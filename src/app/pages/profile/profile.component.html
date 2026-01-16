@@ -1,15 +1,17 @@
-<div class="container">
-    <div class="saludo">
-        <h2>Hola!, Diver</h2>
+<app-loading *ngIf="isLoading"></app-loading>
+<div class="container" *ngIf="!isLoading">
+    <div class="saludo" >
+        <h2>Hola!, {{identity.first_name}}</h2>
     </div>
 
-    <div class="product_list">
+    <div class="product_list" *ngIf="!isLoading">
         <div class="div1">
             <img src="https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_t.png" alt="">
         </div>
         <div class="div2">
-            <h3>Driver #92287157</h3>
-            <p>Driver Delivery</p>
+            <h3>{{identity.first_name}} {{identity.last_name}} </h3>
+            <p>{{identity.numdoc}}</p>
+            <p>{{identity.role}}</p>
             <h4>Activo</h4>
         </div>
         <div class="div3">
@@ -18,7 +20,9 @@
             </a>
         </div>
     </div>
-    <div class="product_list">
+
+     <app-aviso *ngIf="!driver" [aviso]="'Agrega Información de tu vehiculo'"></app-aviso>
+    <div class="product_list" *ngIf="driver">
         <div class="div1">
             <img src="https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_t.png" alt="">
         </div>
@@ -30,16 +34,13 @@
         </div>
     </div>
 
-    <div class="num_tracking">
+    <div class="num_tracking" *ngIf="driver">
         <i class="fa fa-list"></i>
         <h3>Numero de licencia</h3>
         <p>LGS-i9292783</p>
     </div>
 
-    <div class="avisos">
-        <p>Tienes nuevas entregas por atender</p>
-        <i class="fa fa-info-circle" aria-hidden="true"></i>
-    </div>
+    <app-aviso *ngIf="driver" [aviso]="'Tienes nuevas entregas por atender'"></app-aviso>
     <div class="barra_progreso ">
 
         <div class="circulo_inicio"></div>
