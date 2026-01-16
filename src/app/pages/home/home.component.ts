@@ -9,7 +9,6 @@ import { OrderListComponent } from '../../components/order-list/order-list.compo
     HeaderComponent,
     MenufooterComponent,
     RouterModule,
-    OrderListComponent
 ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
