@@ -13,5 +13,8 @@ import { Usuario } from '../../models/usuario.model';
 export class HeaderComponent {
 
   @Input() identity!:Usuario;
+  ngOnInit(){
+    
+  }
 }
 

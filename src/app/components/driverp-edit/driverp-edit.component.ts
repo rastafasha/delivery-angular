@@ -9,7 +9,13 @@ import { FileUploadService } from '../../services/file-upload.service';
 import { UsuarioService } from '../../services/usuario.service';
 import { CommonModule } from '@angular/common';
 import { ImagenPipe } from '../../pipes/imagen-pipe.pipe';
+import { environment } from '../../../environments/environment';
+declare var jQuery:any;
+declare var $:any;
 
+interface HtmlInputEvent extends Event{
+  target : HTMLInputElement & EventTarget;
+}
 // Initialize with empty object to prevent undefined errors
 const defaultDriver: Driver = {
   user: {} as Usuario,
@@ -41,7 +47,7 @@ export class DriverpEditComponent implements OnInit {
   @Input() identity!: Usuario;
 
   public driverProfileForm!: FormGroup;
-  public usuario: Usuario;
+  public usuario!: Usuario;
   public driver!: Driver;
   public driverSeleccionado: any;
   public imagenSubir!: File;
@@ -49,116 +55,162 @@ export class DriverpEditComponent implements OnInit {
   uid!: string;
   pageTitle!: string;
 
-  user: any = [];
-  user_id: any;
-
-  constructor(
-    private fb: FormBuilder,
-    private usuarioService: UsuarioService,
-    private activatedRoute: ActivatedRoute,
-    private driverService: DriverpService,
-    private fileUploadService: FileUploadService
-  ) {
-    this.usuario = usuarioService.usuario;
-  }
-
-  ngOnInit(): void {
-    console.log('user: ', this.identity);
-    this.user_id = this.identity.uid
-    this.cargardriver();
-  }
-
-  cargardriver() {
-    this.driverService.getByUserId(this.user_id).subscribe(
-      (resp: any) => {
-        // this.listIcons = resp.iconos;
-        this.driverSeleccionado = resp;
-        console.log('driver: ', this.driverSeleccionado)
-
-        this.driverProfileForm.setValue({
-          marca: this.driverSeleccionado.marca,
-          modelo: this.driverSeleccionado.modelo,
-          color: this.driverSeleccionado.color,
-          year: this.driverSeleccionado.year,
-          tipo_vehiculo: this.driverSeleccionado.tipo_vehiculo,
-          placa: this.driverSeleccionado.placa,
-          licencianum: this.driverSeleccionado.licencianum,
-          status: this.driverSeleccionado.status,
-          user: this.driverSeleccionado.user,
-        });
-      }
-    )
-    // this.validarFormulario();
-  }
-
-  validarFormulario() {
-    this.driverProfileForm = this.fb.group({
-      marca: ['', Validators.required],
-      modelo: ['', Validators.required],
-      color: [''],
-      year: ['', Validators.required],
-      tipo_vehiculo: ['', Validators.required],
-      placa: ['', Validators.required],
-      licencianum: ['', Validators.required],
-      asignaciones: [''],
-      status: ['PENDING'],
-      user: [this.identity?.uid || ''],
-    });
-  }
-
-
   
-  actualizar() {
-    if (this.driverSeleccionado) {
-      //actualizar
-      const data = {
-        ...this.driverProfileForm.value,
-        _id: this.driverSeleccionado._id,
-      };
-      this.driverService.actualizar(data).subscribe(
-        resp => {
-          Swal.fire('Actualizado', `Actualizado correctamente`, 'success');
+    public url;
+    public paises:any;
+    public file !:File;
+    public imgSelect !: String | ArrayBuffer;
+    public data_paises : any = [];
+    public msm_error = false;
+    public msm_success = false;
+    public pass_error = false;
+    public isLoading = false;
+    public isDriver = false;
+    
+    public user!: Usuario;
+    public user_id: any;
+  
+    public perfilForm!: FormGroup;
+  
+    option_selectedd: number = 1;
+    solicitud_selectedd: any = null;
+  
+  
+    //DATA
+    public new_password = '';
+    public comfirm_password = '';
+  
+    constructor(
+      private fb: FormBuilder,
+      private usuarioService: UsuarioService,
+      private fileUploadService: FileUploadService
+    ) {
+      // this.usuario = usuarioService.usuario;
+      
+      this.url = environment.baseUrl;
+  
+    }
+  
+    ngOnInit(): void {
+      window.scrollTo(0,0);
+  
+       let USER = localStorage.getItem('user');
+      if(USER){
+        this.user = JSON.parse(USER);
+        this.user_id = this.user.uid
+        // console.log(this.user);
+        this. getUser();
+      }
+     
+    }
+  
+    getUser(){
+      this.usuarioService.get_user(this.user_id).subscribe((resp:any)=>{
+        this.identity = resp.usuario;
+        // console.log(this.identity)
+        if(this.identity.role ==='CHOFER'){
+          this.isDriver = true
         }
-      );
-    } else {
-      //crear
-      const data = {
-        ...this.driverProfileForm.value,
-      };
-      this.driverService.create(data)
-        .subscribe((resp: any) => {
-          Swal.fire('Creado', `Creado correctamente`, 'success');
-          // this.router.navigateByUrl(`/dashboard/producto`);
-        });
-    }
-  }
-
-
-
-  cambiarImagen(file: File) {
-    this.imagenSubir = file;
-
-    // if (!file) {
-    //   return this.imgTemp = null;
-    // }
-
-    const reader = new FileReader();
-    const url64 = reader.readAsDataURL(file);
-
-    reader.onloadend = () => {
-      this.imgTemp = reader.result;
-    }
-  }
-
-  subirImagen() {
-    this.fileUploadService
-      .actualizarFoto(this.imagenSubir, 'drivers', this.user.uid)
-      .then(img => {
-        this.usuario.img = img;
-        Swal.fire('Guardado', 'La imagen fue actualizada', 'success');
-      }).catch(err => {
-        Swal.fire('Error', 'No se pudo subir la imagen', 'error');
+        if(this.identity){
+          this.iniciarFormulario()
+        }
       })
-  }
-
+    }
+  
+    iniciarFormulario(){
+      this.perfilForm = this.fb.group({
+        uid: [ this.identity.uid,  Validators.required ],
+        email: [ this.identity.email],
+        first_name: [ this.identity.first_name, Validators.required ],
+        last_name: [ this.identity.last_name, Validators.required ],
+        numdoc: [ this.identity.numdoc ],
+        telefono: [ this.identity.telefono ],
+        pais: [ this.identity.pais],
+        ciudad: [ this.identity.ciudad],
+        google: [ this.identity.google],
+        role: [ this.identity.role],
+        password: [ ''],
+      });
+      
+    }
+  
+  
+  
+    close_alert(){
+      this.msm_success = false;
+      this.msm_error = false;
+    }
+  
+    view_password(){
+      let type = $('#password').attr('type');
+  
+      if(type == 'text'){
+        $('#password').attr('type','password');
+  
+      }else if(type == 'password'){
+        $('#password').attr('type','text');
+      }
+    }
+  
+    view_password2(){
+      let type = $('#password_dos').attr('type');
+  
+      if(type == 'text'){
+        $('#password_dos').attr('type','password');
+  
+      }else if(type == 'password'){
+        $('#password_dos').attr('type','text');
+      }
+    }
+  
+    onUserSave(){
+  
+      const {first_name, last_name, telefono, pais, ciudad,  numdoc, email, role, uid} = this.perfilForm.value;
+      this.usuarioService.actualizarP(this.perfilForm.value)
+      .subscribe((resp:any) => {
+        
+        Swal.fire('Guardado', 'Los cambios fueron actualizados', 'success');
+      }, (err)=>{
+        Swal.fire('Error', err.error.msg, 'error');
+  
+      })
+    }
+  
+  cambiarImagen(file: File) {
+      this.imagenSubir = file;
+  
+      // if (!file) {
+      //   return this.imgTemp = null;
+      // }
+  
+      const reader = new FileReader();
+      const url64 = reader.readAsDataURL(file);
+  
+      reader.onloadend = () => {
+        this.imgTemp = reader.result;
+      }
+    }
+  
+    subirImagen() {
+      this.fileUploadService
+        .actualizarFoto(this.imagenSubir, 'drivers', this.user_id)
+        .then(img => {
+          this.identity.img = img;
+          Swal.fire('Guardado', 'La imagen fue actualizada', 'success');
+        }).catch(err => {
+          Swal.fire('Error', 'No se pudo subir la imagen', 'error');
+        })
+    }
+  
+     optionSelected(value: number) {
+      this.option_selectedd = value;
+      if (this.option_selectedd === 1) {
+  
+        // this.ngOnInit();
+      }
+      if (this.option_selectedd === 2) {
+        this.solicitud_selectedd = null;
+      }
+    }
+  
 }
