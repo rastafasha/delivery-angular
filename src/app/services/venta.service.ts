@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import {environment} from 'src/environments/environment';
 import { HttpClient,HttpHeaders } from "@angular/common/http";
 import { Observable } from "rxjs";
 import{Usuario} from '../models/usuario.model';
-import{Producto} from '../models/producto.model';
+import { environment } from '../../environments/environment';
+import { Producto } from '../models/producto.model';
 @Injectable({
   providedIn: 'root'
 })
@@ -15,8 +15,8 @@ export class VentaService {
   clientIdPaypal = environment.clientIdPaypal;
   sandboxPaypal = environment.sandboxPaypal;
 
-  user:Usuario;
-  producto:Producto;
+  user!:Usuario;
+  producto!:Producto;
 
   constructor(
     private _http : HttpClient

@@ -1,0 +1,48 @@
+.breadcrumb-light .breadcrumb-item::before {
+    display: none !important;
+}
+
+.media {
+    
+    width: 100%;
+    position: relative;
+    border-radius: 100px;
+    & img{
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+        border-radius: 100px;
+
+    }
+}
+
+
+
+.tab-content-set {
+    display: flex;
+    justify-content: space-between;
+    & .nav {
+        align-items: center;
+        padding: 6px;
+        gap: 5px;
+        & li {
+            padding: 5px;
+            font-size: 16px;
+            color: #333;
+            & a {
+                color: #333;
+                text-decoration: none;
+
+            }
+        }
+    }
+    & .active {
+    color: #b02b2b !important;
+}
+    
+}
+
+
+
+
+

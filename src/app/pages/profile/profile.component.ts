@@ -7,10 +7,16 @@ import { Driver } from '../../models/driverp.model';
 import { LoadingComponent } from "../../shared/loading/loading.component";
 import { CommonModule, NgIf } from '@angular/common';
 import { AvisoComponent } from "../../shared/aviso/aviso.component";
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
-  imports: [MenufooterComponent, LoadingComponent, NgIf, CommonModule, AvisoComponent],
+  imports: [
+    MenufooterComponent, 
+    LoadingComponent, NgIf, 
+    CommonModule, 
+    RouterModule,
+    AvisoComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })

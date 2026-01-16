@@ -16,7 +16,7 @@ import { environment } from '../../../environments/environment';
     ReactiveFormsModule,
     RouterModule,
     NgIf,
-    ImagenPipe
+    // ImagenPipe
   ],
   templateUrl: './register.component.html',
   styleUrls: [ './register.component.scss' ]

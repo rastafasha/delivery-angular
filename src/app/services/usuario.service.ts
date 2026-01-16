@@ -32,7 +32,7 @@ export class UsuarioService {
     return localStorage.getItem('token') || '';
   }
 
-  get role(): 'ADMIN' | 'USER' | 'VENTAS' {
+  get role(): 'USER' | 'CHOFER' {
     return this.usuario?.role ?? 'USER';
   }
 
@@ -54,10 +54,10 @@ export class UsuarioService {
       if (USER && USER !== 'undefined') {
         this.usuario = JSON.parse(USER);
       } else {
-        this.usuario = new Usuario('', '', '', '', '', '', '', '', false, 'USER', '');
+        this.usuario = new Usuario('', '', '', '', '', '', '', '','', false, 'USER', '');
       }
     } else {
-      this.usuario = new Usuario('', '', '', '', '', '', '', '', false, 'USER', '');
+      this.usuario = new Usuario('', '', '', '', '', '', '', '', '',false, 'USER', '');
     }
   }
   guardarLocalStorage(token: string, user: any) {
@@ -185,6 +185,7 @@ export class UsuarioService {
               user.first_name,
               user.last_name,
               user.pais,
+              user.ciudad,
               user.telefono,
               user.numdoc,
               user.email,

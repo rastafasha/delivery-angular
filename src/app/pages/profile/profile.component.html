@@ -4,7 +4,7 @@
         <h2>Hola!, {{identity.first_name}}</h2>
     </div>
 
-    <div class="product_list" *ngIf="!isLoading">
+    <div class="product_list" >
         <div class="div1">
             <img src="https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_t.png" alt="">
         </div>
@@ -15,7 +15,7 @@
             <h4>Activo</h4>
         </div>
         <div class="div3">
-            <a href="delivery-status.html">
+            <a [routerLink]="['/myprofile/', identity.uid]">
                 <button class="boton_azul_borde">Editar</button>
             </a>
         </div>

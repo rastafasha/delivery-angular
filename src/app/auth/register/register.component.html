@@ -6,8 +6,8 @@
         <div class="card-body">
             <form [formGroup]="registerForm" (ngSubmit)="crearUsuario()" autocapitalize="off" class="form-horizontal form-material" id="loginform">
                 <a routerLink="/" class="ilogo">
-                     <img [src]="tiendaSelected.img | imagenPipe: 'tiendas'"  [alt]="tiendaSelected.nombre">
-                    <!-- <img src="../assets/images/logo.png" alt="Home" /> -->
+                     <!-- <img [src]="tiendaSelected.img | imagenPipe: 'tiendas'"  [alt]="tiendaSelected.nombre"> -->
+                    <img [src]="'../assets/svg/logo_Mallconnect_tipo1.svg'" alt="">
                     <br/>
                     <!-- <img src="../assets/images/logo-text.png" alt="Home" /> -->
                 </a>

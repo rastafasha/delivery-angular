@@ -6,13 +6,14 @@ export class Usuario {
     public first_name: string,
     public last_name: string,
     public pais: string,
+    public ciudad: string,
     public telefono: string,
     public numdoc: string,
     public email: string,
     public password?: string,
     public img?: string,
     public google?: boolean,
-    public role?: 'ADMIN' | 'USER' | 'VENTAS',
+    public role?: 'USER' | 'CHOFER',
     public uid?: string
   ){}
 

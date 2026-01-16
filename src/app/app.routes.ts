@@ -9,6 +9,7 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { LoginComponent } from './auth/login/login.component';
 import { RecoveryComponent } from './auth/recovery/recovery.component';
+import { PerfilComponent } from './pages/profile/perfil/perfil.component';
 
 
 
@@ -22,7 +23,7 @@ export const routes: Routes = [
     {path: 'mapa-page', component: MapaComponent},
     {path: 'order-detail', component: OrderDetailComponent},
     {path: 'mis-entregas', component: MisEntregasComponent},
-    {path: 'myprofile', component: ProfileComponent},
+    
    
      {
         path:'login',
@@ -33,8 +34,10 @@ export const routes: Routes = [
         component: RegisterComponent
     },
     {path: 'recovery-password', component: RecoveryComponent },
+
+    {path: 'myprofile', component: ProfileComponent},
+    {path: 'myprofile/:id', component: PerfilComponent },
     // {path: 'my-account', component: MyaccountComponent },
-    // {path: 'my-account/perfil/:id', component: PerfilComponent },
     // { path: 'my-account/ordenes', component: IndexOrdenesComponent},
     // { path: 'my-account/ordenes/detalles/:id', component: DetalleOrdenComponent},
     // {path: 'my-account/cart', component: CartCheckoutComponent },
