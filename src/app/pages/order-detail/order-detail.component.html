@@ -1,18 +1,20 @@
-<div class="container">
+<app-loading *ngIf="isLoading"></app-loading>
+<div class="container" *ngIf="!isLoading">
     <div class="saludo">
         <h2>Detalle de la Entrega</h2>
     </div>
 
-     <app-aviso  [aviso]="'Tienes nuevas entregas por atender'"></app-aviso>
+     <!-- <app-aviso  [aviso]="'Tienes nuevas entregas por atender'"></app-aviso> -->
    
     <div class="product_list">
         <div class="div1">
             <img src="https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_t.png" alt="">
         </div>
         <div class="div2">
-            <h3>Order #92287157</h3>
+            <h5>Order</h5>
+            <h3>#92287157</h3>
+            <h5>Empacado</h5>
             <p>Standard Delivery</p>
-            <h4>en camino</h4>
         </div>
         <div class="div3 botonera">
             <button class="boton_azul_borde">Aplicar</button>
@@ -21,14 +23,35 @@
             </a>
         </div>
     </div>
+
+    <h2>Lista Despacho</h2>
+    
     <div class="product_list">
         <div class="div1">
             <img src="../assets/img/user.png" alt="">
         </div>
         <div class="div2">
-            <h4>Pedro Perez</h4>
-            <h3>#92287157</h3>
-            <p>ci-1258782</p>
+            <h5>Farmatodo</h5>
+            <h3>Sambil</h3>
+            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit.</p>
+        </div>
+        <div class="div3">
+            <!-- <p> Llamar </p> -->
+            <a href="delivery-status.html">
+                <button class="boton_azul_borde">LLamar</button>
+            </a>
+        </div>
+    </div>
+    <h2>Info Entrega</h2>
+     <div class="product_list">
+        <div class="div1">
+            <img src="../assets/img/user.png" alt="">
+        </div>
+        <div class="div2">
+            <h5>Pedro Perez</h5>
+            <h4>$10.00</h4>
+            <p>Av. Andres Bello </p>
+
         </div>
         <div class="div3">
             <!-- <p> Llamar </p> -->
@@ -38,16 +61,14 @@
         </div>
     </div>
 
-     
 
-
-    <div class="barra_progreso ">
+    <!-- <div class="barra_progreso ">
             
             <div class="circulo_inicio"></div>
             <div class="circulo_progreso"></div>
             <div class="circulo_llegada"></div>
             <div class="barra_progreso__barra"></div>
-        </div>
+        </div> -->
         <div class="num_tracking">
             <i class="fa fa-list"></i>
             <h3>Numero de Trackig</h3>
@@ -73,7 +94,7 @@
             <div class="empacado">
                 <h2>Empacado</h2>
                 <p>fecha de movimiento</p>
-                <p>Your parcel is packed and will be handed over to our delivery partner.</p>
+                <p>Los Artículos ya estan empacados para despacho.</p>
             </div>
             <!-- <div class="empacado">
                 <h2>En Camino</h2>

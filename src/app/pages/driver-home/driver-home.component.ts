@@ -6,6 +6,8 @@ import { OrderListComponent } from "../../components/order-list/order-list.compo
 import { Usuario } from '../../models/usuario.model';
 import { UsuarioService } from '../../services/usuario.service';
 import { AvisoComponent } from "../../shared/aviso/aviso.component";
+import { LoadingComponent } from "../../shared/loading/loading.component";
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-driver-home',
@@ -14,13 +16,17 @@ import { AvisoComponent } from "../../shared/aviso/aviso.component";
     MenufooterComponent,
     RouterModule,
     OrderListComponent,
-    AvisoComponent
+    AvisoComponent,
+    LoadingComponent,
+    NgIf
 ],
   templateUrl: './driver-home.component.html',
   styleUrl: './driver-home.component.css'
 })
 export class DriverHomeComponent {
   identity!:Usuario;
+  isLoading= false;
+
   private usuarioService = inject(UsuarioService);
   private router = inject(Router);
   
@@ -29,6 +35,7 @@ export class DriverHomeComponent {
   }
 
   loadIdentity(){
+    this.isLoading= true;
     let USER = localStorage.getItem("user");
     if(!USER){
       this.router.navigateByUrl('/login')
@@ -37,6 +44,7 @@ export class DriverHomeComponent {
       let user = JSON.parse(USER);
       this.usuarioService.get_user(user.uid).subscribe((resp:any)=>{
         this.identity = resp.usuario;
+        this.isLoading= false;
       })
     }
   }

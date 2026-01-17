@@ -13,6 +13,24 @@
             <p>{{driver.marca}}</p>
             <p>{{driver.placa}}</p>
             <h4>{{driver.status}}</h4>
+            <span *ngIf="driver.tipo_vehiculo === 'Carro'">
+               <i class="fa fa-car" aria-hidden="true"></i>
+            </span>
+            <span *ngIf="driver.tipo_vehiculo === 'Moto'">
+               <i class="fas fa-motorcycle"></i>
+            </span>
+            <span *ngIf="driver.tipo_vehiculo === 'Camion'">
+               <i class="fas fa-truck"></i>
+            </span>
+            <span *ngIf="driver.tipo_vehiculo === 'Camioneta'">
+               <i class="fas fa-truck-pickup"></i>
+            </span>
+            <span *ngIf="driver.tipo_vehiculo === 'Pickup'">
+               <i class="fas fa-truck-pickup"></i>
+            </span>
+            <span *ngIf="driver.tipo_vehiculo === 'Van'">
+               <i class="fas fa-truck-loading"></i>
+            </span>
         </div>
     </div>
 
@@ -143,10 +161,11 @@
                                     <label for="exampleInputPais">Tipo Vehículo</label>
                                     <select formControlName="tipo_vehiculo" class="form-control">
                                         <option value="">Selecione</option>
-                                        <option value="carro">Carro</option>
-                                        <option value="moto">Moto</option>
-                                        <option value="camioneta">Camioneta</option>
-                                        <option value="van">Van ó Mini-Van</option>
+                                        <option value="Carro">Carro</option>
+                                        <option value="Moto">Moto</option>
+                                        <option value="Camioneta">Camioneta</option>
+                                        <option value="Van">Van ó Mini-Van</option>
+                                        <option value="Pickup">Pickup</option>
                                         <option value="Camion">Camión</option>
                                     </select>
                                 </div>

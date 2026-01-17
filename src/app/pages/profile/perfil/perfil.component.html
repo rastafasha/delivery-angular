@@ -160,27 +160,6 @@
                                     </div>
                                     }
                                 </div>
-                                <!-- Teléfono Casa -->
-                                <!-- <div class="col-md-4 ">
-                                <label for="validationCustom02" class="form-label labelgoogle">
-                                    <input type="text" formControlName="telhome" class="form-control input"
-                                        id="validationCustom02" placeholder=" " required>
-                                    <span class="label__name">
-                                        {{'Phome Home'}}<span class="login-danger">*</span>
-                                    </span>
-                                </label>
-                                @if(perfilForm.controls['telhome'].touched){
-
-                                <div class="text-danger">
-                                    @if(perfilForm.controls['telhome'].errors?.['required']){
-                                    <span>{{'Field Required'}}</span>
-                                    }
-                                    @if(perfilForm.controls['telhome'].errors?.['minlength']){
-                                    <span>{{'3 Charecters Minimal'}}</span>
-                                    }
-                                </div>
-                                }
-                            </div> -->
                                 <!-- Teléfono Móvil -->
                                 <div class="col-md-4 ">
                                     <label for="validationCustom02" class="form-label labelgoogle">
@@ -197,6 +176,28 @@
                                         <span>{{'Field Required'}}</span>
                                         }
                                         @if(perfilForm.controls['telefono'].errors?.['minlength']){
+                                        <span>{{'3 Charecters Minimal'}}</span>
+                                        }
+                                    </div>
+                                    }
+                                </div>
+                                <!-- País -->
+                                <div class="col-md-4 ">
+                                    <div class="input-group form-label labelgoogle">
+                                        <select class="form-control" formControlName="pais">
+                                            <option [value]=" ">Seleccione País</option>
+                                            <option *ngFor="let data of paises" [value]="data.pais">
+                                                {{data.pais}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    @if(perfilForm.controls['pais'].touched){
+
+                                    <div class="text-danger">
+                                        @if(perfilForm.controls['pais'].errors?.['required']){
+                                        <span>{{'Field Required'}}</span>
+                                        }
+                                        @if(perfilForm.controls['pais'].errors?.['minlength']){
                                         <span>{{'3 Charecters Minimal'}}</span>
                                         }
                                     </div>
@@ -224,108 +225,7 @@
                                     }
                                 </div>
 
-                                <!-- País -->
-                                <div class="col-md-4 ">
-                                    <div class="input-group form-label labelgoogle">
-                                        <!-- <label for="validationCustom02" class="form-label">{{'Country'}}</label> -->
-                                        <!-- <span class="label__name">
-                                        {{'Pais'}}<span class="login-danger">*</span>
-                                    </span> -->
-                                        <select class="form-control" formControlName="pais">
-                                            <option [value]=" ">Seleccione Pais</option>
-                                            <option *ngFor="let data of paises" [value]="data.pais">
-                                                {{data.pais}}
-                                            </option>
-                                        </select>
-
-
-                                    </div>
-                                    @if(perfilForm.controls['pais'].touched){
-
-                                    <div class="text-danger">
-                                        @if(perfilForm.controls['pais'].errors?.['required']){
-                                        <span>{{'Field Required'}}</span>
-                                        }
-                                        @if(perfilForm.controls['pais'].errors?.['minlength']){
-                                        <span>{{'3 Charecters Minimal'}}</span>
-                                        }
-                                    </div>
-                                    }
-                                </div>
-
-                                <!-- Género -->
-                                <!-- <div class="col-12 col-md-4  col-xl-4">
-                                <div class="form-group select-gender input-group gap-3">
-                                    <span class="input-group-text" id="basic-addon1">
-                                        <i class="fa fa-user" aria-hidden="true"></i>
-                                    </span>
-                                    <div class="form-check-inline ">
-                                        <label class="form-check-label ">
-                                            <input type="radio" [value]="'1'" formControlName="gender"
-                                                class="form-check-input ">{{'Male'}}
-                                        </label>
-                                    </div>
-                                    <div class="form-check-inline ">
-                                        <label class="form-check-label ">
-                                            <input type="radio" [value]="'2'" formControlName="gender"
-                                                class="form-check-input ">{{'Female'}}
-                                        </label>
-                                    </div>
-                                </div>
-                            </div> -->
-                                <!-- Lang -->
-                                <!-- <div class="col-12 col-md-4  col-xl-4">
-                                        <div class="form-group select-gender input-group gap-3">
-                                            <span class="input-group-text" id="basic-addon1">
-                                                <i class="fa fa-user" aria-hidden="true"></i>
-                                            </span>
-                                            <div class="form-check-inline ">
-                                                <label class="form-check-label ">
-                                                    <input type="radio"  [value]="'es'" (change)="cambiarLenguaje('es')" formControlName="lang" class="form-check-input ">{{'Spanish'}}
-                                                </label>
-                                            </div>
-                                            <div class="form-check-inline ">
-                                                <label class="form-check-label ">
-                                                    <input type="radio"  [value]="'en'" (change)="cambiarLenguaje('en')" formControlName="lang" class="form-check-input ">{{'English'}}
-                                                </label>
-                                            </div>
-                                        </div>
-                                      </div> -->
-
-                                <!-- Dirección -->
-                                <!-- <div class="col-12  col-sm-6">
-                                <label for="validationCustom02" class="form-label ">{{'Direccion'}}</label>
-                                <textarea formControlName="direccion" class="form-control" id="validationCustom02"
-                                    required></textarea>
-                                @if(perfilForm.controls['direccion'].touched){
-
-                                <div class="text-danger">
-                                    @if(perfilForm.controls['direccion'].errors?.['required']){
-                                    <span>{{'Field Required'}}</span>
-                                    }
-                                    @if(perfilForm.controls['direccion'].errors?.['minlength']){
-                                    <span>{{'3 Charecters Minimal'}}</span>
-                                    }
-                                </div>
-                                }
-                            </div> -->
-                                <!-- Descripción -->
-                                <!-- <div class="col-12 col-sm-6">
-                                <label for="validationCustom02" class="form-label">{{'Description'}}</label>
-                                <textarea formControlName="description" class="form-control" id="validationCustom02"
-                                    required></textarea>
-                                @if(perfilForm.controls['description'].touched){
-
-                                <div class="text-danger">
-                                    @if(perfilForm.controls['description'].errors?.['required']){
-                                    <span>{{'Field Required'}}</span>
-                                    }
-                                    @if(perfilForm.controls['description'].errors?.['minlength']){
-                                    <span>{{'3 Charecters Minimal'}}</span>
-                                    }
-                                </div>
-                                }
-                            </div> -->
+                                
 
 
 
@@ -333,78 +233,10 @@
                         </div>
                     </div>
                     <br>
-                    <!-- Tarifas -->
-                    <!-- <div class="row " *ngIf="user.role === 'CHOFER' " >
-                            <details class="shadowSearch cuadrosearch">
-                                <summary>{{'Price Sale'}}</summary>
-                                <div class="row">
-                                        
-                                    <div class="col-12 col-sm-10">  
-                                        <label class="labelgoogle">
-                                            <input class="form-control input" name="item_tarifa" placeholder=" " [ngModelOptions]="{standalone: true}"  [(ngModel)]="item_tarifa" type="text" required>
-                                            <span class="label__name">
-                                                Item<span class="login-danger">*</span>
-                                            </span>
-                                        </label>
-                                        <div class="form-group ">
-    
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-sm-2">
-                                        <label class="labelgoogle">
-                                            <input class="form-control input" name="precio" placeholder=" " [ngModelOptions]="{standalone: true}" [(ngModel)]="precio" type="number"  >
-                                            <span class="label__name">
-                                                {{'Price'}}<span class="login-danger">*</span>
-                                            </span>
-                                        </label>
-                                    </div>
-                                    <div class="col-12 mb-3">
-                                        <button class="btn btn-primary btn-sm text-end " (click)="addMedicamento()">+ {{'Add'}}</button>
-                                    </div>
-                                </div>
-                            </details>
-                            
-                            <div class="row align-items-center" >
-                                
-                                <div class="col-xs-12 ">
-                                    <div class="table-responsive">
-                                        <table class="table mb-0 table-striped">
-                                            <thead>
-                                                <tr>
-                                                    <th>{{'Description'}}</th>
-                                                    <th>{{'Price'}}</th>
-                                                    <th>{{'Action'}}</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr *ngFor="let item of tarifas ; let i=index">
-                                                    <td>
-                                                         {{item.item_tarifa}}
-                                                        
-                                                    </td>
-                                                    <td>
-                                                        {{item.precio  | currency }}
-                                                    </td>
-                                                    <td>
-                                                        <button class="btn btn-danger btn-sm text-end" (click)="deleteMedical(i)">x</button>
-                                                    </td>
-                                                </tr>
-                                                
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                
-                            </div>
-                            
-                        </div> -->
-                    <!-- Tarifas -->
+                   
 
                     <div class="row align-items-center">
                         <div class="col-12">
-                            <a [routerLink]="['/myprofile/',]">
-                                <button class="boton_azul_borde">Volver</button>
-                            </a>
                             <div class="doctor-submit text-end">
                                 <button type="button" class="boton_azul_borde"
                                     (click)="onUserSave()">{{'Save'}}</button>

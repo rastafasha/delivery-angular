@@ -98,9 +98,16 @@
 }
 
 .div2 h4,
+.div2 h5,
 .div2 h3{
     font-weight: bold;
     color: var(--azul);
+    margin: 0;
+    padding: 0;
+}
+.div2 p{
+    margin: 0;
+    padding: 0;
 }
 
 .div3 {

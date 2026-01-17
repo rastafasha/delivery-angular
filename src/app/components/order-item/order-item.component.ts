@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -12,5 +12,5 @@ import { RouterModule } from '@angular/router';
   styleUrl: './order-item.component.css'
 })
 export class OrderItemComponent {
-
+  @Input() statustText!:string;
 }

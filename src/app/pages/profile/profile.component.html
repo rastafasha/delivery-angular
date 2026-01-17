@@ -27,10 +27,28 @@
             <img src="https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_t.png" alt="">
         </div>
         <div class="div2">
-            <h3>Camaro</h3>
-            <h3>Chevrolet</h3>
-            <h4>Rojo</h4>
-            <p>2015</p>
+            <h3>{{driver.modelo}}</h3>
+            <h3>{{driver.marca}}</h3>
+            <h4>{{driver.color}}</h4>
+            <p>{{driver.year}}</p>
+            <span *ngIf="driver.tipo_vehiculo === 'Carro'">
+               <i class="fa fa-car" aria-hidden="true"></i>
+            </span>
+            <span *ngIf="driver.tipo_vehiculo === 'Moto'">
+               <i class="fas fa-motorcycle"></i>
+            </span>
+            <span *ngIf="driver.tipo_vehiculo === 'Camion'">
+               <i class="fas fa-truck"></i>
+            </span>
+            <span *ngIf="driver.tipo_vehiculo === 'Camioneta'">
+               <i class="fas fa-truck-pickup"></i>
+            </span>
+            <span *ngIf="driver.tipo_vehiculo === 'Pickup'">
+               <i class="fas fa-truck-pickup"></i>
+            </span>
+            <span *ngIf="driver.tipo_vehiculo === 'Van'">
+               <i class="fas fa-truck-loading"></i>
+            </span>
         </div>
     </div>
 
