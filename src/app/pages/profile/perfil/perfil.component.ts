@@ -85,23 +85,39 @@ export class PerfilComponent implements OnInit {
 
   ngOnInit(): void {
     window.scrollTo(0,0);
-    this.loadIdentity();
+
+     let USER = localStorage.getItem('user');
+    if(USER){
+      this.user = JSON.parse(USER);
+      this.user_id = this.user.uid
+      // console.log(this.user);
+      this. getUser();
+    }
    
   }
 
-  loadIdentity(){
-    this.isLoading= true;
-    let USER = localStorage.getItem("user");
-   
-    if(USER){
-      let user = JSON.parse(USER);
-      this.usuarioService.get_user(user.uid).subscribe((resp:any)=>{
-        this.identity = resp.usuario;
-        this.isLoading= false;
-      })
-    }
+  // loadIdentity(){
+  //   this.isLoading= true;
+  //   let USER = localStorage.getItem("user");
+  //   if(!USER){
+  //     this.router.navigateByUrl('/login')
+  //   }
+  //   if(USER){
+  //     let user = JSON.parse(USER);
+  //     this.usuarioService.get_user(user.uid).subscribe((resp:any)=>{
+  //       this.identity = resp.usuario;
+  //       this.isLoading= false;
+  //     })
+  //   }
+  // }
 
-    if(this.identity.role ==='CHOFER'){
+  getUser(){
+    this.isLoading= true;
+    this.usuarioService.get_user(this.user_id).subscribe((resp:any)=>{
+      this.identity = resp.usuario;
+      this.isLoading= false;
+      // console.log(this.identity)
+      if(this.identity.role ==='CHOFER'){
         this.isDriver = true
       }
       if(this.identity){
@@ -110,9 +126,9 @@ export class PerfilComponent implements OnInit {
       }else{
       this._router.navigate(['/']);
     }
+    })
   }
 
-  
   iniciarFormulario(){
     this.perfilForm = this.fb.group({
       uid: [ this.identity.uid,  Validators.required ],
@@ -180,7 +196,7 @@ export class PerfilComponent implements OnInit {
             resp => {
               Swal.fire('Actualizado', `Actualizado correctamente`, 'success');
               this.isLoading = false;
-              this.loadIdentity()
+              this.getUser()
             }
           );
         } else {
@@ -192,7 +208,7 @@ export class PerfilComponent implements OnInit {
             .subscribe((resp: any) => {
               Swal.fire('Creado', `Creado correctamente`, 'success');
               this.isLoading = false;
-              this.loadIdentity()
+              this.getUser()
               // this.router.navigateByUrl(`/dashboard/producto`);
             });
         }
@@ -221,11 +237,11 @@ cambiarImagen(file: File) {
             this.identity.img = img;
             Swal.fire('Guardado', 'La imagen fue actualizada', 'success');
             this.isLoading = false;
-            this.loadIdentity()
+            this.getUser()
           }).catch(err => {
             Swal.fire('Error', 'No se pudo subir la imagen', 'error');
             this.isLoading = false;
-            this.loadIdentity()
+            this.getUser()
           })
   }
 

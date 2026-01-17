@@ -45,7 +45,9 @@ isLoadingDr = false;
         this.identity = resp.usuario;
         this.identityId = this.identity.uid;
         this.isLoading = false;
-        this.loadDriverProfile();
+        setTimeout(()=>{
+          this.loadDriverProfile();
+        }, 1000)
       })
     }
   }

@@ -44,7 +44,8 @@ nombreSelected = environment.nombreSelected;
       password: ['', Validators.required],
       password2: ['', Validators.required],
       local: [''],
-      terminos: [false, Validators.required],
+      terminos: [false,],
+      // terminos: [false, Validators.required],
 
     }, {
       validators: this.passwordsIguales('password', 'password2')
@@ -78,7 +79,7 @@ nombreSelected = environment.nombreSelected;
     this.formSumitted = true;
     //agregamos el id de la tienda a la respuesta
 
-    this.registerForm.value.local = this.tienda._id;
+    this.registerForm.value.local = this.tiendaSelected._id;
     console.log(this.registerForm.value);
 
     if(this.registerForm.invalid){
@@ -93,7 +94,7 @@ nombreSelected = environment.nombreSelected;
         this.usuarioService.getLocalStorage();
          if(localStorage.getItem('user')){
           setTimeout(()=>{
-            this.router.navigateByUrl('/my-account');
+            this.router.navigateByUrl('/home');
           },500);
         }
       },(err) => {
@@ -113,9 +114,9 @@ nombreSelected = environment.nombreSelected;
 
   }
 
-  aceptaTerminos(){
-    return !this.registerForm.get('terminos')?.value && this.formSumitted;
-  }
+  // aceptaTerminos(){
+  //   return !this.registerForm.get('terminos')?.value && this.formSumitted;
+  // }
 
   passwordNoValido(){
     const pass1 = this.registerForm.get('password')?.value;

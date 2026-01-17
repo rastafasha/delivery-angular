@@ -7,6 +7,8 @@ import { Subscription } from 'rxjs';
 import { MenufooterComponent } from '../../shared/menufooter/menufooter.component';
 import * as L from 'leaflet';
 import { NgIf } from '@angular/common';
+import { UsuarioService } from '../../services/usuario.service';
+import { Usuario } from '../../models/usuario.model';
 
 @Component({
   selector: 'app-mapa',
@@ -33,6 +35,10 @@ export class MapaComponent implements OnInit, AfterViewInit, OnDestroy {
   deliveryPosition: { lat: number; lng: number } | null = null;
   loading = true;
   errorMessage = '';
+
+  identity!:Usuario;
+
+   private usuarioService = inject(UsuarioService);
 
   // Configuración de iconos personalizados
   private driverIcon = L.icon({
@@ -94,10 +100,13 @@ export class MapaComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       }
     });
+
+    this.loadIdentity();
   }
 
   ngAfterViewInit() {
     this.initMap();
+    
   }
 
   ngOnDestroy() {
@@ -198,6 +207,18 @@ export class MapaComponent implements OnInit, AfterViewInit, OnDestroy {
         [this.deliveryPosition.lat, this.deliveryPosition.lng]
       ]);
       this.map.fitBounds(bounds, { padding: [50, 50] });
+    }
+  }
+
+
+   loadIdentity(){
+    let USER = localStorage.getItem("user");
+    if(USER){
+      let user = JSON.parse(USER);
+      this.usuarioService.get_user(user.uid).subscribe((resp:any)=>{
+        this.identity = resp.usuario;
+
+      })
     }
   }
 }

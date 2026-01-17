@@ -4,7 +4,7 @@ export const environment = {
   // mediaUrl: 'http://localhost:3003/api/uploads/',
   // soketServer : 'http://localhost:3003',
   //remoto vercel
-  nombreSelected: 'Strapizza',
+  nombreSelected: 'Delivery App',
   baseUrl: 'https://back-ecomm-mall.vercel.app/api',
   soketServer : 'https://back-ecomm-mall.vercel.app/',
   mediaUrl: 'https://back-ecomm-mall.vercel.app/api/uploads/',

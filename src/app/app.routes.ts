@@ -16,8 +16,8 @@ import { PerfilComponent } from './pages/profile/perfil/perfil.component';
 export const routes: Routes = [
     // {path: '', component: LoginComponent},
     
-    // {path: 'home', component: HomeComponent},
-    {path: '', component: DriverHomeComponent},
+    {path: '', component: DriverHomeComponent},// home del driver
+    {path: 'home', component: HomeComponent}, // home usuarios
     {path: 'delivery-home', component: DriverHomeComponent},
     {path: 'delivery-status', component: DeliveryStatusComponent},
     {path: 'mapa-page', component: MapaComponent},

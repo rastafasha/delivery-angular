@@ -2,9 +2,9 @@
 
 <!-- Page Content-->
 <div class="container " *ngIf="!isLoading">
-   <div class="back-title">
+    <div class="back-title">
         <div class="saludo">
-            <h2>Editando Perfil: {{identity.first_name}}</h2>
+            <h2>Hola {{identity.first_name}}!</h2>
         </div>
         <a routerLink="/myprofile">
             <button class="boton_azul_borde">Volver</button>
@@ -14,15 +14,19 @@
         <ul class="nav">
             <li>
                 <a href="#" onclick="return false;" [ngClass]="{'active': option_selectedd == 1}"
-                (click)="optionSelected(1)"><h3> {{'Perfil'}}</h3></a>
+                    (click)="optionSelected(1)">
+                    <h3> {{'Perfil'}}</h3>
+                </a>
             </li>
             <li *ngIf="isDriver">
                 <a href="#" onclick="return false;" [ngClass]="{'active': option_selectedd == 2}"
-                (click)="optionSelected(2)"><h3>{{'Driver'}}</h3></a>
+                    (click)="optionSelected(2)">
+                    <h3>{{'Driver'}}</h3>
+                </a>
             </li>
         </ul>
     </div>
-    
+
     <div *ngIf="option_selectedd == 1">
 
         <div class="product_list">
@@ -225,7 +229,7 @@
                                     }
                                 </div>
 
-                                
+
 
 
 
@@ -233,7 +237,7 @@
                         </div>
                     </div>
                     <br>
-                   
+
 
                     <div class="row align-items-center">
                         <div class="col-12">

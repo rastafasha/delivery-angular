@@ -45,6 +45,10 @@ export class DriverHomeComponent {
       this.usuarioService.get_user(user.uid).subscribe((resp:any)=>{
         this.identity = resp.usuario;
         this.isLoading= false;
+
+         if( this.identity.role !== 'CHOFER'){
+          this.router.navigateByUrl('/home')
+        }
       })
     }
   }

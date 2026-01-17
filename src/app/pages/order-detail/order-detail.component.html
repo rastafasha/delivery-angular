@@ -17,16 +17,19 @@
             <p>Standard Delivery</p>
         </div>
         <div class="div3 botonera">
-            <button class="boton_azul_borde">Aplicar</button>
+            <button class="boton_azul_borde" *ngIf="identity.role ==='CHOFER'">Aplicar</button>
+            <a routerLink="/delivery-status" *ngIf="identity.role ==='USER'">
+                <button class="boton_azul_borde">Status</button>
+            </a>
             <a routerLink="/mapa-page">
                 <button class="boton_azul_borde">Mapa</button>
             </a>
         </div>
     </div>
 
-    <h2>Lista Despacho</h2>
+    <h4 *ngIf="identity.role ==='CHOFER'">Info Despacho</h4>
     
-    <div class="product_list">
+    <div class="product_list" *ngIf="identity.role ==='CHOFER'">
         <div class="div1">
             <img src="../assets/img/user.png" alt="">
         </div>
@@ -42,15 +45,33 @@
             </a>
         </div>
     </div>
-    <h2>Info Entrega</h2>
-     <div class="product_list">
+    <h4 *ngIf="identity.role ==='CHOFER'">Info Destino</h4>
+     <div class="product_list" *ngIf="identity.role ==='CHOFER'">
         <div class="div1">
             <img src="../assets/img/user.png" alt="">
         </div>
         <div class="div2">
-            <h5>Pedro Perez</h5>
-            <h4>$10.00</h4>
             <p>Av. Andres Bello </p>
+            <h4>$10.00</h4>
+            <h5>Pendiente</h5>
+
+        </div>
+        <div class="div3">
+            <!-- <p> Llamar </p> -->
+            <a href="delivery-status.html">
+                <button class="boton_azul_borde">LLamar</button>
+            </a>
+        </div>
+    </div>
+    <h4 *ngIf="identity.role ==='USER'">Info Chofer</h4>
+     <div class="product_list" *ngIf="identity.role ==='USER'">
+        <div class="div1">
+            <img src="../assets/img/user.png" alt="">
+        </div>
+        <div class="div2">
+            <h4>Pepito Driver</h4>
+            <p>Av. Andres Bello </p>
+            <h5>En camino</h5>
 
         </div>
         <div class="div3">
