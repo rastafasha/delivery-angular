@@ -8,6 +8,7 @@ import { TiendaService } from '../../services/tienda.service';
 import { Tienda } from '../../models/tienda.model';
 import { ImagenPipe } from '../../pipes/imagen-pipe.pipe';
 import { environment } from '../../../environments/environment';
+import { PwaNotifInstallerComponent } from '../../shared/pwa-notif-installer/pwa-notif-installer.component';
 
 // declare const gapi: any;
 
@@ -20,10 +21,8 @@ import { environment } from '../../../environments/environment';
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
-    // HeaderComponent,
-    // FooterComponent,
     RouterModule,
-    // ImagenPipe
+    PwaNotifInstallerComponent
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
