@@ -24,7 +24,7 @@
      <app-aviso *ngIf="!driver" [aviso]="'Agrega Información de tu vehiculo'"></app-aviso>
     <div class="product_list" *ngIf="driver">
         <div class="div1">
-            <img src="https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_t.png" alt="">
+            <img [src]="(driver.img ?? '') | imagenPipe: 'drivers'" [alt]="driver.modelo">
         </div>
         <div class="div2">
             <h3>{{driver.modelo}}</h3>
