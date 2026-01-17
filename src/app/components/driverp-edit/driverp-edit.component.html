@@ -1,208 +1,250 @@
-<div class="row">
+<app-loading *ngIf="isLoading"></app-loading>
+<div class="container ">
+    <div class="saludo">
+        <h2>Conductor: {{identity.first_name}}</h2>
+    </div>
 
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">Mi perfil de conductor</h4>
-                <h6 class="card-subtitle">{{pageTitle}} | {{identity.first_name}} {{identity.last_name}} </h6>
-                <h6 class="card-subtitle" *ngIf="driverSeleccionado">LicNum: {{driverSeleccionado.licencianum}}</h6>
-                <form [formGroup]="perfilForm" *ngIf="!isLoading">
+    <div class="product_list" *ngIf="driver && !isLoading">
+        <div class="div1">
+            <img [src]="(driver.img ?? '') | imagenPipe: 'drivers'" [alt]="driver.modelo">
+        </div>
+        <div class="div2">
+            <h3>{{driver.modelo}} </h3>
+            <p>{{driver.marca}}</p>
+            <p>{{driver.placa}}</p>
+            <h4>{{driver.status}}</h4>
+        </div>
+    </div>
+
+    <div class="num_tracking">
+        <!-- Content  -->
+        <section class="col-lg-8">
+
+            <!-- messages form-->
+            <div class="col-sm-12" *ngIf="msm_error">
+                <div class="form-group">
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert" (click)="close_alert()">
+                        <span class="font-weight-medium">Error:</span> Por favor complete el formulario
+                        correctamente.
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-12" *ngIf="msm_success">
+                <div class="form-group">
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <span class="font-weight-medium">Mensaje:</span> Se actualizó sus datos correctamente.
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"
+                            (click)="close_alert()">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- driver form-->
+            <form [formGroup]="driverForm" *ngIf="!isLoading">
                 <!-- datos -->
                 <div class="row">
-                    <!-- Foto -->
-                        <div style="height: auto; margin-bottom: 20px;">
-                            <div class="col-xs-12 col-sm-">
-                                <div class="form-group">
-                                    <div class="cz-file-drop-area">
-                                        <label for="file" class="upload labelgoogle">
-                                            <input type="file" accept="image/*" name="image" id="file"
-                                                (change)="cambiarImagen($any($event.target).files?.[0])"
-                                                 class="hide-input input">
-                                            <span class="label__name">
-                                                {{'Select a Photo'}}
-                                            </span>
-                                        </label>
-                                        <button type="button" [disabled]="!imagenSubir" (click)="subirImagen()"
-                                            class="boton_azul_borde ">
-                                            <i class="fa fa-save"></i> Cambiar imagen
-                                        </button>
 
-                                      
-                                    </div>
+                    <div class="col-xs-12 ">
+                        <div class="row ">
+                            <!-- marca -->
+                            <div class="col-md-4 ">
+                                <label for="validationCustom02" class="form-label labelgoogle">
+                                    <input type="text" formControlName="marca" class="form-control input"
+                                        id="validationCustom02" placeholder=" " required>
+                                    <span class="label__name">
+                                        {{'Marca'}} <span class="login-danger">*</span>
+                                    </span>
+                                </label>
+                                @if(driverForm.controls['marca'].touched){
+
+                                <div class="text-danger">
+                                    @if(driverForm.controls['marca'].errors?.['required']){
+                                    <span>{{'Field Required'}}</span>
+                                    }
+                                    @if(driverForm.controls['marca'].errors?.['minlength']){
+                                    <span>{{'3 Charecters Minimal'}}</span>
+                                    }
                                 </div>
+                                }
+                            </div>
+                            <!-- modelo -->
+                            <div class="col-md-4 ">
+                                <label for="validationCustom02" class="form-label labelgoogle">
+                                    <input type="text" formControlName="modelo" class="form-control input"
+                                        id="validationCustom02" placeholder=" " required>
+                                    <span class="label__name">
+                                        {{'Modelo'}} <span class="login-danger">*</span>
+
+                                    </span>
+                                </label>
+                                @if(driverForm.controls['modelo'].touched){
+
+                                <div class="text-danger">
+                                    @if(driverForm.controls['modelo'].errors?.['required']){
+                                    <span>{{'Field Required'}}</span>
+                                    }
+                                    @if(driverForm.controls['modelo'].errors?.['minlength']){
+                                    <span>{{'3 Charecters Minimal'}}</span>
+                                    }
+                                </div>
+                                }
+                            </div>
+                            <!-- color -->
+                            <div class="col-md-4 ">
+                                <label for="validationCustom02" class="form-label labelgoogle">
+                                    <input type="text" formControlName="color" class="form-control input"
+                                        id="validationCustom02" placeholder=" " required>
+                                    <span class="label__name">
+                                        {{'Color'}}<span class="login-danger">*</span>
+                                    </span>
+                                </label>
+                                @if(driverForm.controls['color'].touched){
+
+                                <div class="text-danger">
+                                    @if(driverForm.controls['color'].errors?.['required']){
+                                    <span>{{'Field Required'}}</span>
+                                    }
+                                    @if(driverForm.controls['color'].errors?.['minlength']){
+                                    <span>{{'3 Charecters Minimal'}}</span>
+                                    }
+                                </div>
+                                }
+                            </div>
+                            <!-- year -->
+                            <div class="col-md-4 ">
+                                <label for="validationCustom02" class="form-label labelgoogle">
+                                    <input type="text" formControlName="year" class="form-control input"
+                                        id="validationCustom02" placeholder=" " required>
+                                    <span class="label__name">
+                                        {{'Año'}}<span class="login-danger">*</span>
+                                    </span>
+                                </label>
+                                @if(driverForm.controls['year'].touched){
+
+                                <div class="text-danger">
+                                    @if(driverForm.controls['year'].errors?.['required']){
+                                    <span>{{'Field Required'}}</span>
+                                    }
+                                    @if(driverForm.controls['year'].errors?.['minlength']){
+                                    <span>{{'3 Charecters Minimal'}}</span>
+                                    }
+                                </div>
+                                }
+                            </div>
+                            <!-- Tipo Vehículo -->
+                            <div class="col-md-4 ">
+                                <div class="form-group labelgoogle">
+                                    <label for="exampleInputPais">Tipo Vehículo</label>
+                                    <select formControlName="tipo_vehiculo" class="form-control">
+                                        <option value="">Selecione</option>
+                                        <option value="carro">Carro</option>
+                                        <option value="moto">Moto</option>
+                                        <option value="camioneta">Camioneta</option>
+                                        <option value="van">Van ó Mini-Van</option>
+                                        <option value="Camion">Camión</option>
+                                    </select>
+                                </div>
+                                @if(driverForm.controls['tipo_vehiculo'].touched){
+
+                                <div class="text-danger">
+                                    @if(driverForm.controls['tipo_vehiculo'].errors?.['required']){
+                                    <span>{{'Field Required'}}</span>
+                                    }
+                                    @if(driverForm.controls['tipo_vehiculo'].errors?.['minlength']){
+                                    <span>{{'3 Charecters Minimal'}}</span>
+                                    }
+                                </div>
+                                }
+                            </div>
+
+                            <!-- placa -->
+                            <div class="col-md-4 ">
+                                <label for="validationCustom02" class="form-label labelgoogle">
+                                    <input type="text" formControlName="placa" class="form-control input"
+                                        id="validationCustom02" placeholder=" " required>
+                                    <span class="label__name">
+                                        {{'Placa'}}<span class="login-danger">*</span>
+                                    </span>
+                                </label>
+                                @if(driverForm.controls['placa'].touched){
+
+                                <div class="text-danger">
+                                    @if(driverForm.controls['placa'].errors?.['required']){
+                                    <span>{{'Field Required'}}</span>
+                                    }
+                                    @if(driverForm.controls['placa'].errors?.['minlength']){
+                                    <span>{{'3 Charecters Minimal'}}</span>
+                                    }
+                                </div>
+                                }
+                            </div>
+
+                            <!-- licencianum -->
+                            <div class="col-md-4 ">
+                                <label for="validationCustom02" class="form-label labelgoogle">
+                                    <input type="text" formControlName="licencianum" class="form-control input"
+                                        id="validationCustom02" placeholder=" " required>
+                                    <span class="label__name">
+                                        {{'Licencia No'}}<span class="login-danger">*</span>
+                                    </span>
+                                </label>
+                                @if(driverForm.controls['licencianum'].touched){
+
+                                <div class="text-danger">
+                                    @if(driverForm.controls['licencianum'].errors?.['required']){
+                                    <span>{{'Field Required'}}</span>
+                                    }
+                                    @if(driverForm.controls['licencianum'].errors?.['minlength']){
+                                    <span>{{'3 Charecters Minimal'}}</span>
+                                    }
+                                </div>
+                                }
                             </div>
                         </div>
-                        <hr>
-                        <br>
-                    <div class="col-xs-12 col-sm-12 col-md-9">
-                        <div class="row ">
-                            <!-- Nombre -->
-                            <div class="col-md-4 ">
-                                <label for="validationCustom02" class="form-label labelgoogle">
-                                    <input type="text" formControlName="first_name" class="form-control input"
-                                        id="validationCustom02" placeholder=" " required>
-                                    <span class="label__name">
-                                        {{'Nombre'}} <span class="login-danger">*</span>
-                                    </span>
-                                </label>
-                                @if(perfilForm.controls['first_name'].touched){
+                    </div>
 
-                                <div class="text-danger">
-                                    @if(perfilForm.controls['first_name'].errors?.['required']){
-                                    <span>{{'Field Required'}}</span>
-                                    }
-                                    @if(perfilForm.controls['first_name'].errors?.['minlength']){
-                                    <span>{{'3 Charecters Minimal'}}</span>
-                                    }
+                    <!-- Foto -->
+                    <div *ngIf="driver" style="height: auto; margin-bottom: 20px;">
+                        <div class="col-xs-12 col-sm-">
+                            <div class="form-group">
+                                <div class="cz-file-drop-area">
+                                    <label for="file" class="upload labelgoogle">
+                                        <input type="file" accept="image/*" name="image" id="file"
+                                            (change)="cambiarImagen($any($event.target).files?.[0])"
+                                            class="hide-input input">
+                                        <span class="label__name">
+                                            {{'Imagen de Vehículo'}}
+                                        </span>
+                                    </label>
+                                    <button type="button" [disabled]="!imagenSubir" (click)="subirImagen()"
+                                        class="boton_azul_borde ">
+                                        <i class="fa fa-save"></i> Cambiar imagen
+                                    </button>
+
+
                                 </div>
-                                }
                             </div>
-                            <!-- Apellido -->
-                            <div class="col-md-4 ">
-                                <label for="validationCustom02" class="form-label labelgoogle">
-                                    <input type="text" formControlName="last_name" class="form-control input"
-                                        id="validationCustom02" placeholder=" " required>
-                                    <span class="label__name">
-                                        {{'Apellido'}} <span class="login-danger">*</span>
-
-                                    </span>
-                                </label>
-                                @if(perfilForm.controls['last_name'].touched){
-
-                                <div class="text-danger">
-                                    @if(perfilForm.controls['last_name'].errors?.['required']){
-                                    <span>{{'Field Required'}}</span>
-                                    }
-                                    @if(perfilForm.controls['last_name'].errors?.['minlength']){
-                                    <span>{{'3 Charecters Minimal'}}</span>
-                                    }
-                                </div>
-                                }
-                            </div>
-                            <!-- Identificación -->
-                            <div class="col-md-4 ">
-                                <label for="validationCustom02" class="form-label labelgoogle">
-                                    <input type="text" formControlName="numdoc" class="form-control input"
-                                        id="validationCustom02" placeholder=" " required>
-                                    <span class="label__name">
-                                        {{'Id Number'}}<span class="login-danger">*</span>
-                                    </span>
-                                </label>
-                                @if(perfilForm.controls['numdoc'].touched){
-
-                                <div class="text-danger">
-                                    @if(perfilForm.controls['numdoc'].errors?.['required']){
-                                    <span>{{'Field Required'}}</span>
-                                    }
-                                    @if(perfilForm.controls['numdoc'].errors?.['minlength']){
-                                    <span>{{'3 Charecters Minimal'}}</span>
-                                    }
-                                </div>
-                                }
-                            </div>
-                            <!-- Teléfono Móvil -->
-                            <div class="col-md-4 ">
-                                <label for="validationCustom02" class="form-label labelgoogle">
-                                    <input type="text" formControlName="telefono" class="form-control input"
-                                        id="validationCustom02" placeholder=" " required>
-                                    <span class="label__name">
-                                        {{'Teléfono Móvil'}}<span class="login-danger">*</span>
-                                    </span>
-                                </label>
-                                @if(perfilForm.controls['telefono'].touched){
-
-                                <div class="text-danger">
-                                    @if(perfilForm.controls['telefono'].errors?.['required']){
-                                    <span>{{'Field Required'}}</span>
-                                    }
-                                    @if(perfilForm.controls['telefono'].errors?.['minlength']){
-                                    <span>{{'3 Charecters Minimal'}}</span>
-                                    }
-                                </div>
-                                }
-                            </div>
-                            <!-- Ciudad -->
-                            <div class="col-md-4 ">
-                                <label for="validationCustom02" class="form-label labelgoogle">
-                                    <input type="text" formControlName="ciudad" class="form-control input"
-                                        id="validationCustom02" placeholder=" " required>
-                                    <span class="label__name">
-                                        {{'City'}}<span class="login-danger">*</span>
-                                    </span>
-                                </label>
-                                @if(perfilForm.controls['ciudad'].touched){
-
-                                <div class="text-danger">
-                                    @if(perfilForm.controls['ciudad'].errors?.['required']){
-                                    <span>{{'Field Required'}}</span>
-                                    }
-                                    @if(perfilForm.controls['ciudad'].errors?.['minlength']){
-                                    <span>{{'3 Charecters Minimal'}}</span>
-                                    }
-                                </div>
-                                }
-                            </div>
-
-                            <!-- País -->
-                            <div class="col-md-4 ">
-                                <div class="input-group form-label labelgoogle">
-                                    <!-- <label for="validationCustom02" class="form-label">{{'Country'}}</label> -->
-                                   <!-- <span class="label__name">
-                                        {{'Pais'}}<span class="login-danger">*</span>
-                                    </span> -->
-                                    <select class="form-control" formControlName="pais">
-                                        <option [value]=" ">Seleccione Pais</option>
-                                        <option *ngFor="let data of paises" [value]="data.pais">
-                                            {{data.pais}}
-                                        </option>
-                                    </select>
-                                    
-
-                                </div>
-                                @if(perfilForm.controls['pais'].touched){
-
-                                <div class="text-danger">
-                                    @if(perfilForm.controls['pais'].errors?.['required']){
-                                    <span>{{'Field Required'}}</span>
-                                    }
-                                    @if(perfilForm.controls['pais'].errors?.['minlength']){
-                                    <span>{{'3 Charecters Minimal'}}</span>
-                                    }
-                                </div>
-                                }
-                            </div>
-
-
-
-
                         </div>
                     </div>
                 </div>
                 <br>
 
+                <div class="row align-items-center">
+                    <div class="col-12">
+                        <button type="button" class="boton_azul_borde" (click)="onUserSave()">{{'Save'}}</button>
+                    </div>
+                </div>
+
 
             </form>
-            </div>
-        </div>
+
+        </section>
     </div>
-     <div class="col-md-6" *ngIf="driverSeleccionado">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">Avatar</h4>
-                <h6 class="card-subtitle">Imagen de Vehículo</h6>
-                <div class="text-center">
-                    <img *ngIf="!imgTemp" [src]="driverSeleccionado.img | imagenPipe: 'drivers'  "
-                        class="img-responsive img-thumbnail" alt="">
-                    <img *ngIf="imgTemp" [src]="imgTemp" class="img-avatar">
-                </div>
-                <input type="file" (change)="cambiarImagen($any($event.target).files?.[0])">
-                <br>
-                <br>
-                <button type="button" [disabled]="!imagenSubir" (click)="subirImagen()"
-                    class="btn btn-success waves-effect waves-light m-r-10 btn-block">
-                    <i class="fa fa-save"></i> Cambiar imagen
-                </button>
-            </div>
-        </div>
-    </div> 
+
 </div>

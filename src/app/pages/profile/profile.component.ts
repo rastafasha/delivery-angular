@@ -8,6 +8,7 @@ import { LoadingComponent } from "../../shared/loading/loading.component";
 import { CommonModule, NgIf } from '@angular/common';
 import { AvisoComponent } from "../../shared/aviso/aviso.component";
 import { RouterModule } from '@angular/router';
+import { ImagenPipe } from '../../pipes/imagen-pipe.pipe';
 
 @Component({
   selector: 'app-profile',
@@ -16,6 +17,7 @@ import { RouterModule } from '@angular/router';
     LoadingComponent, NgIf, 
     CommonModule, 
     RouterModule,
+    ImagenPipe,
     AvisoComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'

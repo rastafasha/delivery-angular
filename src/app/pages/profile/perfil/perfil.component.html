@@ -1,69 +1,75 @@
-
-
 <app-loading *ngIf="isLoading"></app-loading>
-<div class="tab-content-set">
-    <ul class="nav">
-        <li>
-            <a href="#" onclick="return false;" [ngClass]="{'active': option_selectedd == 1}"
-                (click)="optionSelected(1)"> {{'Perfil'}}</a>
-        </li>
-        <li *ngIf="isDriver">
-            <a href="#" onclick="return false;" [ngClass]="{'active': option_selectedd == 2}"
-                (click)="optionSelected(2)">{{'Driver'}}</a>
-        </li>
-    </ul>
-</div>
+
 <!-- Page Content-->
- <div *ngIf="option_selectedd == 1">
-    <div class="container " *ngIf="!isLoading">
-    <div class="saludo">
-        <h2>Editando Perfil: {{identity.first_name}}</h2>
-    </div>
-
-    <div class="product_list">
-        <div class="div1">
-            <img [src]="(identity.img ?? '') | imagenPipe: 'usuarios'" alt="user.first_name">
+<div class="container " *ngIf="!isLoading">
+   <div class="back-title">
+        <div class="saludo">
+            <h2>Editando Perfil: {{identity.first_name}}</h2>
         </div>
-        <div class="div2">
-            <h3>{{identity.first_name}} {{identity.last_name}} </h3>
-            <p>{{identity.numdoc}}</p>
-            <p>{{identity.role}}</p>
-            <h4>Activo</h4>
-        </div>
+        <a routerLink="/myprofile">
+            <button class="boton_azul_borde">Volver</button>
+        </a>
     </div>
+    <div class="tab-content-set">
+        <ul class="nav">
+            <li>
+                <a href="#" onclick="return false;" [ngClass]="{'active': option_selectedd == 1}"
+                (click)="optionSelected(1)"><h3> {{'Perfil'}}</h3></a>
+            </li>
+            <li *ngIf="isDriver">
+                <a href="#" onclick="return false;" [ngClass]="{'active': option_selectedd == 2}"
+                (click)="optionSelected(2)"><h3>{{'Driver'}}</h3></a>
+            </li>
+        </ul>
+    </div>
+    
+    <div *ngIf="option_selectedd == 1">
 
-    <div class="num_tracking">
-        <!-- Content  -->
-        <section class="col-lg-8">
-
-            <!-- Profile form-->
-            <div class="col-sm-12" *ngIf="msm_error">
-                <div class="form-group">
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert" (click)="close_alert()">
-                        <span class="font-weight-medium">Error:</span> Por favor complete el formulario
-                        correctamente.
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                </div>
+        <div class="product_list">
+            <div class="div1">
+                <img [src]="(identity.img ?? '') | imagenPipe: 'usuarios'" [alt]="identity.first_name">
             </div>
-            <div class="col-sm-12" *ngIf="msm_success">
-                <div class="form-group">
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <span class="font-weight-medium">Mensaje:</span> Se actualizó sus datos correctamente.
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"
+            <div class="div2">
+                <h3>{{identity.first_name}} {{identity.last_name}} </h3>
+                <p>{{identity.numdoc}}</p>
+                <p>{{identity.role}}</p>
+                <h4>Activo</h4>
+            </div>
+        </div>
+
+        <div class="num_tracking">
+            <!-- Content  -->
+            <section class="col-lg-8">
+
+                <!-- Profile form-->
+                <div class="col-sm-12" *ngIf="msm_error">
+                    <div class="form-group">
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert"
                             (click)="close_alert()">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                            <span class="font-weight-medium">Error:</span> Por favor complete el formulario
+                            correctamente.
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
+                <div class="col-sm-12" *ngIf="msm_success">
+                    <div class="form-group">
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <span class="font-weight-medium">Mensaje:</span> Se actualizó sus datos correctamente.
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"
+                                (click)="close_alert()">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
-            <form [formGroup]="perfilForm" *ngIf="!isLoading">
-                <!-- datos -->
-                <div class="row">
-                    <!-- Foto -->
+                <form [formGroup]="perfilForm" *ngIf="!isLoading">
+                    <!-- datos -->
+                    <div class="row">
+                        <!-- Foto -->
                         <div style="height: auto; margin-bottom: 20px;">
                             <div class="col-xs-12 col-sm-">
                                 <div class="form-group">
@@ -71,7 +77,7 @@
                                         <label for="file" class="upload labelgoogle">
                                             <input type="file" accept="image/*" name="image" id="file"
                                                 (change)="cambiarImagen($any($event.target).files?.[0])"
-                                                 class="hide-input input">
+                                                class="hide-input input">
                                             <span class="label__name">
                                                 {{'Select a Photo'}}
                                             </span>
@@ -81,81 +87,81 @@
                                             <i class="fa fa-save"></i> Cambiar imagen
                                         </button>
 
-                                      
+
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <hr>
                         <br>
-                    <div class="col-xs-12 col-sm-12 col-md-9">
-                        <div class="row ">
-                            <!-- Nombre -->
-                            <div class="col-md-4 ">
-                                <label for="validationCustom02" class="form-label labelgoogle">
-                                    <input type="text" formControlName="first_name" class="form-control input"
-                                        id="validationCustom02" placeholder=" " required>
-                                    <span class="label__name">
-                                        {{'Nombre'}} <span class="login-danger">*</span>
-                                    </span>
-                                </label>
-                                @if(perfilForm.controls['first_name'].touched){
+                        <div class="col-xs-12 col-sm-12 col-md-9">
+                            <div class="row ">
+                                <!-- Nombre -->
+                                <div class="col-md-4 ">
+                                    <label for="validationCustom02" class="form-label labelgoogle">
+                                        <input type="text" formControlName="first_name" class="form-control input"
+                                            id="validationCustom02" placeholder=" " required>
+                                        <span class="label__name">
+                                            {{'Nombre'}} <span class="login-danger">*</span>
+                                        </span>
+                                    </label>
+                                    @if(perfilForm.controls['first_name'].touched){
 
-                                <div class="text-danger">
-                                    @if(perfilForm.controls['first_name'].errors?.['required']){
-                                    <span>{{'Field Required'}}</span>
-                                    }
-                                    @if(perfilForm.controls['first_name'].errors?.['minlength']){
-                                    <span>{{'3 Charecters Minimal'}}</span>
+                                    <div class="text-danger">
+                                        @if(perfilForm.controls['first_name'].errors?.['required']){
+                                        <span>{{'Field Required'}}</span>
+                                        }
+                                        @if(perfilForm.controls['first_name'].errors?.['minlength']){
+                                        <span>{{'3 Charecters Minimal'}}</span>
+                                        }
+                                    </div>
                                     }
                                 </div>
-                                }
-                            </div>
-                            <!-- Apellido -->
-                            <div class="col-md-4 ">
-                                <label for="validationCustom02" class="form-label labelgoogle">
-                                    <input type="text" formControlName="last_name" class="form-control input"
-                                        id="validationCustom02" placeholder=" " required>
-                                    <span class="label__name">
-                                        {{'Apellido'}} <span class="login-danger">*</span>
+                                <!-- Apellido -->
+                                <div class="col-md-4 ">
+                                    <label for="validationCustom02" class="form-label labelgoogle">
+                                        <input type="text" formControlName="last_name" class="form-control input"
+                                            id="validationCustom02" placeholder=" " required>
+                                        <span class="label__name">
+                                            {{'Apellido'}} <span class="login-danger">*</span>
 
-                                    </span>
-                                </label>
-                                @if(perfilForm.controls['last_name'].touched){
+                                        </span>
+                                    </label>
+                                    @if(perfilForm.controls['last_name'].touched){
 
-                                <div class="text-danger">
-                                    @if(perfilForm.controls['last_name'].errors?.['required']){
-                                    <span>{{'Field Required'}}</span>
-                                    }
-                                    @if(perfilForm.controls['last_name'].errors?.['minlength']){
-                                    <span>{{'3 Charecters Minimal'}}</span>
+                                    <div class="text-danger">
+                                        @if(perfilForm.controls['last_name'].errors?.['required']){
+                                        <span>{{'Field Required'}}</span>
+                                        }
+                                        @if(perfilForm.controls['last_name'].errors?.['minlength']){
+                                        <span>{{'3 Charecters Minimal'}}</span>
+                                        }
+                                    </div>
                                     }
                                 </div>
-                                }
-                            </div>
-                            <!-- Identificación -->
-                            <div class="col-md-4 ">
-                                <label for="validationCustom02" class="form-label labelgoogle">
-                                    <input type="text" formControlName="numdoc" class="form-control input"
-                                        id="validationCustom02" placeholder=" " required>
-                                    <span class="label__name">
-                                        {{'Id Number'}}<span class="login-danger">*</span>
-                                    </span>
-                                </label>
-                                @if(perfilForm.controls['numdoc'].touched){
+                                <!-- Identificación -->
+                                <div class="col-md-4 ">
+                                    <label for="validationCustom02" class="form-label labelgoogle">
+                                        <input type="text" formControlName="numdoc" class="form-control input"
+                                            id="validationCustom02" placeholder=" " required>
+                                        <span class="label__name">
+                                            {{'Id Number'}}<span class="login-danger">*</span>
+                                        </span>
+                                    </label>
+                                    @if(perfilForm.controls['numdoc'].touched){
 
-                                <div class="text-danger">
-                                    @if(perfilForm.controls['numdoc'].errors?.['required']){
-                                    <span>{{'Field Required'}}</span>
-                                    }
-                                    @if(perfilForm.controls['numdoc'].errors?.['minlength']){
-                                    <span>{{'3 Charecters Minimal'}}</span>
+                                    <div class="text-danger">
+                                        @if(perfilForm.controls['numdoc'].errors?.['required']){
+                                        <span>{{'Field Required'}}</span>
+                                        }
+                                        @if(perfilForm.controls['numdoc'].errors?.['minlength']){
+                                        <span>{{'3 Charecters Minimal'}}</span>
+                                        }
+                                    </div>
                                     }
                                 </div>
-                                }
-                            </div>
-                            <!-- Teléfono Casa -->
-                            <!-- <div class="col-md-4 ">
+                                <!-- Teléfono Casa -->
+                                <!-- <div class="col-md-4 ">
                                 <label for="validationCustom02" class="form-label labelgoogle">
                                     <input type="text" formControlName="telhome" class="form-control input"
                                         id="validationCustom02" placeholder=" " required>
@@ -175,80 +181,80 @@
                                 </div>
                                 }
                             </div> -->
-                            <!-- Teléfono Móvil -->
-                            <div class="col-md-4 ">
-                                <label for="validationCustom02" class="form-label labelgoogle">
-                                    <input type="text" formControlName="telefono" class="form-control input"
-                                        id="validationCustom02" placeholder=" " required>
-                                    <span class="label__name">
-                                        {{'Teléfono Móvil'}}<span class="login-danger">*</span>
-                                    </span>
-                                </label>
-                                @if(perfilForm.controls['telefono'].touched){
+                                <!-- Teléfono Móvil -->
+                                <div class="col-md-4 ">
+                                    <label for="validationCustom02" class="form-label labelgoogle">
+                                        <input type="text" formControlName="telefono" class="form-control input"
+                                            id="validationCustom02" placeholder=" " required>
+                                        <span class="label__name">
+                                            {{'Teléfono Móvil'}}<span class="login-danger">*</span>
+                                        </span>
+                                    </label>
+                                    @if(perfilForm.controls['telefono'].touched){
 
-                                <div class="text-danger">
-                                    @if(perfilForm.controls['telefono'].errors?.['required']){
-                                    <span>{{'Field Required'}}</span>
-                                    }
-                                    @if(perfilForm.controls['telefono'].errors?.['minlength']){
-                                    <span>{{'3 Charecters Minimal'}}</span>
+                                    <div class="text-danger">
+                                        @if(perfilForm.controls['telefono'].errors?.['required']){
+                                        <span>{{'Field Required'}}</span>
+                                        }
+                                        @if(perfilForm.controls['telefono'].errors?.['minlength']){
+                                        <span>{{'3 Charecters Minimal'}}</span>
+                                        }
+                                    </div>
                                     }
                                 </div>
-                                }
-                            </div>
-                            <!-- Ciudad -->
-                            <div class="col-md-4 ">
-                                <label for="validationCustom02" class="form-label labelgoogle">
-                                    <input type="text" formControlName="ciudad" class="form-control input"
-                                        id="validationCustom02" placeholder=" " required>
-                                    <span class="label__name">
-                                        {{'City'}}<span class="login-danger">*</span>
-                                    </span>
-                                </label>
-                                @if(perfilForm.controls['ciudad'].touched){
+                                <!-- Ciudad -->
+                                <div class="col-md-4 ">
+                                    <label for="validationCustom02" class="form-label labelgoogle">
+                                        <input type="text" formControlName="ciudad" class="form-control input"
+                                            id="validationCustom02" placeholder=" " required>
+                                        <span class="label__name">
+                                            {{'City'}}<span class="login-danger">*</span>
+                                        </span>
+                                    </label>
+                                    @if(perfilForm.controls['ciudad'].touched){
 
-                                <div class="text-danger">
-                                    @if(perfilForm.controls['ciudad'].errors?.['required']){
-                                    <span>{{'Field Required'}}</span>
-                                    }
-                                    @if(perfilForm.controls['ciudad'].errors?.['minlength']){
-                                    <span>{{'3 Charecters Minimal'}}</span>
+                                    <div class="text-danger">
+                                        @if(perfilForm.controls['ciudad'].errors?.['required']){
+                                        <span>{{'Field Required'}}</span>
+                                        }
+                                        @if(perfilForm.controls['ciudad'].errors?.['minlength']){
+                                        <span>{{'3 Charecters Minimal'}}</span>
+                                        }
+                                    </div>
                                     }
                                 </div>
-                                }
-                            </div>
 
-                            <!-- País -->
-                            <div class="col-md-4 ">
-                                <div class="input-group form-label labelgoogle">
-                                    <!-- <label for="validationCustom02" class="form-label">{{'Country'}}</label> -->
-                                   <!-- <span class="label__name">
+                                <!-- País -->
+                                <div class="col-md-4 ">
+                                    <div class="input-group form-label labelgoogle">
+                                        <!-- <label for="validationCustom02" class="form-label">{{'Country'}}</label> -->
+                                        <!-- <span class="label__name">
                                         {{'Pais'}}<span class="login-danger">*</span>
                                     </span> -->
-                                    <select class="form-control" formControlName="pais">
-                                        <option [value]=" ">Seleccione Pais</option>
-                                        <option *ngFor="let data of paises" [value]="data.pais">
-                                            {{data.pais}}
-                                        </option>
-                                    </select>
-                                    
+                                        <select class="form-control" formControlName="pais">
+                                            <option [value]=" ">Seleccione Pais</option>
+                                            <option *ngFor="let data of paises" [value]="data.pais">
+                                                {{data.pais}}
+                                            </option>
+                                        </select>
 
-                                </div>
-                                @if(perfilForm.controls['pais'].touched){
 
-                                <div class="text-danger">
-                                    @if(perfilForm.controls['pais'].errors?.['required']){
-                                    <span>{{'Field Required'}}</span>
+                                    </div>
+                                    @if(perfilForm.controls['pais'].touched){
+
+                                    <div class="text-danger">
+                                        @if(perfilForm.controls['pais'].errors?.['required']){
+                                        <span>{{'Field Required'}}</span>
+                                        }
+                                        @if(perfilForm.controls['pais'].errors?.['minlength']){
+                                        <span>{{'3 Charecters Minimal'}}</span>
+                                        }
+                                    </div>
                                     }
-                                    @if(perfilForm.controls['pais'].errors?.['minlength']){
-                                    <span>{{'3 Charecters Minimal'}}</span>
-                                    }
                                 </div>
-                                }
-                            </div>
 
-                            <!-- Género -->
-                            <!-- <div class="col-12 col-md-4  col-xl-4">
+                                <!-- Género -->
+                                <!-- <div class="col-12 col-md-4  col-xl-4">
                                 <div class="form-group select-gender input-group gap-3">
                                     <span class="input-group-text" id="basic-addon1">
                                         <i class="fa fa-user" aria-hidden="true"></i>
@@ -267,8 +273,8 @@
                                     </div>
                                 </div>
                             </div> -->
-                            <!-- Lang -->
-                            <!-- <div class="col-12 col-md-4  col-xl-4">
+                                <!-- Lang -->
+                                <!-- <div class="col-12 col-md-4  col-xl-4">
                                         <div class="form-group select-gender input-group gap-3">
                                             <span class="input-group-text" id="basic-addon1">
                                                 <i class="fa fa-user" aria-hidden="true"></i>
@@ -286,8 +292,8 @@
                                         </div>
                                       </div> -->
 
-                            <!-- Dirección -->
-                            <!-- <div class="col-12  col-sm-6">
+                                <!-- Dirección -->
+                                <!-- <div class="col-12  col-sm-6">
                                 <label for="validationCustom02" class="form-label ">{{'Direccion'}}</label>
                                 <textarea formControlName="direccion" class="form-control" id="validationCustom02"
                                     required></textarea>
@@ -303,8 +309,8 @@
                                 </div>
                                 }
                             </div> -->
-                            <!-- Descripción -->
-                            <!-- <div class="col-12 col-sm-6">
+                                <!-- Descripción -->
+                                <!-- <div class="col-12 col-sm-6">
                                 <label for="validationCustom02" class="form-label">{{'Description'}}</label>
                                 <textarea formControlName="description" class="form-control" id="validationCustom02"
                                     required></textarea>
@@ -323,12 +329,12 @@
 
 
 
+                            </div>
                         </div>
                     </div>
-                </div>
-                <br>
-                <!-- Tarifas -->
-                <!-- <div class="row " *ngIf="user.role === 'CHOFER' " >
+                    <br>
+                    <!-- Tarifas -->
+                    <!-- <div class="row " *ngIf="user.role === 'CHOFER' " >
                             <details class="shadowSearch cuadrosearch">
                                 <summary>{{'Price Sale'}}</summary>
                                 <div class="row">
@@ -392,30 +398,29 @@
                             </div>
                             
                         </div> -->
-                <!-- Tarifas -->
+                    <!-- Tarifas -->
 
-                <div class="row align-items-center">
-                    <div class="col-12">
-                        <a [routerLink]="['/myprofile/',]">
-                            <button class="boton_azul_borde">Volver</button>
-                        </a>
-                        <div class="doctor-submit text-end">
-                            <button type="button" class="boton_azul_borde"
-                                (click)="onUserSave()">{{'Save'}}</button>
+                    <div class="row align-items-center">
+                        <div class="col-12">
+                            <a [routerLink]="['/myprofile/',]">
+                                <button class="boton_azul_borde">Volver</button>
+                            </a>
+                            <div class="doctor-submit text-end">
+                                <button type="button" class="boton_azul_borde"
+                                    (click)="onUserSave()">{{'Save'}}</button>
 
+                            </div>
                         </div>
                     </div>
-                </div>
 
 
-            </form>
+                </form>
 
-        </section>
+            </section>
+        </div>
+
     </div>
-
-</div>
- </div>
-
- <div *ngIf="option_selectedd == 2">
-    <app-driverp-edit [identity]="identity"></app-driverp-edit>
+    <div *ngIf="option_selectedd == 2">
+        <app-driverp-edit [identity]="identity"></app-driverp-edit>
+    </div>
 </div>

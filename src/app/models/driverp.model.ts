@@ -1,6 +1,8 @@
 import { Asignacion } from "./asignaciondelivery.model";
 import { Usuario } from "./usuario.model";
+import { environment } from "../../environments/environment";
 
+const base_url = environment.mediaUrlRemoto;
 export class Driver {
      constructor(
         public user : Usuario,
@@ -17,6 +19,20 @@ export class Driver {
         public _id?: string
 
     
-      ){
-      }
+      ){}
+
+      get imagenUrl(){
+
+    if(!this.img){
+      return `${base_url}/uploads/drivers/no-image.jpg`;
+    } else if(this.img.includes('https')){
+      return this.img;
+    } else if(this.img){
+      return `${base_url}/uploads/drivers/${this.img}`;
+    }else {
+      return `${base_url}/uploads/drivers/no-image.jpg`;
+    }
+
+  }
+
 }

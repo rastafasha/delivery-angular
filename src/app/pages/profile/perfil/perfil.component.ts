@@ -167,15 +167,34 @@ export class PerfilComponent implements OnInit {
 
   onUserSave(){
 
-    const {first_name, last_name, telefono, pais, ciudad,  numdoc, email, role, uid} = this.perfilForm.value;
-    this.usuarioService.actualizarP(this.perfilForm.value)
-    .subscribe((resp:any) => {
-      
-      Swal.fire('Guardado', 'Los cambios fueron actualizados', 'success');
-    }, (err)=>{
-      Swal.fire('Error', err.error.msg, 'error');
-
-    })
+    this.isLoading = true;
+    
+        if (this.identity) {
+          //actualizar
+          const data = {
+            ...this.perfilForm.value,
+            _id: this.identity.uid,
+          };
+          this.usuarioService.actualizarP(data).subscribe(
+            resp => {
+              Swal.fire('Actualizado', `Actualizado correctamente`, 'success');
+              this.isLoading = false;
+              this.getUser()
+            }
+          );
+        } else {
+          //crear
+          const data = {
+            ...this.perfilForm.value,
+          };
+          this.usuarioService.crearUsuario(data)
+            .subscribe((resp: any) => {
+              Swal.fire('Creado', `Creado correctamente`, 'success');
+              this.isLoading = false;
+              this.getUser()
+              // this.router.navigateByUrl(`/dashboard/producto`);
+            });
+        }
   }
 
 cambiarImagen(file: File) {
@@ -194,14 +213,19 @@ cambiarImagen(file: File) {
   }
 
   subirImagen() {
-    this.fileUploadService
-      .actualizarFoto(this.imagenSubir, 'drivers', this.user_id)
-      .then(img => {
-        this.identity.img = img;
-        Swal.fire('Guardado', 'La imagen fue actualizada', 'success');
-      }).catch(err => {
-        Swal.fire('Error', 'No se pudo subir la imagen', 'error');
-      })
+    this.isLoading = true;
+        this.fileUploadService
+          .actualizarFoto(this.imagenSubir, 'usuarios', this.user_id)
+          .then(img => {
+            this.identity.img = img;
+            Swal.fire('Guardado', 'La imagen fue actualizada', 'success');
+            this.isLoading = false;
+            this.getUser()
+          }).catch(err => {
+            Swal.fire('Error', 'No se pudo subir la imagen', 'error');
+            this.isLoading = false;
+            this.getUser()
+          })
   }
 
    optionSelected(value: number) {

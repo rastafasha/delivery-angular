@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import Swal from 'sweetalert2';
 import { Driver } from '../../models/driverp.model';
 import { Usuario } from '../../models/usuario.model';
@@ -10,34 +10,24 @@ import { UsuarioService } from '../../services/usuario.service';
 import { CommonModule } from '@angular/common';
 import { ImagenPipe } from '../../pipes/imagen-pipe.pipe';
 import { environment } from '../../../environments/environment';
-declare var jQuery:any;
-declare var $:any;
+import { LoadingComponent } from '../../shared/loading/loading.component';
+declare var jQuery: any;
+declare var $: any;
 
-interface HtmlInputEvent extends Event{
-  target : HTMLInputElement & EventTarget;
+interface HtmlInputEvent extends Event {
+  target: HTMLInputElement & EventTarget;
 }
-// Initialize with empty object to prevent undefined errors
-const defaultDriver: Driver = {
-  user: {} as Usuario,
-  tipo_vehiculo: '',
-  placa: '',
-  color: '',
-  year: '',
-  marca: '',
-  modelo: '',
-  asignaciones: {} as any,
-  status: '',
-  licencianum: '',
-  img: ''
-};
+
 
 @Component({
   selector: 'app-driverp-edit',
-  imports:[
+  imports: [
     CommonModule,
-    FormsModule,
+    LoadingComponent,
+    RouterModule,
     ReactiveFormsModule,
-    ImagenPipe
+    FormsModule,
+    ImagenPipe,
   ],
   templateUrl: './driverp-edit.component.html',
   styleUrls: ['./driverp-edit.component.css']
@@ -55,162 +45,166 @@ export class DriverpEditComponent implements OnInit {
   uid!: string;
   pageTitle!: string;
 
-  
-    public url;
-    public paises:any;
-    public file !:File;
-    public imgSelect !: String | ArrayBuffer;
-    public data_paises : any = [];
-    public msm_error = false;
-    public msm_success = false;
-    public pass_error = false;
-    public isLoading = false;
-    public isDriver = false;
-    
-    public user!: Usuario;
-    public user_id: any;
-  
-    public perfilForm!: FormGroup;
-  
-    option_selectedd: number = 1;
-    solicitud_selectedd: any = null;
-  
-  
-    //DATA
-    public new_password = '';
-    public comfirm_password = '';
-  
-    constructor(
-      private fb: FormBuilder,
-      private usuarioService: UsuarioService,
-      private fileUploadService: FileUploadService
-    ) {
-      // this.usuario = usuarioService.usuario;
+
+  public url;
+  public paises: any;
+  public file !: File;
+  public imgSelect !: String | ArrayBuffer;
+  public data_paises: any = [];
+  public msm_error = false;
+  public msm_success = false;
+  public pass_error = false;
+  public isLoading = false;
+  public isDriver = false;
+
+  public user!: Usuario;
+  public user_id: any;
+  public driver_id!: string;
+
+  public driverForm!: FormGroup;
+
+  option_selectedd: number = 1;
+  solicitud_selectedd: any = null;
+
+
+  //DATA
+  public new_password = '';
+  public comfirm_password = '';
+
+  constructor(
+    private fb: FormBuilder,
+    private usuarioService: UsuarioService,
+    private driverService: DriverpService,
+    private fileUploadService: FileUploadService
+  ) {
+    // this.usuario = usuarioService.usuario;
+
+    this.url = environment.baseUrl;
+
+  }
+
+  ngOnInit(): void {
+    window.scrollTo(0, 0);
+
+    this.identity;
+    this.user_id = this.identity.uid;
+    this.user_id = this.identity.uid;
+    console.log(this.identity)
+    this.getDriver();
+    this.iniciarFormulario();
+
+  }
+
+  getDriver() {
+    this.driverService.getByUserId(this.user_id).subscribe((resp: any) => {
+      this.driver = resp;
+      this.driver_id = resp._id;
+      console.log(this.driver)
+      console.log(this.driver_id)
+
+      if(this.driver){
+        this.driverForm.setValue({
+          marca: this.driver.marca,
+          modelo: this.driver.modelo,
+          color: this.driver.color,
+          year: this.driver.year,
+          tipo_vehiculo: this.driver.tipo_vehiculo,
+          placa: this.driver.placa,
+          licencianum: this.driver.licencianum,
+          status: this.driver.status,
+          user: this.driver.user,
+          img: this.driver.img,
+        });
+      }
       
-      this.url = environment.baseUrl;
-  
-    }
-  
-    ngOnInit(): void {
-      window.scrollTo(0,0);
-  
-       let USER = localStorage.getItem('user');
-      if(USER){
-        this.user = JSON.parse(USER);
-        this.user_id = this.user.uid
-        // console.log(this.user);
-        this. getUser();
-      }
-     
-    }
-  
-    getUser(){
-      this.usuarioService.get_user(this.user_id).subscribe((resp:any)=>{
-        this.identity = resp.usuario;
-        // console.log(this.identity)
-        if(this.identity.role ==='CHOFER'){
-          this.isDriver = true
+    })
+  }
+
+  iniciarFormulario() {
+    this.driverForm = this.fb.group({
+      marca: ['', Validators.required],
+      tipo_vehiculo: ['', Validators.required],
+      placa: ['', Validators.required],
+      color: ['', Validators.required],
+      year: ['', Validators.required],
+      modelo: ['', Validators.required],
+      licencianum: ['', Validators.required],
+      user: [this.user_id ],
+      status: ['PENDING'],
+      img: [''],
+    });
+
+  }
+
+
+
+  close_alert() {
+    this.msm_success = false;
+    this.msm_error = false;
+  }
+
+
+  onUserSave() {
+    this.isLoading = true;
+
+    if (this.driver) {
+      //actualizar
+      const data = {
+        ...this.driverForm.value,
+        _id: this.driver._id,
+      };
+      this.driverService.actualizar(data).subscribe(
+        resp => {
+          Swal.fire('Actualizado', `Actualizado correctamente`, 'success');
+          this.isLoading = false;
+          this.getDriver()
         }
-        if(this.identity){
-          this.iniciarFormulario()
-        }
-      })
+      );
+    } else {
+      //crear
+      const data = {
+        ...this.driverForm.value,
+      };
+      this.driverService.create(data)
+        .subscribe((resp: any) => {
+          Swal.fire('Creado', `Creado correctamente`, 'success');
+          this.isLoading = false;
+          this.getDriver()
+          // this.router.navigateByUrl(`/dashboard/producto`);
+        });
     }
-  
-    iniciarFormulario(){
-      this.perfilForm = this.fb.group({
-        uid: [ this.identity.uid,  Validators.required ],
-        email: [ this.identity.email],
-        first_name: [ this.identity.first_name, Validators.required ],
-        last_name: [ this.identity.last_name, Validators.required ],
-        numdoc: [ this.identity.numdoc ],
-        telefono: [ this.identity.telefono ],
-        pais: [ this.identity.pais],
-        ciudad: [ this.identity.ciudad],
-        google: [ this.identity.google],
-        role: [ this.identity.role],
-        password: [ ''],
-      });
-      
-    }
-  
-  
-  
-    close_alert(){
-      this.msm_success = false;
-      this.msm_error = false;
-    }
-  
-    view_password(){
-      let type = $('#password').attr('type');
-  
-      if(type == 'text'){
-        $('#password').attr('type','password');
-  
-      }else if(type == 'password'){
-        $('#password').attr('type','text');
-      }
-    }
-  
-    view_password2(){
-      let type = $('#password_dos').attr('type');
-  
-      if(type == 'text'){
-        $('#password_dos').attr('type','password');
-  
-      }else if(type == 'password'){
-        $('#password_dos').attr('type','text');
-      }
-    }
-  
-    onUserSave(){
-  
-      const {first_name, last_name, telefono, pais, ciudad,  numdoc, email, role, uid} = this.perfilForm.value;
-      this.usuarioService.actualizarP(this.perfilForm.value)
-      .subscribe((resp:any) => {
-        
-        Swal.fire('Guardado', 'Los cambios fueron actualizados', 'success');
-      }, (err)=>{
-        Swal.fire('Error', err.error.msg, 'error');
-  
-      })
-    }
-  
+  }
+
   cambiarImagen(file: File) {
-      this.imagenSubir = file;
-  
-      // if (!file) {
-      //   return this.imgTemp = null;
-      // }
-  
-      const reader = new FileReader();
-      const url64 = reader.readAsDataURL(file);
-  
-      reader.onloadend = () => {
-        this.imgTemp = reader.result;
-      }
+    this.imagenSubir = file;
+
+    // if (!file) {
+    //   return this.imgTemp = null;
+    // }
+
+    const reader = new FileReader();
+    const url64 = reader.readAsDataURL(file);
+
+    reader.onloadend = () => {
+      this.imgTemp = reader.result;
     }
-  
-    subirImagen() {
-      this.fileUploadService
-        .actualizarFoto(this.imagenSubir, 'drivers', this.user_id)
-        .then(img => {
-          this.identity.img = img;
-          Swal.fire('Guardado', 'La imagen fue actualizada', 'success');
-        }).catch(err => {
-          Swal.fire('Error', 'No se pudo subir la imagen', 'error');
-        })
-    }
-  
-     optionSelected(value: number) {
-      this.option_selectedd = value;
-      if (this.option_selectedd === 1) {
-  
-        // this.ngOnInit();
-      }
-      if (this.option_selectedd === 2) {
-        this.solicitud_selectedd = null;
-      }
-    }
-  
+  }
+
+  subirImagen() {
+    this.isLoading = true;
+    this.fileUploadService
+      .actualizarFoto(this.imagenSubir, 'drivers', this.driver_id)
+      .then(img => {
+        this.driver.img = img;
+        Swal.fire('Guardado', 'La imagen fue actualizada', 'success');
+        this.isLoading = false;
+        this.getDriver()
+      }).catch(err => {
+        Swal.fire('Error', 'No se pudo subir la imagen', 'error');
+        this.isLoading = false;
+        this.getDriver()
+      })
+  }
+
+
 }

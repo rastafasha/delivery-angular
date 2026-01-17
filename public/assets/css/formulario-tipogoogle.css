@@ -25,15 +25,15 @@ input {
 
 }
 
-select{
-    grid-area: input;
+/* select{
+    grid-area: select;
     width: 100%;
     font: inherit;
     border-radius: 10px;
     border:1px solid gray;
     padding: .7rem 1.5rem;
 
-}
+} */
 /* .label__name */
 .label__name{
     grid-area: input;
