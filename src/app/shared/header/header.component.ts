@@ -1,6 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { Usuario } from '../../models/usuario.model';
+import { UsuarioService } from '../../services/usuario.service';
 
 @Component({
   selector: 'app-header',
@@ -12,9 +13,13 @@ import { Usuario } from '../../models/usuario.model';
 })
 export class HeaderComponent {
 
-  @Input() identity!:Usuario;
+   private usuarioService = inject(UsuarioService);
   ngOnInit(){
     
+  }
+
+  logout(){
+    this.usuarioService.logout();
   }
 }
 
