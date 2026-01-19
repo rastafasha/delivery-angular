@@ -49,7 +49,7 @@ export class DriverHomeComponent {
         this.isLoading= false;
 
          if( this.identity.role !== 'CHOFER'){
-          this.router.navigateByUrl('/home')
+          this.router.navigateByUrl('/home-customer');
         }
       })
     }
