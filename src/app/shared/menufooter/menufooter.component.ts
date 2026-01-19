@@ -22,7 +22,9 @@ export class MenufooterComponent {
     private router = inject(Router);
     
     ngOnInit(){
-      this.loadIdentity();
+       setTimeout(() => {
+        this.loadIdentity();
+      }, 500);
     }
   
     loadIdentity(){

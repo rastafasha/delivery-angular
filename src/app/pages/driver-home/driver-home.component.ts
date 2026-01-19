@@ -31,7 +31,9 @@ export class DriverHomeComponent {
   private router = inject(Router);
   
   ngOnInit(){
-    this.loadIdentity();
+    setTimeout(() => {
+      this.loadIdentity();
+    }, 500);
   }
 
   loadIdentity(){
