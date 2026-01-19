@@ -11,8 +11,6 @@ import { environment } from '../../../environments/environment';
 import { PwaNotifInstallerComponent } from '../../shared/pwa-notif-installer/pwa-notif-installer.component';
 
 // declare const gapi: any;
-
-
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -67,7 +65,7 @@ export class LoginComponent implements OnInit {
 
     this.usuarioService.login(this.loginForm.value).subscribe(
       resp => {
-        console.log('Login response:', resp);
+        // console.log('Login response:', resp);
         if (this.loginForm.get('remember')?.value) {
           localStorage.setItem('email', this.loginForm.get('email')?.value);
         } else {
@@ -76,7 +74,7 @@ export class LoginComponent implements OnInit {
         this.usuarioService.getLocalStorage();
         if (localStorage.getItem('user') !== 'undefined') {
           setTimeout(() => {
-            this.router.navigateByUrl('/my-account');
+            this.router.navigateByUrl('/myprofile');
           }, 500);
         } else {
           this.router.navigateByUrl('/login');
