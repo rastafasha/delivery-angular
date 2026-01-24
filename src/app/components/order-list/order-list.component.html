@@ -1,7 +1,8 @@
-<div class="list_products">
 
-    <app-order-item [statustText]="'Empacado'"></app-order-item>
-    <app-order-item [statustText]="'En Camino'"></app-order-item>
-    <app-order-item [statustText]="'Entregado'"></app-order-item>
+<app-loading *ngIf="isLoading"></app-loading>
+<div *ngIf="!isLoading">
+    <div class="list_products" *ngFor=" let asignacion of asignacions">
+        <app-order-item [asignacion]="asignacion" [statustText]="'Empacado'"></app-order-item>
+    </div>
     
 </div>

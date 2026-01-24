@@ -11,9 +11,8 @@
             <img src="https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_t.png" alt="">
         </div>
         <div class="div2">
-            <h5>Order</h5>
-            <h3>#92287157</h3>
-            <h5>Empacado</h5>
+            <h3># {{asignacion._id | slice:0:10}}</h3>
+            <h5>{{asignacion.status}}</h5>
             <p>Standard Delivery</p>
         </div>
         <div class="div3 botonera">
@@ -34,9 +33,9 @@
             <img src="../assets/img/user.png" alt="">
         </div>
         <div class="div2">
-            <h5>Farmatodo</h5>
-            <h3>Sambil</h3>
-            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit.</p>
+            <h5>{{tienda.nombre}}</h5>
+            <h3>{{tienda.local}}</h3>
+            <p>{{tienda.direccion}}</p>
         </div>
         <div class="div3">
             <!-- <p> Llamar </p> -->
@@ -51,9 +50,9 @@
             <img src="../assets/img/user.png" alt="">
         </div>
         <div class="div2">
-            <p>Av. Andres Bello </p>
-            <h4>$10.00</h4>
-            <h5>Pendiente</h5>
+            <p>{{venta.direccion}}</p>
+            <h4>{{venta.precio_envio | currency}}</h4>
+            <h5>{{venta.estado}}</h5>
 
         </div>
         <div class="div3">
@@ -93,7 +92,7 @@
         <div class="num_tracking">
             <i class="fa fa-list"></i>
             <h3>Numero de Trackig</h3>
-            <p>LGS-i92927839300763731</p>
+            <p>{{venta.tracking_number}}</p>
         </div>
         <div class="status">
             <h1>Lista entrega</h1>

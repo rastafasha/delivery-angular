@@ -5,7 +5,6 @@ import { Router, RouterModule } from '@angular/router';
 import { UsuarioService } from '../../services/usuario.service';
 import { CommonModule } from '@angular/common';
 import { TiendaService } from '../../services/tienda.service';
-import { Tienda } from '../../models/tienda.model';
 import { ImagenPipe } from '../../pipes/imagen-pipe.pipe';
 import { environment } from '../../../environments/environment';
 import { PwaNotifInstallerComponent } from '../../shared/pwa-notif-installer/pwa-notif-installer.component';
@@ -20,7 +19,8 @@ import { PwaNotifInstallerComponent } from '../../shared/pwa-notif-installer/pwa
     ReactiveFormsModule,
     FormsModule,
     RouterModule,
-    PwaNotifInstallerComponent
+    PwaNotifInstallerComponent,
+    ImagenPipe
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
   public auth2: any;
 
   loginForm: FormGroup;
-  tiendaSelected!: Tienda;
+  tiendaSelected!: any;
 
   constructor(
     private router: Router,
@@ -51,7 +51,12 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     // this.renderButton();
     this.usuarioService.getLocalStorage();
-    this.getTienda();
+    setTimeout(() => {
+      if (localStorage.getItem('user') !== 'undefined' && localStorage.getItem('user') != null) {
+        this.router.navigateByUrl('/myprofile');
+      }
+    }, 500);
+    this.getTienda(); 
   }
 
   getTienda() {

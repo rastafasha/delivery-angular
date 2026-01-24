@@ -24,7 +24,7 @@
 
     <div *ngIf="option_selectedd == 1">
         <div class="list_products">
-            <app-order-list></app-order-list>
+            <app-order-list [identity]="identity" [identityId]="identityId"></app-order-list>
         </div>
     </div>
     <div *ngIf="option_selectedd == 2">

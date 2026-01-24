@@ -11,7 +11,6 @@ export class Tienda{
     public slug: string,
     public local: string,
     public state_banner : boolean,
-    public img: string,
     public redssociales?: string,
     public telefono?: string,
     public productos?: string,
@@ -24,6 +23,7 @@ export class Tienda{
     public categoria?: Categoria,
     public subcategoria?: string,
     public isFeatured?: boolean,
+    public img?: string,
     public iva?: number,
     public status?: boolean,
     public _id?: string

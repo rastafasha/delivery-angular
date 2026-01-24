@@ -16,7 +16,7 @@ import { environment } from '../../../environments/environment';
     ReactiveFormsModule,
     RouterModule,
     NgIf,
-    // ImagenPipe
+    ImagenPipe
   ],
   templateUrl: './register.component.html',
   styleUrls: [ './register.component.scss' ]
@@ -28,7 +28,7 @@ nombreSelected = environment.nombreSelected;
   registerForm:FormGroup;
   tiendas!: Tienda[];
   tienda!: Tienda;
-  tiendaSelected!: Tienda;
+  tiendaSelected!: any;
 
 
   constructor(

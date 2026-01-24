@@ -47,11 +47,11 @@ export class AsignardeliveryService {
           );
   
     }
-    getByUserId(_id: string){
-      const url = `${base_url}/asignardelivery/user/${_id}`;
+    getByDriverId(_id: string){
+      const url = `${base_url}/asignardelivery/driver/${_id}`;
       return this.http.get<any>(url, this.headers)
         .pipe(
-          map((resp:{ok: boolean, asignacion: Asignacion}) => resp.asignacion)
+          map((resp:{ok: boolean, asignacions: Asignacion}) => resp.asignacions)
           );
   
     }

@@ -8,6 +8,8 @@ import { UsuarioService } from '../../services/usuario.service';
 import { AvisoComponent } from "../../shared/aviso/aviso.component";
 import { LoadingComponent } from "../../shared/loading/loading.component";
 import { NgIf } from '@angular/common';
+import { Driver } from '../../models/driverp.model';
+import { DriverpService } from '../../services/driverp.service';
 
 @Component({
   selector: 'app-driver-home',
@@ -25,10 +27,14 @@ import { NgIf } from '@angular/common';
 })
 export class DriverHomeComponent {
   identity!:Usuario;
+  driver!:Driver;
+  driverId!:string;
+  identityId!:string;
   isLoading= false;
 
   private usuarioService = inject(UsuarioService);
   private router = inject(Router);
+  private driverService = inject(DriverpService);
   
   ngOnInit(){
     setTimeout(() => {
@@ -44,14 +50,30 @@ export class DriverHomeComponent {
     }
     if(USER){
       let user = JSON.parse(USER);
-      this.usuarioService.get_user(user.uid).subscribe((resp:any)=>{
+      this.identityId = user.uid;
+      this.usuarioService.get_user(this.identityId).subscribe((resp:any)=>{
         this.identity = resp.usuario;
-        this.isLoading= false;
 
          if( this.identity.role !== 'CHOFER'){
           this.router.navigateByUrl('/home-customer');
         }
+        this.isLoading= false;
+        console.log(this.identity)
+        this.loadIdentityD();
       })
     }
+  }
+
+
+   loadIdentityD() {
+    this.isLoading = true;
+   this.driverService.getByUserId(this.identityId).subscribe((resp: any) => {
+        this.driver = resp
+        this.driverId = resp._id;
+        // console.log(this.identity)
+        this.isLoading = false;
+
+        
+      })
   }
 }

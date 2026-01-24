@@ -23,8 +23,8 @@ export class MenufooterComponent {
     
     ngOnInit(){
        setTimeout(() => {
-        this.loadIdentity();
       }, 500);
+      this.loadIdentity();
     }
   
     loadIdentity(){
