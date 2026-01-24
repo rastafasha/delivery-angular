@@ -58,7 +58,7 @@ export class DriverHomeComponent {
           this.router.navigateByUrl('/home-customer');
         }
         this.isLoading= false;
-        console.log(this.identity)
+        // console.log(this.identity)
         this.loadIdentityD();
       })
     }

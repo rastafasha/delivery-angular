@@ -4,8 +4,8 @@
         <h2>Detalle de la Entrega</h2>
     </div>
 
-     <!-- <app-aviso  [aviso]="'Tienes nuevas entregas por atender'"></app-aviso> -->
-   
+    <!-- <app-aviso  [aviso]="'Tienes nuevas entregas por atender'"></app-aviso> -->
+    <!-- detales iniciales -->
     <div class="product_list">
         <div class="div1">
             <img src="https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_t.png" alt="">
@@ -13,21 +13,22 @@
         <div class="div2">
             <h3># {{asignacion._id | slice:0:10}}</h3>
             <h5>{{asignacion.status}}</h5>
-            <p>Standard Delivery</p>
+            <p>{{venta.tipo_envio}}</p>
         </div>
         <div class="div3 botonera">
             <button class="boton_azul_borde" *ngIf="identity.role ==='CHOFER'">Aplicar</button>
             <a routerLink="/delivery-status" *ngIf="identity.role ==='USER'">
                 <button class="boton_azul_borde">Status</button>
             </a>
-            <a routerLink="/mapa-page">
+            <a [routerLink]="['/mapa-page/',asignacion._id]">
                 <button class="boton_azul_borde">Mapa</button>
             </a>
         </div>
     </div>
-
+    <!-- detales iniciales -->
+     <!-- Info Despacho -->
     <h4 *ngIf="identity.role ==='CHOFER'">Info Despacho</h4>
-    
+
     <div class="product_list" *ngIf="identity.role ==='CHOFER'">
         <div class="div1">
             <img src="../assets/img/user.png" alt="">
@@ -35,7 +36,8 @@
         <div class="div2">
             <h5>{{tienda.nombre}}</h5>
             <h3>{{tienda.local}}</h3>
-            <p>{{tienda.direccion}}</p>
+            <!-- <p >{{tienda.direccion}}</p> -->
+            <div [innerHtml]="tienda.direccion "  ></div>
         </div>
         <div class="div3">
             <!-- <p> Llamar </p> -->
@@ -44,8 +46,9 @@
             </a>
         </div>
     </div>
+    <!-- Info Destino -->
     <h4 *ngIf="identity.role ==='CHOFER'">Info Destino</h4>
-     <div class="product_list" *ngIf="identity.role ==='CHOFER'">
+    <div class="product_list" *ngIf="identity.role ==='CHOFER'">
         <div class="div1">
             <img src="../assets/img/user.png" alt="">
         </div>
@@ -62,8 +65,9 @@
             </a>
         </div>
     </div>
+    <!-- Info Chofer -->
     <h4 *ngIf="identity.role ==='USER'">Info Chofer</h4>
-     <div class="product_list" *ngIf="identity.role ==='USER'">
+    <div class="product_list" *ngIf="identity.role ==='USER'">
         <div class="div1">
             <img src="../assets/img/user.png" alt="">
         </div>
@@ -80,56 +84,49 @@
             </a>
         </div>
     </div>
-
-
-    <!-- <div class="barra_progreso ">
-            
-            <div class="circulo_inicio"></div>
-            <div class="circulo_progreso"></div>
-            <div class="circulo_llegada"></div>
-            <div class="barra_progreso__barra"></div>
-        </div> -->
+    <!-- Numero de Trackig -->
         <div class="num_tracking">
-            <i class="fa fa-list"></i>
-            <h3>Numero de Trackig</h3>
-            <p>{{venta.tracking_number}}</p>
-        </div>
-        <div class="status">
-            <h1>Lista entrega</h1>
-            <div class="empacado">
-                <ul>
-                    <li>item articulo x 3</li>
-                <li>item articulo x 3</li>
-                <li>item articulo x 3</li>
-                <li>item articulo x 3</li>
-                <li>item articulo x 3</li>
-                <li>item articulo x 3</li>
-                <li>item articulo x 3</li>
-                <li>item articulo x 3</li>
-            </ul>
+        <i class="fa fa-list"></i>
+        <h3>Numero de Trackig</h3>
+        <p>{{venta.tracking_number}}</p>
+    </div>
+    <!-- Lista entrega-->
+    <div class="status">
+        <h1>Lista entrega</h1>
+        <summary>
+            <details>
+                <div *ngFor="let detalle of detalles">
+                <app-item-list [detalle]="detalle"></app-item-list>
             </div>
+            </details>
+        </summary>
+        
+        
+    </div>
+    <br>
+    <!-- Status Entrega-->
+    <div class="status" style="margin-bottom: 80px;">
+        <!-- <h1>Status Entrega</h1> -->
+        <div class="empacado">
+            <h2>{{venta.estado}}</h2>
+            <p>{{venta.tiempo_estimado}}</p>
+            <p>Los Artículos ya estan empacados para despacho.</p>
         </div>
-        <div class="status" style="margin-bottom: 80px;">
-            <h1>Status Entrega</h1>
-            <div class="empacado">
-                <h2>Empacado</h2>
-                <p>fecha de movimiento</p>
-                <p>Los Artículos ya estan empacados para despacho.</p>
-            </div>
-            <!-- <div class="empacado">
+        <!-- <div class="empacado">
                 <h2>En Camino</h2>
                 <p>fecha de movimiento</p>
                 <p>Your parcel is packed and will be handed over to our delivery partner.</p>
             </div> -->
-            <!-- <div class="empacado">
+        <!-- <div class="empacado">
                 <h2>Entregado</h2>
                 <p>fecha de movimiento</p>
                 <p>Your parcel is packed and will be handed over to our delivery partner.</p>
             </div> -->
-            <!-- <div class="mapa"></div> -->
-            <!-- <button class="boton_azul">
+        <!-- <div class="mapa"></div> -->
+        <!-- <button class="boton_azul">
                 Calificar
             </button> -->
-        </div>
+    </div>
+    
 </div>
 <app-menufooter></app-menufooter>

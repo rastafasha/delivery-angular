@@ -1,3 +1,5 @@
+import { Producto } from "./producto.model";
+import { Usuario } from "./usuario.model";
 
 export class Venta {
   constructor(
@@ -16,6 +18,7 @@ export class Venta {
   public destinatario: string,
   public referencia: string,
   public pais: string,
+  public detalle: Detalle,
   public zip: string,
   public ciudad: string,
   public tracking_number: string,
@@ -37,5 +40,18 @@ export class Cancelacion {
   public estado: string,
   public user: string,
   public venta: string,
+  ){}
+}
+
+export class Detalle {
+  constructor(
+   public  _id: string,
+   public user: Usuario,
+   public venta: Venta,
+   public producto: Producto,
+   public cantidad: string,
+   public precio: string,
+   public color: string,
+   public selector: string,
   ){}
 }

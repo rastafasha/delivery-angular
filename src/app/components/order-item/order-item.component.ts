@@ -15,4 +15,5 @@ import { Asignacion } from '../../models/asignaciondelivery.model';
 export class OrderItemComponent {
   @Input() statustText!:string;
   @Input() asignacion!:Asignacion;
+  
 }

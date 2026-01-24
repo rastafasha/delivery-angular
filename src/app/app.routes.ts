@@ -22,6 +22,7 @@ export const routes: Routes = [
     {path: 'delivery-home', component: DriverHomeComponent},
     {path: 'delivery-status', component: DeliveryStatusComponent},
     {path: 'mapa-page', component: MapaComponent},
+    {path: 'mapa-page/:id', component: MapaComponent},
     {path: 'order-detail/:id', component: OrderDetailComponent},
     {path: 'mis-entregas', component: MisEntregasComponent},
     

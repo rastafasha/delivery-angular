@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, OnDestroy, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { WaGeolocationService } from '@ng-web-apis/geolocation';
 import { BehaviorSubject, take } from 'rxjs';
 import { Subscription } from 'rxjs';
@@ -37,8 +37,10 @@ export class MapaComponent implements OnInit, AfterViewInit, OnDestroy {
   errorMessage = '';
 
   identity!:Usuario;
+  asignacion!:any;
 
    private usuarioService = inject(UsuarioService);
+   private activatedRoute = inject(ActivatedRoute);
 
   // Configuración de iconos personalizados
   private driverIcon = L.icon({
@@ -60,6 +62,10 @@ export class MapaComponent implements OnInit, AfterViewInit, OnDestroy {
   });
 
   ngOnInit() {
+    this.activatedRoute.params.subscribe(params => {
+      let orderId = params['id'];
+      console.log(orderId);
+    });
     // Suscripción continua a la ubicación
     this.locationSubscription = this.geolocation$.subscribe({
       next: (position) => {
@@ -102,6 +108,8 @@ export class MapaComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     this.loadIdentity();
+
+    
   }
 
   ngAfterViewInit() {

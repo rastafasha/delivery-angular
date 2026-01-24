@@ -4,6 +4,9 @@ import { AsignardeliveryService } from '../../services/asignardelivery.service';
 import { Asignacion } from '../../models/asignaciondelivery.model';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { LoadingComponent } from "../../shared/loading/loading.component";
+import { VentaService } from '../../services/venta.service';
+import { UsuarioService } from '../../services/usuario.service';
+import { Usuario } from '../../models/usuario.model';
 
 @Component({
   selector: 'app-order-list',
@@ -24,16 +27,31 @@ export class OrderListComponent {
   asignacions!: Asignacion [];
 
   isLoading: boolean = false;
+  user!:Usuario
+  userId!:any;
 
   private asignacionDService = inject(AsignardeliveryService);
+  private ventaService = inject(VentaService);
+  private userService = inject(UsuarioService);
 
   ngOnInit(){
-    
     this.identityId;
     console.log(this.identityId)
-    setTimeout(() => {
-      this.loadAsignaciones();
-    }, 500);
+
+    let USER = localStorage.getItem("user");
+    this.user = JSON.parse(USER || '{}');
+
+    this.userId = this.user.uid;
+    
+    if(this.user.role == 'CHOFER'){
+        this.loadAsignaciones();
+      } else {
+        this.getVentaByUser();
+      }
+  
+    
+    // setTimeout(() => {
+    // }, 500);
   }
 
   loadAsignaciones(){
@@ -43,6 +61,12 @@ export class OrderListComponent {
        this.isLoading = false;
     });
 
+  }
+
+  getVentaByUser(){
+    this.ventaService.listarporUser(this.userId).subscribe((resp:any)=>{
+      console.log(resp);
+    });
   }
 
 

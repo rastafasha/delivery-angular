@@ -25,6 +25,7 @@ import { LoadingComponent } from '../../shared/loading/loading.component';
 export class HomeComponent {
 
   identity!:Usuario;
+  userId!:string;
     isLoading= false;
   
     private usuarioService = inject(UsuarioService);
