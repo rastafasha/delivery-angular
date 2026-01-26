@@ -132,8 +132,8 @@ export class MapaComponent implements OnInit, AfterViewInit, OnDestroy {
             default:
               this.errorMessage = 'Error desconocido';
           }
-          // Usar ubicación por defecto para demo
-          // this.driverPosition = { lat: -33.4489, lng: -70.6693 }; // Santiago, Chile
+          // Usar ubicación por defecto para demo (Venezuela)
+          // this.driverPosition = { lat: 10.4806, lng: -66.9036 }; // Caracas, Venezuela
           if (this.map) {
             this.updateMap();
           }
@@ -293,15 +293,15 @@ export class MapaComponent implements OnInit, AfterViewInit, OnDestroy {
   private initMap(): void {
     // Esperar a tener posición del conductor
     if (!this.driverPosition) {
-      // Posición por defecto mientras carga
-      // this.driverPosition = { lat: -33.4489, lng: -70.6693 };
+      // Posición por defecto mientras carga (Venezuela)
+      // this.driverPosition = { lat: 10.4806, lng: -66.9036 }; // Caracas, Venezuela
       const parsed = this.asignacion?.driverPosition ? this.parsePosition(this.asignacion.driverPosition) : null;
-      this.driverPosition = parsed ?? { lat: -33.4489, lng: -70.6693 };
+      this.driverPosition = parsed ?? { lat: 10.4806, lng: -66.9036 };
     }
 
     // Inicializar mapa centrado en posición del conductor (usar fallback si es null)
-    const centerLat = this.driverPosition?.lat ?? -33.4489;
-    const centerLng = this.driverPosition?.lng ?? -70.6693;
+    const centerLat = this.driverPosition?.lat ?? 10.4806;
+    const centerLng = this.driverPosition?.lng ?? -66.9036;
 
     this.map = L.map(this.mapContainer.nativeElement, {
       center: [centerLat, centerLng],
