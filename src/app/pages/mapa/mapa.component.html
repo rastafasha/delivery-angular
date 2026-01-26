@@ -13,11 +13,19 @@
     <div class="coords-info" *ngIf="driverPosition || deliveryPosition">
         <div class="coord-item" *ngIf="driverPosition">
             <span class="label">📍 Repartidor:</span>
-            <span class="value">{{ driverPosition.lat.toFixed(6) }}, {{ driverPosition.lng.toFixed(6) }}</span>
+            <span class="value">{{ (driverPosition.lat || 0).toFixed(6) }}, {{ (driverPosition.lng || 0).toFixed(6) }}</span>
         </div>
         <div class="coord-item" *ngIf="deliveryPosition">
             <span class="label">🏠 Entrega:</span>
-            <span class="value">{{ deliveryPosition.lat.toFixed(6) }}, {{ deliveryPosition.lng.toFixed(6) }}</span>
+            <span class="value">{{ (deliveryPosition.lat || 0).toFixed(6) }}, {{ (deliveryPosition.lng || 0).toFixed(6) }}</span>
+        </div>
+        
+        <!-- Botón para compartir coordenadas -->
+        <div class="share-section">
+            <button class="share-btn btn" (click)="shareCoordinates()">
+                <span class="share-icon">📤</span>
+                <span class="share-text">Compartir Coordenadas</span>
+            </button>
         </div>
     </div>
 

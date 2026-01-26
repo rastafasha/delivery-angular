@@ -20,7 +20,7 @@ import { PwaNotifInstallerComponent } from '../../shared/pwa-notif-installer/pwa
     FormsModule,
     RouterModule,
     PwaNotifInstallerComponent,
-    ImagenPipe
+    // ImagenPipe
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']

@@ -46,7 +46,7 @@ export class OrderListComponent {
     if(this.user.role == 'CHOFER'){
         this.loadAsignaciones();
       } else {
-        this.getVentaByUser();
+        this.loadAsignacionesByUser();
       }
   
     
@@ -63,9 +63,11 @@ export class OrderListComponent {
 
   }
 
-  getVentaByUser(){
-    this.ventaService.listarporUser(this.userId).subscribe((resp:any)=>{
-      console.log(resp);
+  loadAsignacionesByUser(){
+    this.isLoading = true;
+    this.asignacionDService.getByUserId(this.userId).subscribe((resp:any)=>{
+      this.asignacions = resp;
+       this.isLoading = false;
     });
   }
 

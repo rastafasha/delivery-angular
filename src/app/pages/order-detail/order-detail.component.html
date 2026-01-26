@@ -16,17 +16,17 @@
             <p>{{venta.tipo_envio}}</p>
         </div>
         <div class="div3 botonera">
-            <button class="boton_azul_borde" *ngIf="identity.role ==='CHOFER'">Aplicar</button>
-            <a routerLink="/delivery-status" *ngIf="identity.role ==='USER'">
+            <button class="boton_azul_borde" *ngIf="identity.role ==='CHOFER' && asignacion.status ==='Asignado'" (click)="activarDelivery()">Aplicar</button>
+            <!-- <a routerLink="/delivery-status" *ngIf="identity.role ==='USER'">
                 <button class="boton_azul_borde">Status</button>
-            </a>
+            </a> -->
             <a [routerLink]="['/mapa-page/',asignacion._id]">
                 <button class="boton_azul_borde">Mapa</button>
             </a>
         </div>
     </div>
     <!-- detales iniciales -->
-     <!-- Info Despacho -->
+    <!-- Info Despacho -->
     <h4 *ngIf="identity.role ==='CHOFER'">Info Despacho</h4>
 
     <div class="product_list" *ngIf="identity.role ==='CHOFER'">
@@ -37,7 +37,7 @@
             <h5>{{tienda.nombre}}</h5>
             <h3>{{tienda.local}}</h3>
             <!-- <p >{{tienda.direccion}}</p> -->
-            <div [innerHtml]="tienda.direccion "  ></div>
+            <div [innerHtml]="tienda.direccion "></div>
         </div>
         <div class="div3">
             <!-- <p> Llamar </p> -->
@@ -69,23 +69,46 @@
     <h4 *ngIf="identity.role ==='USER'">Info Chofer</h4>
     <div class="product_list" *ngIf="identity.role ==='USER'">
         <div class="div1">
-            <img src="../assets/img/user.png" alt="">
+            <img [src]="(userDriver?.img || '') | imagenPipe :'usuarios'" alt="">
         </div>
         <div class="div2">
-            <h4>Pepito Driver</h4>
-            <p>Av. Andres Bello </p>
-            <h5>En camino</h5>
+            <h4>{{userDriver.first_name}} {{userDriver.last_name}}</h4>
+            <p>{{driver.modelo}} </p>
+            <h5>{{driver.tipo_vehiculo}}</h5>
+            
 
         </div>
         <div class="div3">
             <!-- <p> Llamar </p> -->
+            <div class="iconovehu">
+                <span *ngIf="driver.tipo_vehiculo === 'Carro'">
+                    <i class="fa fa-car" aria-hidden="true"></i>
+                </span>
+                <span *ngIf="driver.tipo_vehiculo === 'Moto'">
+                    <i class="fas fa-motorcycle"></i>
+                </span>
+                <span *ngIf="driver.tipo_vehiculo === 'Camion'">
+                    <i class="fas fa-truck"></i>
+                </span>
+                <span *ngIf="driver.tipo_vehiculo === 'Camioneta'">
+                    <i class="fas fa-truck-pickup"></i>
+                </span>
+                <span *ngIf="driver.tipo_vehiculo === 'Pickup'">
+                    <i class="fas fa-truck-pickup"></i>
+                </span>
+                <span *ngIf="driver.tipo_vehiculo === 'Van'">
+                    <i class="fas fa-truck-loading"></i>
+                </span>
+
+                <h5>{{driver.placa}}</h5>
+            </div>
             <a href="delivery-status.html">
                 <button class="boton_azul_borde">LLamar</button>
             </a>
         </div>
     </div>
     <!-- Numero de Trackig -->
-        <div class="num_tracking">
+    <div class="num_tracking">
         <i class="fa fa-list"></i>
         <h3>Numero de Trackig</h3>
         <p>{{venta.tracking_number}}</p>
@@ -96,12 +119,12 @@
         <summary>
             <details>
                 <div *ngFor="let detalle of detalles">
-                <app-item-list [detalle]="detalle"></app-item-list>
-            </div>
+                    <app-item-list [detalle]="detalle"></app-item-list>
+                </div>
             </details>
         </summary>
-        
-        
+
+
     </div>
     <br>
     <!-- Status Entrega-->
@@ -127,6 +150,6 @@
                 Calificar
             </button> -->
     </div>
-    
+
 </div>
 <app-menufooter></app-menufooter>

@@ -8,6 +8,8 @@ import { UsuarioService } from '../../services/usuario.service';
 import { NgIf } from '@angular/common';
 import { AvisoComponent } from '../../shared/aviso/aviso.component';
 import { LoadingComponent } from '../../shared/loading/loading.component';
+import { AsignardeliveryService } from '../../services/asignardelivery.service';
+import { Asignacion } from '../../models/asignaciondelivery.model';
 @Component({
   selector: 'app-home',
   imports: [
@@ -27,12 +29,15 @@ export class HomeComponent {
   identity!:Usuario;
   userId!:string;
     isLoading= false;
+    asignacion!: Asignacion;
   
     private usuarioService = inject(UsuarioService);
+    private asignacionDServices = inject(AsignardeliveryService);
     private router = inject(Router);
     
     ngOnInit(){
       this.loadIdentity();
+
     }
   
     loadIdentity(){
@@ -49,5 +54,7 @@ export class HomeComponent {
         })
       }
     }
+
+    
 
 }

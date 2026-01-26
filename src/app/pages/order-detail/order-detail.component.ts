@@ -11,13 +11,15 @@ import { Tienda } from '../../models/tienda.model';
 import { Detalle, Venta } from '../../models/ventas.model';
 import { VentaService } from '../../services/venta.service';
 import { ItemListComponent } from "../../components/item-list/item-list.component";
+import { Driver } from '../../models/driverp.model';
+import { ImagenPipe } from '../../pipes/imagen-pipe.pipe';
 
 @Component({
   selector: 'app-order-detail',
   imports: [
     MenufooterComponent, RouterLink,
     LoadingComponent, NgIf, SlicePipe, CurrencyPipe, 
-    NgFor, CommonModule,
+    NgFor, CommonModule, ImagenPipe,
     ItemListComponent
 ],
   templateUrl: './order-detail.component.html',
@@ -29,6 +31,9 @@ export class OrderDetailComponent {
   asignacion!: Asignacion;
   tienda!: Tienda;
   venta!: Venta;
+  driver!: Driver;
+  driverId!: any;
+  userDriver!:Usuario;
   @Input() detalles!: Detalle[];
 
   private usuarioService = inject(UsuarioService);
@@ -63,19 +68,36 @@ export class OrderDetailComponent {
       this.asignacion = resp
       this.tienda = resp.tienda;
       this.venta = resp.venta;
+      this.driver = resp.driver;
+      this.driverId = this.driver.user;
       this.isLoading = false;
       this.getVentaDetails(this.venta._id);
+      this.getUsuarioDriver();
     });
   }
 
   getVentaDetails(id: string) {
     this.isLoading = true;
     this.ventaServices.detalle(id).subscribe((resp: any) => {
-      console.log(resp);
       this.venta = resp.venta;
       this.detalles = resp.detalle;
       this.isLoading = false;
     });
+  }
+
+  getUsuarioDriver(){
+    this.usuarioService.get_user(this.driverId).subscribe((resp:any)=>{
+      this.userDriver = resp.usuario;
+    });
+  }
+  //actualizamos es status de la asignacion a 'EN PROCESO' cuando el chofer aplica para entregar el pedido
+  activarDelivery(){
+ 
+    this.asignacionDServices.activar(this.asignacion._id).subscribe((resp:any)=>{
+      // console.log(resp);
+      this.asignacion = resp.asignacion;
+      this.ngOnInit();
+    }); 
   }
 
 }

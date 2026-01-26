@@ -1,14 +1,13 @@
 import { Component, inject, OnInit, OnDestroy, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
-import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { WaGeolocationService } from '@ng-web-apis/geolocation';
-import { BehaviorSubject, take } from 'rxjs';
 import { Subscription } from 'rxjs';
 import { MenufooterComponent } from '../../shared/menufooter/menufooter.component';
 import * as L from 'leaflet';
 import { NgIf } from '@angular/common';
 import { UsuarioService } from '../../services/usuario.service';
 import { Usuario } from '../../models/usuario.model';
+import { Driver } from '../../models/driverp.model';
 
 @Component({
   selector: 'app-mapa',
@@ -38,6 +37,8 @@ export class MapaComponent implements OnInit, AfterViewInit, OnDestroy {
 
   identity!:Usuario;
   asignacion!:any;
+  user!:any;
+  driver!:any;
 
    private usuarioService = inject(UsuarioService);
    private activatedRoute = inject(ActivatedRoute);
@@ -62,6 +63,18 @@ export class MapaComponent implements OnInit, AfterViewInit, OnDestroy {
   });
 
   ngOnInit() {
+
+    let USER = localStorage.getItem("user");
+    this.user = JSON.parse(USER || '{}');
+
+    
+    if(this.user.role == 'CHOFER'){
+      this.driverPosition = this.driver;
+    } 
+    if(this.user.role == 'USER'){
+      this.deliveryPosition = this.user;
+    } 
+  
     this.activatedRoute.params.subscribe(params => {
       let orderId = params['id'];
       console.log(orderId);
@@ -148,7 +161,7 @@ export class MapaComponent implements OnInit, AfterViewInit, OnDestroy {
     }).addTo(this.map);
 
     // Simular coordenadas de entrega (200-500 metros alejados)
-    this.simulateDeliveryLocation();
+    // this.simulateDeliveryLocation();
 
     // Actualizar marcadores y ruta
     this.updateMap();
@@ -219,7 +232,7 @@ export class MapaComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
 
-   loadIdentity(){
+  loadIdentity(){
     let USER = localStorage.getItem("user");
     if(USER){
       let user = JSON.parse(USER);
@@ -227,6 +240,84 @@ export class MapaComponent implements OnInit, AfterViewInit, OnDestroy {
         this.identity = resp.usuario;
 
       })
+    }
+  }
+
+  /**
+   * Comparte las coordenadas usando la API nativa de Web Share
+   * o copia al portapapeles como alternativa
+   */
+  async shareCoordinates(): Promise<void> {
+    const shareData = this.buildShareData();
+
+    // Verificar si la API de Web Share está disponible
+    if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+      try {
+        await navigator.share(shareData);
+        console.log('Coordenadas compartidas exitosamente');
+      } catch (error: any) {
+        // El usuario canceló el compartir o hubo un error
+        if (error.name !== 'AbortError') {
+          console.error('Error al compartir:', error);
+          this.copyToClipboard(shareData.text || '');
+        }
+      }
+    } else {
+      // Usar fallback: copiar al portapapeles
+      this.copyToClipboard(shareData.text || '');
+    }
+  }
+
+  /**
+   * Construye el objeto de datos para compartir
+   */
+  private buildShareData(): ShareData {
+    let title = '📍 Coordenadas de Entrega - MallConnect';
+    let text = this.buildCoordinateText();
+    
+    // Crear URL con coordenadas para abrir en Google Maps
+    let mapsUrl = '';
+    if (this.driverPosition) {
+      mapsUrl = `https://www.google.com/maps?q=${this.driverPosition.lat},${this.driverPosition.lng}`;
+    }
+
+    return {
+      title: title,
+      text: text,
+      url: mapsUrl
+    };
+  }
+
+  /**
+   * Construye el texto con las coordenadas formateadas
+   */
+  private buildCoordinateText(): string {
+    let text = '🛵 **Ruta de Entrega - MallConnect**\n\n';
+    
+    if (this.driverPosition) {
+      text += `📍 **Repartidor:** ${this.driverPosition.lat.toFixed(6)}, ${this.driverPosition.lng.toFixed(6)}\n`;
+      text += `[Ver en Google Maps](https://www.google.com/maps?q=${this.driverPosition.lat},${this.driverPosition.lng})\n\n`;
+    }
+    
+    if (this.deliveryPosition) {
+      text += `🏠 **Entrega:** ${this.deliveryPosition.lat.toFixed(6)}, ${this.deliveryPosition.lng.toFixed(6)}\n`;
+      text += `[Ver en Google Maps](https://www.google.com/maps?q=${this.deliveryPosition.lat},${this.deliveryPosition.lng})`;
+    }
+    
+    text += '\n\n📱 Compartido desde MallConnect Delivery';
+    return text;
+  }
+
+  /**
+   * Copia las coordenadas al portapapeles
+   */
+  private async copyToClipboard(text: string): Promise<void> {
+    try {
+      await navigator.clipboard.writeText(text);
+      alert('✅ Coordenadas copiadas al portapapeles\n\nPuedes pegarlas en WhatsApp, SMS o cualquier aplicación');
+    } catch (error) {
+      console.error('Error al copiar al portapapeles:', error);
+      alert('❌ No se pudieron copiar las coordenadas');
     }
   }
 }

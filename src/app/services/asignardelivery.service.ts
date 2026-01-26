@@ -55,6 +55,14 @@ export class AsignardeliveryService {
           );
   
     }
+    getByUserId(_id: string){
+      const url = `${base_url}/asignardelivery/user/${_id}`;
+      return this.http.get<any>(url, this.headers)
+        .pipe(
+          map((resp:{ok: boolean, asignacions: Asignacion}) => resp.asignacions)
+          );
+  
+    }
   
   
     create(asignacion: Asignacion){
@@ -62,7 +70,7 @@ export class AsignardeliveryService {
       return this.http.post(url, asignacion, this.headers);
     }
   
-    actualizar(asignacion: Asignacion){
+    actualizar(asignacion: any){
       const url = `${base_url}/asignardelivery/update/${asignacion._id}`;
       return this.http.put(url, asignacion, this.headers);
     }
@@ -71,6 +79,12 @@ export class AsignardeliveryService {
       const url = `${base_url}/asignardelivery/remove/${_id}`;
       return this.http.delete(url, this.headers);
     }
+
+    activar(_id:any):Observable<any>{
+    const url = `${base_url}/asignardelivery/activar/${_id}`;
+    return this.http.get(url,  this.headers);
+  }
+
 
 
 }
