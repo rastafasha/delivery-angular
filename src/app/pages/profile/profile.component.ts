@@ -9,16 +9,20 @@ import { CommonModule, NgIf } from '@angular/common';
 import { AvisoComponent } from "../../shared/aviso/aviso.component";
 import { RouterModule } from '@angular/router';
 import { ImagenPipe } from '../../pipes/imagen-pipe.pipe';
+import { DireccionesComponent } from "./direcciones/direcciones.component";
+import { BackComponent } from "../../shared/back/back.component";
 
 @Component({
   selector: 'app-profile',
   imports: [
-    MenufooterComponent, 
-    LoadingComponent, NgIf, 
-    CommonModule, 
+    MenufooterComponent,
+    LoadingComponent, NgIf,
+    CommonModule,
     RouterModule,
     ImagenPipe,
-    AvisoComponent],
+    AvisoComponent,
+    DireccionesComponent,
+],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
@@ -28,6 +32,7 @@ driver!:Driver;
 identityId!:any;
 isLoading = false;
 isLoadingDr = false;
+pageTitle = 'Mi Perfil';
 
   private usuarioService = inject(UsuarioService);
   private driverpService = inject(DriverpService);

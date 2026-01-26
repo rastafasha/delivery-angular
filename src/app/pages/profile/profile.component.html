@@ -1,4 +1,5 @@
 <app-loading *ngIf="isLoading"></app-loading>
+<!-- <app-back [pageTitle]="pageTitle"></app-back> -->
 <div class="container" *ngIf="!isLoading">
     <div class="saludo" >
         <h2>Hola!, {{identity.first_name}}</h2>
@@ -20,6 +21,8 @@
             </a>
         </div>
     </div>
+
+     <app-direcciones [identity]="identity" *ngIf="identity && identity.role ==='USER'"></app-direcciones>
 
      <app-aviso *ngIf="!driver && identity.role ==='CHOFER'" [aviso]="'Agrega Información de tu vehiculo'"></app-aviso>
     <div class="product_list" *ngIf="driver">
@@ -59,12 +62,14 @@
     </div>
 
     <app-aviso *ngIf="driver" [aviso]="'Tienes nuevas entregas por atender'"></app-aviso>
-    <div class="barra_progreso ">
+
+   
+    <!-- <div class="barra_progreso ">
 
         <div class="circulo_inicio"></div>
         <div class="circulo_progreso"></div>
         <div class="circulo_llegada"></div>
         <div class="barra_progreso__barra"></div>
-    </div>
+    </div> -->
 </div>
 <app-menufooter></app-menufooter>

@@ -1,0 +1,79 @@
+<app-loading *ngIf="isLoading"></app-loading>
+
+<!-- Page Content-->
+<div class="container " *ngIf="!isLoading">
+    <div class="back-title">
+
+        <a routerLink="/myprofile">
+            <button class="boton_azul_borde">Volver</button>
+        </a>
+    </div>
+
+    <div class="num_tracking">
+        <!-- Content  -->
+        <section class="col-lg-8">
+
+            <!-- Profile form-->
+            <form class=" p-t-20 col-xs-12" [formGroup]="direccionForm" (ngSubmit)="onSubmit()">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Nombre y apellidos</label>
+                        <input class="form-control" type="text" required placeholder="Nombres y apellidos"
+                            formControlName="nombres_completos">
+
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>País</label>
+                        <div class="input-group form-label labelgoogle">
+                                        <select class="form-control" formControlName="pais">
+                                            <option [value]=" ">Seleccione País</option>
+                                            <option *ngFor="let data of paises" [value]="data.pais">
+                                                {{data.pais}}
+                                            </option>
+                                        </select>
+                                    </div>
+                        <!-- <input class="form-control" type="text" required placeholder="pais" formControlName="pais"> -->
+                       
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label>Dirección</label>
+                        <textarea class="form-control" placeholder="Ingrese la dirección" required
+                            formControlName="direccion"></textarea>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label>Referencia</label>
+                        <textarea class="form-control" placeholder="Referencia de su dirección" required
+                            formControlName="referencia"></textarea>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Ciudad</label>
+                        <input class="form-control" type="text" id="address-fn" required placeholder="Ciudad"
+                            formControlName="ciudad">
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>ZIP</label>
+                        <input class="form-control" type="text" id="address-fn" required placeholder="Código Postal"
+                            formControlName="zip">
+                    </div>
+                </div>
+
+                <button type="submit" [disabled]="direccionForm.invalid"
+                    class="btn btn-success waves-effect waves-light m-r-10 btn-block">
+                    <i class="fa fa-save"></i> Guardar cambios
+                </button>
+            </form>
+
+        </section>
+    </div>
+</div>

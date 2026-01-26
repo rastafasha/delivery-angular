@@ -11,12 +11,13 @@
             <img src="https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_t.png" alt="">
         </div>
         <div class="div2">
-            <h3># {{asignacion._id | slice:0:10}}</h3>
+            <h5># {{asignacion._id | slice:0:10}}</h5>
             <h5>{{asignacion.status}}</h5>
             <p>{{venta.tipo_envio}}</p>
         </div>
         <div class="div3 botonera">
-            <button class="boton_azul_borde" *ngIf="identity.role ==='CHOFER' && asignacion.status ==='Asignado'" (click)="activarDelivery()">Aplicar</button>
+            <button class="boton_azul_borde" *ngIf="identity.role ==='CHOFER' && asignacion.status ==='Asignado'"
+                (click)="activarDelivery()">Aplicar</button>
             <!-- <a routerLink="/delivery-status" *ngIf="identity.role ==='USER'">
                 <button class="boton_azul_borde">Status</button>
             </a> -->
@@ -74,13 +75,9 @@
         <div class="div2">
             <h4>{{userDriver.first_name}} {{userDriver.last_name}}</h4>
             <p>{{driver.modelo}} </p>
-            <h5>{{driver.tipo_vehiculo}}</h5>
-            
-
-        </div>
-        <div class="div3">
-            <!-- <p> Llamar </p> -->
-            <div class="iconovehu">
+            <p>{{driver.placa}}</p>
+            <p>{{driver.tipo_vehiculo}}</p>
+             <div class="">
                 <span *ngIf="driver.tipo_vehiculo === 'Carro'">
                     <i class="fa fa-car" aria-hidden="true"></i>
                 </span>
@@ -99,9 +96,11 @@
                 <span *ngIf="driver.tipo_vehiculo === 'Van'">
                     <i class="fas fa-truck-loading"></i>
                 </span>
-
-                <h5>{{driver.placa}}</h5>
             </div>
+        </div>
+        <div class="div3">
+            <!-- <p> Llamar </p> -->
+           
             <a href="delivery-status.html">
                 <button class="boton_azul_borde">LLamar</button>
             </a>
@@ -128,28 +127,20 @@
     </div>
     <br>
     <!-- Status Entrega-->
-    <div class="status" style="margin-bottom: 80px;">
+    <div class="status" style="margin-bottom: 20px;">
         <!-- <h1>Status Entrega</h1> -->
         <div class="empacado">
             <h2>{{venta.estado}}</h2>
             <p>{{venta.tiempo_estimado}}</p>
-            <p>Los Artículos ya estan empacados para despacho.</p>
         </div>
-        <!-- <div class="empacado">
-                <h2>En Camino</h2>
-                <p>fecha de movimiento</p>
-                <p>Your parcel is packed and will be handed over to our delivery partner.</p>
-            </div> -->
-        <!-- <div class="empacado">
-                <h2>Entregado</h2>
-                <p>fecha de movimiento</p>
-                <p>Your parcel is packed and will be handed over to our delivery partner.</p>
-            </div> -->
-        <!-- <div class="mapa"></div> -->
-        <!-- <button class="boton_azul">
-                Calificar
-            </button> -->
     </div>
+
+    <button class="boton_azul_borde" style="margin-bottom: 80px;" *ngIf="identity.role ==='USER'">
+        Calificar
+    </button>
+    <button class="boton_azul_borde" style="margin-bottom: 80px;" *ngIf="identity.role ==='CHOFER'">
+        Marcar como Entregado
+    </button>
 
 </div>
 <app-menufooter></app-menufooter>

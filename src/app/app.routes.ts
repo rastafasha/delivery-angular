@@ -10,6 +10,7 @@ import { RegisterComponent } from './auth/register/register.component';
 import { LoginComponent } from './auth/login/login.component';
 import { RecoveryComponent } from './auth/recovery/recovery.component';
 import { PerfilComponent } from './pages/profile/perfil/perfil.component';
+import { DireccionEditComponent } from './pages/profile/direcciones/direccion-edit/direccion-edit.component';
 
 
 
@@ -39,6 +40,8 @@ export const routes: Routes = [
 
     {path: 'myprofile', component: ProfileComponent},
     {path: 'myprofile/:id', component: PerfilComponent },
+    {path: 'myprofile/direccion/create', component: DireccionEditComponent },
+    {path: 'myprofile/direccion/edit/:id', component: DireccionEditComponent },
     // {path: 'my-account', component: MyaccountComponent },
     // { path: 'my-account/ordenes', component: IndexOrdenesComponent},
     // { path: 'my-account/ordenes/detalles/:id', component: DetalleOrdenComponent},
