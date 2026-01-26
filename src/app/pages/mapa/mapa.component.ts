@@ -294,12 +294,17 @@ export class MapaComponent implements OnInit, AfterViewInit, OnDestroy {
     // Esperar a tener posición del conductor
     if (!this.driverPosition) {
       // Posición por defecto mientras carga
-      this.driverPosition = { lat: -33.4489, lng: -70.6693 };
+      // this.driverPosition = { lat: -33.4489, lng: -70.6693 };
+      const parsed = this.asignacion?.driverPosition ? this.parsePosition(this.asignacion.driverPosition) : null;
+      this.driverPosition = parsed ?? { lat: -33.4489, lng: -70.6693 };
     }
 
-    // Inicializar mapa centrado en posición del conductor
+    // Inicializar mapa centrado en posición del conductor (usar fallback si es null)
+    const centerLat = this.driverPosition?.lat ?? -33.4489;
+    const centerLng = this.driverPosition?.lng ?? -70.6693;
+
     this.map = L.map(this.mapContainer.nativeElement, {
-      center: [this.driverPosition.lat, this.driverPosition.lng],
+      center: [centerLat, centerLng],
       zoom: 15,
       zoomControl: true
     });
