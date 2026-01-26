@@ -74,6 +74,11 @@ export class AsignardeliveryService {
       const url = `${base_url}/asignardelivery/update/${asignacion._id}`;
       return this.http.put(url, asignacion, this.headers);
     }
+    
+    actualizarCoords(asignacion: any){
+      const url = `${base_url}/asignardelivery/update/coord/${asignacion._id}`;
+      return this.http.put(url, asignacion, this.headers);
+    }
   
     borrar(_id:string){
       const url = `${base_url}/asignardelivery/remove/${_id}`;

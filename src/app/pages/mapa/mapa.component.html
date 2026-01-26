@@ -10,7 +10,7 @@
     <div #mapContainer class="map-container"></div>
 
     <!-- Información de coordenadas -->
-    <div class="coords-info" *ngIf="driverPosition || deliveryPosition">
+    <div class="coords-info" >
         <div class="coord-item" *ngIf="driverPosition">
             <span class="label">📍 Repartidor:</span>
             <span class="value">{{ (driverPosition.lat || 0).toFixed(6) }}, {{ (driverPosition.lng || 0).toFixed(6) }}</span>
