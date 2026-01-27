@@ -7,6 +7,12 @@ export const environment = {
     soketServer : 'https://back-ecomm-mall.vercel.app/',
     nombreSelected: 'Delivery App',
     //pluggins
+
+     rapidapiKey: '****',
+  rapidapiHost: '****',
+  clientIdPaypal: '****',
+  sandboxPaypal: '****',
+  client_idGoogle: '****'
     
   };
   

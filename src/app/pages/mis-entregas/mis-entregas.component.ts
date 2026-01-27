@@ -23,9 +23,11 @@ export class MisEntregasComponent {
   option_selectedd: number = 1;
   identity!: any;
   user!: any;
-  solicitud_selectedd: any = null;
+  solicitud_selectedd: any = 1;
 
   isLoading = false;
+  statusD = 'Confirmado';
+  statusC = 'Confirmado';
 
   private driverService = inject(DriverpService);
   private router = inject(Router);
@@ -41,23 +43,19 @@ export class MisEntregasComponent {
   loadIdentity() {
     this.isLoading = true;
     let USER = localStorage.getItem("user");
-    if (!USER) {
+    this.user = USER ? JSON.parse(USER) : null;
+    
+    if (!this.user) {
       this.router.navigateByUrl('/login')
     }
-    if (USER) {
-      let user = JSON.parse(USER);
-      // console.log(user)
-      this.user = user;
-
+    if (this.user.role === 'CHOFER' ) {
       this.driverService.getByUserId(this.user.uid).subscribe((resp: any) => {
         this.identity = resp
         this.identityId = resp._id;
-        // console.log(this.identity)
-        this.isLoading = false;
-
-        
       })
     }
+    this.isLoading = false;
+
   }
 
 
@@ -68,6 +66,9 @@ export class MisEntregasComponent {
       // this.ngOnInit();
     }
     if (this.option_selectedd === 2) {
+      this.solicitud_selectedd = null;
+    }
+    if (this.option_selectedd === 3) {
       this.solicitud_selectedd = null;
     }
   }

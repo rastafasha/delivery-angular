@@ -1,6 +1,6 @@
 <app-header></app-header>
 <app-loading *ngIf="isLoading"></app-loading>
-<div class="container" *ngIf="!isLoading" style="margin-bottom: 60px;">
+<div class="container" *ngIf="!isLoading && identity" style="margin-bottom: 60px;">
     <div class="saludo">
         <h2>Hola, {{identity.first_name}}!</h2>
     </div>

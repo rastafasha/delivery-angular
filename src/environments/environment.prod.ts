@@ -10,5 +10,11 @@ export const environment = {
   mediaUrl: 'https://back-ecomm-mall.vercel.app/api/uploads/',
   mediaUrlRemoto: 'https://res.cloudinary.com/dmv6aukai/image/upload/v1741218430/mallConnect',
   //pluggins
+
+   rapidapiKey: '****',
+  rapidapiHost: '****',
+  clientIdPaypal: '****',
+  sandboxPaypal: '****',
+  client_idGoogle: '****'
   
 };

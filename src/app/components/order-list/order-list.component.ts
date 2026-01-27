@@ -24,11 +24,15 @@ export class OrderListComponent {
   @Input() identityId!:string;
   @Input() driverId!:string;
   @Input() asignacion!: any;
+  @Input() statusC!: any;
+  @Input() statusD!: any;
   asignacions!: Asignacion [];
 
   isLoading: boolean = false;
   user!:Usuario
   userId!:any;
+  statusreqest!:string;
+  iduserstatus!:string;
 
   private asignacionDService = inject(AsignardeliveryService);
   private ventaService = inject(VentaService);
@@ -36,8 +40,6 @@ export class OrderListComponent {
 
   ngOnInit(){
     this.identityId;
-    console.log(this.identityId)
-
     let USER = localStorage.getItem("user");
     this.user = JSON.parse(USER || '{}');
 
@@ -48,7 +50,17 @@ export class OrderListComponent {
       } else {
         this.loadAsignacionesByUser();
       }
-  
+      
+      if(this.statusD ){
+        this.statusreqest = this.statusD;
+        this.iduserstatus = this.identityId
+        this.loadAsignacionesByStatus();
+      }
+      if(this.statusC){
+        this.statusreqest = this.statusC;
+        this.iduserstatus = this.userId 
+        this.loadAsignacionesByStatus();
+      }
     
     // setTimeout(() => {
     // }, 500);
@@ -70,6 +82,16 @@ export class OrderListComponent {
        this.isLoading = false;
     });
   }
+  
+  loadAsignacionesByStatus(){
+    this.isLoading = true;
+    this.asignacionDService.getByStatus(this.iduserstatus, this.statusreqest).subscribe((resp:any)=>{
+      this.asignacions = resp;
+       this.isLoading = false;
+       console.log(resp)
+    });
+  }
+  
 
 
 }

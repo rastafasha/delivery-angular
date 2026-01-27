@@ -9,6 +9,8 @@ export class Asignacion {
         public tienda : Tienda,
         public venta: Venta,
         public status: string,
+        public statusD: string,
+        public statusC: string,
         public driverPosition: string,
         public deliveryPosition: string,
         public _id?: string

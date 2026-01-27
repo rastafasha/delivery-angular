@@ -8,6 +8,8 @@ export class Direccion{
         public ciudad : string,
         public zip : string,
         public user: string,
+        public latitud?: number,
+        public longitud?: number,
     ){
     }
 }

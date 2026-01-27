@@ -17,7 +17,6 @@ import { Asignacion } from '../../models/asignaciondelivery.model';
     MenufooterComponent,
     RouterModule,
     OrderListComponent,
-    AvisoComponent,
     LoadingComponent,
     NgIf
 ],

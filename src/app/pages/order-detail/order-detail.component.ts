@@ -100,4 +100,24 @@ export class OrderDetailComponent {
     }); 
   }
 
+  marcarEntregado(){
+ 
+    this.asignacionDServices.entregado(this.asignacion._id).subscribe((resp:any)=>{
+      // console.log(resp);
+      this.asignacion = resp.asignacion;
+      this.ngOnInit();
+    }); 
+  }
+  marcarRecibido(){
+ 
+    this.asignacionDServices.recibido(this.asignacion._id).subscribe((resp:any)=>{
+      // console.log(resp);
+      this.asignacion = resp.asignacion;
+      this.ngOnInit();
+    }); 
+  }
+  
+
+
+
 }

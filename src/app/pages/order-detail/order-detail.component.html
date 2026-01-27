@@ -28,25 +28,29 @@
     </div>
     <!-- detales iniciales -->
     <!-- Info Despacho -->
-    <h4 *ngIf="identity.role ==='CHOFER'">Info Despacho</h4>
-
-    <div class="product_list" *ngIf="identity.role ==='CHOFER'">
-        <div class="div1">
-            <img src="../assets/img/user.png" alt="">
-        </div>
-        <div class="div2">
-            <h5>{{tienda.nombre}}</h5>
-            <h3>{{tienda.local}}</h3>
-            <!-- <p >{{tienda.direccion}}</p> -->
-            <div [innerHtml]="tienda.direccion "></div>
-        </div>
-        <div class="div3">
-            <!-- <p> Llamar </p> -->
-            <a href="delivery-status.html">
-                <button class="boton_azul_borde">LLamar</button>
-            </a>
-        </div>
-    </div>
+    <summary *ngIf="identity.role ==='CHOFER'">
+        <h4>Info Despacho</h4>
+        <details>
+            <div class="product_list" *ngIf="identity.role ==='CHOFER'">
+                <div class="div1">
+                    <img src="../assets/img/user.png" alt="">
+                </div>
+                <div class="div2">
+                    <h5>{{tienda.nombre}}</h5>
+                    <h3>{{tienda.local}}</h3>
+                    <!-- <p >{{tienda.direccion}}</p> -->
+                    <div [innerHtml]="tienda.direccion "></div>
+                </div>
+                <div class="div3">
+                    <!-- <p> Llamar </p> -->
+                    <a href="delivery-status.html">
+                        <button class="boton_azul_borde">LLamar</button>
+                    </a>
+                </div>
+            </div>
+        </details>
+    </summary>
+    <hr>
     <!-- Info Destino -->
     <h4 *ngIf="identity.role ==='CHOFER'">Info Destino</h4>
     <div class="product_list" *ngIf="identity.role ==='CHOFER'">
@@ -70,14 +74,14 @@
     <h4 *ngIf="identity.role ==='USER'">Info Chofer</h4>
     <div class="product_list" *ngIf="identity.role ==='USER'">
         <div class="div1">
-            <img [src]="(userDriver?.img || '') | imagenPipe :'usuarios'" alt="">
+            <img [src]="(userDriver.img || '') | imagenPipe :'usuarios'" alt="">
         </div>
         <div class="div2">
             <h4>{{userDriver.first_name}} {{userDriver.last_name}}</h4>
             <p>{{driver.modelo}} </p>
             <p>{{driver.placa}}</p>
             <p>{{driver.tipo_vehiculo}}</p>
-             <div class="">
+            <div class="">
                 <span *ngIf="driver.tipo_vehiculo === 'Carro'">
                     <i class="fa fa-car" aria-hidden="true"></i>
                 </span>
@@ -100,7 +104,7 @@
         </div>
         <div class="div3">
             <!-- <p> Llamar </p> -->
-           
+
             <a href="delivery-status.html">
                 <button class="boton_azul_borde">LLamar</button>
             </a>
@@ -135,10 +139,16 @@
         </div>
     </div>
 
-    <button class="boton_azul_borde" style="margin-bottom: 80px;" *ngIf="identity.role ==='USER'">
+    <button class="boton_azul_borde" style="margin-bottom: 80px;" 
+    *ngIf="identity.role ==='USER' && asignacion.status==='Entregado'">
         Calificar
     </button>
-    <button class="boton_azul_borde" style="margin-bottom: 80px;" *ngIf="identity.role ==='CHOFER'">
+    <button class="boton_azul_borde" (click)="marcarRecibido()" style="margin-bottom: 80px;" 
+    *ngIf="identity.role ==='USER' && asignacion.status==='Entregado'">
+        Marcar como Recibido
+    </button>
+    <button class="boton_azul_borde" (click)="marcarEntregado()" style="margin-bottom: 80px;"
+        *ngIf="identity.role ==='CHOFER' && asignacion.status !=='Entregado'">
         Marcar como Entregado
     </button>
 
