@@ -4,38 +4,39 @@
         <h2>Conductor: {{identity.first_name}}</h2>
     </div>
 
-    <div class="product_list" *ngIf="driver && !isLoading">
+    <div class="product_list" *ngIf="driverSeleccionado && !isLoading">
         <div class="div1">
-            <img [src]="(driver.img ?? '') | imagenPipe: 'drivers'" [alt]="driver.modelo">
+            <img [src]="(driverSeleccionado.img ?? '') | imagenPipe: 'drivers'" [alt]="driverSeleccionado.modelo">
         </div>
         <div class="div2">
-            <h3>{{driver.modelo}} </h3>
-            <p>{{driver.marca}}</p>
-            <p>{{driver.placa}}</p>
-            <h4>{{driver.status}}</h4>
-            <span *ngIf="driver.tipo_vehiculo === 'Carro'">
-               <i class="fa fa-car" aria-hidden="true"></i>
+            <h3>{{driverSeleccionado.modelo}} </h3>
+            <p>{{driverSeleccionado.marca}}</p>
+            <p>{{driverSeleccionado.placa}}</p>
+            <h4>{{driverSeleccionado.status}}</h4>
+            <span *ngIf="driverSeleccionado.tipo_vehiculo === 'Carro'">
+                <i class="fa fa-car" aria-hidden="true"></i>
             </span>
-            <span *ngIf="driver.tipo_vehiculo === 'Moto'">
-               <i class="fas fa-motorcycle"></i>
+            <span *ngIf="driverSeleccionado.tipo_vehiculo === 'Moto'">
+                <i class="fas fa-motorcycle"></i>
             </span>
-            <span *ngIf="driver.tipo_vehiculo === 'Camion'">
-               <i class="fas fa-truck"></i>
+            <span *ngIf="driverSeleccionado.tipo_vehiculo === 'Camion'">
+                <i class="fas fa-truck"></i>
             </span>
-            <span *ngIf="driver.tipo_vehiculo === 'Camioneta'">
-               <i class="fas fa-truck-pickup"></i>
+            <span *ngIf="driverSeleccionado.tipo_vehiculo === 'Camioneta'">
+                <i class="fas fa-truck-pickup"></i>
             </span>
-            <span *ngIf="driver.tipo_vehiculo === 'Pickup'">
-               <i class="fas fa-truck-pickup"></i>
+            <span *ngIf="driverSeleccionado.tipo_vehiculo === 'Pickup'">
+                <i class="fas fa-truck-pickup"></i>
             </span>
-            <span *ngIf="driver.tipo_vehiculo === 'Van'">
-               <i class="fas fa-truck-loading"></i>
+            <span *ngIf="driverSeleccionado.tipo_vehiculo === 'Van'">
+                <i class="fas fa-truck-loading"></i>
             </span>
         </div>
     </div>
 
     <div class="num_tracking">
         <!-- Content  -->
+         
         <section class="col-lg-8">
 
             <!-- messages form-->
@@ -63,8 +64,37 @@
                 </div>
             </div>
 
+            
+
             <!-- driver form-->
             <form [formGroup]="driverForm" *ngIf="!isLoading">
+
+                <!-- Foto -->
+                    <div *ngIf="driverSeleccionado" style="height: auto; margin-bottom: 20px;">
+                        <div class="col-xs-12 col-sm-">
+                            <div class="form-group">
+                                 <div *ngIf="FILE_AVATAR">
+                                <img [src]="IMAGE_PREVISUALIZA" style="width: 250px;" alt="Preview">
+                            </div>
+                                <div class="cz-file-drop-area">
+                                    <label for="file" class="upload labelgoogle">
+                                        <input type="file" accept="image/*" name="image" id="file"
+                                            (change)="cambiarImagen($event)"
+                                            class="hide-input input">
+                                        <span class="label__name">
+                                            {{'Imagen de Vehículo'}}
+                                        </span>
+                                    </label>
+                                    <button type="button" [disabled]="!imagenSubir" (click)="subirImagen()"
+                                        class="boton_azul_borde ">
+                                        <i class="fa fa-save"></i> Cambiar imagen
+                                    </button>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 <!-- datos -->
                 <div class="row">
 
@@ -228,29 +258,7 @@
                         </div>
                     </div>
 
-                    <!-- Foto -->
-                    <div *ngIf="driver" style="height: auto; margin-bottom: 20px;">
-                        <div class="col-xs-12 col-sm-">
-                            <div class="form-group">
-                                <div class="cz-file-drop-area">
-                                    <label for="file" class="upload labelgoogle">
-                                        <input type="file" accept="image/*" name="image" id="file"
-                                            (change)="cambiarImagen($any($event.target).files?.[0])"
-                                            class="hide-input input">
-                                        <span class="label__name">
-                                            {{'Imagen de Vehículo'}}
-                                        </span>
-                                    </label>
-                                    <button type="button" [disabled]="!imagenSubir" (click)="subirImagen()"
-                                        class="boton_azul_borde ">
-                                        <i class="fa fa-save"></i> Cambiar imagen
-                                    </button>
-
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    
                 </div>
                 <br>
 

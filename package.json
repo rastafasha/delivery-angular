@@ -6,7 +6,7 @@
     "start": "ng serve",
     "start:dev": "ng serve --port 4207",
     "build": "ng build",
-    "build:delivery": "ng build --configuration delivery",
+    "build:pizzeria": "ng build --configuration pizzeria",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },

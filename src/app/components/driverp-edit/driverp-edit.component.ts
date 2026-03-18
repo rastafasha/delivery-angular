@@ -39,7 +39,7 @@ export class DriverpEditComponent implements OnInit {
   public driverProfileForm!: FormGroup;
   public usuario!: Usuario;
   public driver!: Driver;
-  public driverSeleccionado: any;
+  public driverSeleccionado!: Driver;
   public imagenSubir!: File;
   public imgTemp: any = null;
   uid!: string;
@@ -66,6 +66,9 @@ export class DriverpEditComponent implements OnInit {
   option_selectedd: number = 1;
   solicitud_selectedd: any = null;
 
+  public FILE_AVATAR!: HTMLInputElement;
+  public IMAGE_PREVISUALIZA: string | null = null;
+
 
   //DATA
   public new_password = '';
@@ -89,7 +92,6 @@ export class DriverpEditComponent implements OnInit {
     this.identity;
     this.user_id = this.identity.uid;
     this.user_id = this.identity.uid;
-    console.log(this.identity)
     this.getDriver();
     this.iniciarFormulario();
 
@@ -97,28 +99,31 @@ export class DriverpEditComponent implements OnInit {
 
   getDriver() {
     this.driverService.getByUserId(this.user_id).subscribe((resp: any) => {
-      this.driver = resp;
+      this.driverSeleccionado = resp;
       this.driver_id = resp._id;
-      console.log(this.driver)
-      console.log(this.driver_id)
+      console.log(this.driverSeleccionado)
 
-      if(this.driver){
+
+
+      if (this.driverSeleccionado) {
         this.driverForm.setValue({
-          marca: this.driver.marca,
-          modelo: this.driver.modelo,
-          color: this.driver.color,
-          year: this.driver.year,
-          tipo_vehiculo: this.driver.tipo_vehiculo,
-          placa: this.driver.placa,
-          licencianum: this.driver.licencianum,
-          status: this.driver.status,
-          user: this.driver.user,
-          img: this.driver.img,
+          marca: this.driverSeleccionado.marca,
+          modelo: this.driverSeleccionado.modelo,
+          color: this.driverSeleccionado.color,
+          year: this.driverSeleccionado.year,
+          tipo_vehiculo: this.driverSeleccionado.tipo_vehiculo,
+          placa: this.driverSeleccionado.placa,
+          licencianum: this.driverSeleccionado.licencianum,
+          status: this.driverSeleccionado.status,
+          user: this.driverSeleccionado.user,
+          img: this.driverSeleccionado.img || null,
         });
       }
-      
+
     })
   }
+
+
 
   iniciarFormulario() {
     this.driverForm = this.fb.group({
@@ -129,7 +134,7 @@ export class DriverpEditComponent implements OnInit {
       year: ['', Validators.required],
       modelo: ['', Validators.required],
       licencianum: ['', Validators.required],
-      user: [this.user_id ],
+      user: [this.user_id],
       status: ['PENDING'],
       img: [''],
     });
@@ -175,34 +180,43 @@ export class DriverpEditComponent implements OnInit {
     }
   }
 
-  cambiarImagen(file: File) {
-    this.imagenSubir = file;
+  cambiarImagen(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) {
+      return;
+    }
 
-    // if (!file) {
-    //   return this.imgTemp = null;
-    // }
+    const file = input.files[0];
+    this.imagenSubir = file;
+    this.FILE_AVATAR = input;
 
     const reader = new FileReader();
-    const url64 = reader.readAsDataURL(file);
-
+    reader.readAsDataURL(file);
     reader.onloadend = () => {
+      this.IMAGE_PREVISUALIZA = reader.result as string;
       this.imgTemp = reader.result;
-    }
+    };
   }
 
   subirImagen() {
     this.isLoading = true;
+    if (!this.imagenSubir) {
+      Swal.fire('Error', 'No hay imagen seleccionada', 'warning');
+      return;
+    }
+
     this.fileUploadService
-      .actualizarFoto(this.imagenSubir, 'drivers', this.driver_id)
+      .actualizarFoto(this.imagenSubir, 'drivers', this.driverSeleccionado._id || '')
       .then(img => {
-        this.driver.img = img;
+        this.driverSeleccionado.img = img;
+        // Reset preview
+        this.isLoading = false;
+        this.IMAGE_PREVISUALIZA = img ? `${environment.baseUrl}/uploads/drivers/${img}` : 'assets/images/no-image.png';
         Swal.fire('Guardado', 'La imagen fue actualizada', 'success');
-        this.isLoading = false;
-        this.getDriver()
       }).catch(err => {
-        Swal.fire('Error', 'No se pudo subir la imagen', 'error');
         this.isLoading = false;
-        this.getDriver()
+        console.error(err);
+        Swal.fire('Error', 'No se pudo subir la imagen', 'error');
       })
   }
 
