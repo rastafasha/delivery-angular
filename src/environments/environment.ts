@@ -17,6 +17,8 @@ export const environment = {
   
   //pluggins
   rapidapiKey: '****',
+  clientIdPaypal: '****',
+  sandboxPaypal: '****',
   rapidapiHost: 'apidojo-17track-v1.p.rapidapi.com',
   
   client_idGoogle: '291137676127-svvuuca518djs47q2v78se9q6iggi4nq.apps.googleusercontent.com'
