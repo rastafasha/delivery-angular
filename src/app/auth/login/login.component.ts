@@ -5,11 +5,13 @@ import { Router, RouterModule } from '@angular/router';
 import { UsuarioService } from '../../services/usuario.service';
 import { CommonModule } from '@angular/common';
 import { TiendaService } from '../../services/tienda.service';
+import { Tienda } from '../../models/tienda.model';
 import { ImagenPipe } from '../../pipes/imagen-pipe.pipe';
 import { environment } from '../../../environments/environment';
-import { PwaNotifInstallerComponent } from '../../shared/pwa-notif-installer/pwa-notif-installer.component';
 
 // declare const gapi: any;
+
+
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -18,8 +20,9 @@ import { PwaNotifInstallerComponent } from '../../shared/pwa-notif-installer/pwa
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
+    // HeaderComponent,
+    // FooterComponent,
     RouterModule,
-    PwaNotifInstallerComponent,
     // ImagenPipe
   ],
   templateUrl: './login.component.html',
@@ -32,7 +35,7 @@ export class LoginComponent implements OnInit {
   public auth2: any;
 
   loginForm: FormGroup;
-  tiendaSelected!: any;
+  tiendaSelected!: Tienda;
 
   constructor(
     private router: Router,
@@ -51,18 +54,13 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     // this.renderButton();
     this.usuarioService.getLocalStorage();
-    setTimeout(() => {
-      if (localStorage.getItem('user') !== 'undefined' && localStorage.getItem('user') != null) {
-        this.router.navigateByUrl('/myprofile');
-      }
-    }, 500);
-    this.getTienda(); 
+    this.getTienda();
   }
 
   getTienda() {
     this.tiendaService.getTiendaByName(this.nombreSelected).subscribe((resp: any) => {
       this.tiendaSelected = resp;
-      console.log(this.tiendaSelected)
+      // console.log(this.tiendaSelected)
     })
   }
 
@@ -79,11 +77,14 @@ export class LoginComponent implements OnInit {
         this.usuarioService.getLocalStorage();
         if (localStorage.getItem('user') !== 'undefined') {
           setTimeout(() => {
-            this.router.navigateByUrl('/myprofile');
+            this.router.navigateByUrl('/my-account');
           }, 500);
         } else {
           this.router.navigateByUrl('/login');
         }
+
+
+        // this.router.navigateByUrl('/my-account');
       }, (err) => {
         Swal.fire('Error', err.error.msg, 'error');
       }

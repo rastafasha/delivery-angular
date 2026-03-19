@@ -47,7 +47,7 @@ export class AsignardeliveryService {
       );
 
   }
-  getByDriverId(_id: string) {
+  getByDriverId(_id: any) {
     const url = `${base_url}/asignardelivery/driver/${_id}`;
     return this.http.get<any>(url, this.headers)
       .pipe(
@@ -55,7 +55,7 @@ export class AsignardeliveryService {
       );
 
   }
-  getByUserId(_id: string) {
+  getByUserId(_id: any) {
     const url = `${base_url}/asignardelivery/user/${_id}`;
     return this.http.get<any>(url, this.headers)
       .pipe(

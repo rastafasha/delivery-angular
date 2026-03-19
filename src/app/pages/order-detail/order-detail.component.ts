@@ -64,7 +64,7 @@ export class OrderDetailComponent {
   getAsignacionById(id: string) {
     this.isLoading = true;
     this.asignacionDServices.getById(id).subscribe((resp: any) => {
-      // console.log(resp);
+      console.log(resp);
       this.asignacion = resp
       this.tienda = resp.tienda;
       this.venta = resp.venta;

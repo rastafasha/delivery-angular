@@ -7,6 +7,8 @@ import { LoadingComponent } from "../../shared/loading/loading.component";
 import { VentaService } from '../../services/venta.service';
 import { UsuarioService } from '../../services/usuario.service';
 import { Usuario } from '../../models/usuario.model';
+import { DriverpService } from '../../services/driverp.service';
+import { Driver } from '../../models/driverp.model';
 
 @Component({
   selector: 'app-order-list',
@@ -33,10 +35,10 @@ export class OrderListComponent {
   userId!:any;
   statusreqest!:string;
   iduserstatus!:string;
+  driver!:Driver;
 
   private asignacionDService = inject(AsignardeliveryService);
-  private ventaService = inject(VentaService);
-  private userService = inject(UsuarioService);
+  private driverService = inject(DriverpService);
 
   ngOnInit(){
     this.identityId;
@@ -46,7 +48,8 @@ export class OrderListComponent {
     this.userId = this.user.uid;
     
     if(this.user.role == 'CHOFER'){
-        this.loadAsignaciones();
+      this.loadDriverId();
+       
       } else {
         this.loadAsignacionesByUser();
       }
@@ -66,9 +69,16 @@ export class OrderListComponent {
     // }, 500);
   }
 
+  loadDriverId(){
+    this.driverService.getByUserId(this.userId).subscribe((resp:any)=>{
+      this.driver = resp;
+      this.loadAsignaciones();
+    })
+  }
+
   loadAsignaciones(){
     this.isLoading = true;
-    this.asignacionDService.getByDriverId(this.identityId).subscribe((resp:any)=>{  
+    this.asignacionDService.getByDriverId(this.driver._id).subscribe((resp:any)=>{  
       this.asignacions = resp;
        this.isLoading = false;
     });
@@ -77,7 +87,7 @@ export class OrderListComponent {
 
   loadAsignacionesByUser(){
     this.isLoading = true;
-    this.asignacionDService.getByUserId(this.userId).subscribe((resp:any)=>{
+    this.asignacionDService.getByUserId(this.user.uid).subscribe((resp:any)=>{
       this.asignacions = resp;
        this.isLoading = false;
     });
@@ -88,7 +98,6 @@ export class OrderListComponent {
     this.asignacionDService.getByStatus(this.iduserstatus, this.statusreqest).subscribe((resp:any)=>{
       this.asignacions = resp;
        this.isLoading = false;
-       console.log(resp)
     });
   }
   

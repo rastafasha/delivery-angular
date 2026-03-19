@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  //remoto vercel
+  //remoto 
   baseUrl: 'https://back-ecomm-mall.onrender.com/api',
   mediaUrl: 'https://back-ecomm-mall.onrender.com/api/uploads',
   soketServer: 'https://back-ecomm-mall.onrender.com/',
