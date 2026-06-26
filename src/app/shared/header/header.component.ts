@@ -101,26 +101,15 @@ export class HeaderComponent {
     let USER = localStorage.getItem("user");
     this.user = USER ? JSON.parse(USER) : null;
 
-   
+    this.getTiemndabId();
 
-    // 1. Comenzamos a escuchar el observable del servicio
-    this.escucharTiendaActiva();
-
-    // 2. Disparamos la petición inicial (usa el slug automático 'pizzeria')
-    // Esto llenará el BehaviorSubject interno de tu servicio
-    this.tiendaService.getTiendaByNameCached().subscribe();
   }
-
-   escucharTiendaActiva() {
-    this.tiendaService.selectedTiendaObservable$.subscribe(tienda => {
-      // Al principio será null, pero en cuanto getTiendaByNameCached responda, 
-      // el tap del servicio emitirá la tienda real aquí.
-      if (tienda) {
-        this.tiendaSelected = tienda;
-        
-      }
-    });
-}
+  getTiemndabId(){
+    this.tiendaService.getTiendaById(this.user.local).subscribe((resp:any)=>{
+      this.tiendaSelected = resp;
+      console.log(resp);
+    })
+  }
 
 
   getLangActive(){

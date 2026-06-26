@@ -30,7 +30,6 @@ import { environment } from '../../../environments/environment';
 })
 export class LoginComponent implements OnInit {
 
-  nombreSelected = environment.nombreSelected;
   public formSumitted = false;
   public auth2: any;
 
@@ -54,15 +53,8 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     // this.renderButton();
     this.usuarioService.getLocalStorage();
-    this.getTienda();
   }
 
-  getTienda() {
-    this.tiendaService.getTiendaByName(this.nombreSelected).subscribe((resp: any) => {
-      this.tiendaSelected = resp;
-      // console.log(this.tiendaSelected)
-    })
-  }
 
   login() {
 

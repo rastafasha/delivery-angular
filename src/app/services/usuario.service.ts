@@ -54,10 +54,10 @@ export class UsuarioService {
       if (USER && USER !== 'undefined') {
         this.usuario = JSON.parse(USER);
       } else {
-        this.usuario = new Usuario('', '', '', '', '', '', '', '','', false, 'USER', '');
+        this.usuario = new Usuario('', '', '', '', '', '', '', '','','', false, 'USER', '');
       }
     } else {
-      this.usuario = new Usuario('', '', '', '', '', '', '', '', '',false, 'USER', '');
+      this.usuario = new Usuario('', '', '', '', '', '', '', '', '','',false, 'USER', '');
     }
   }
   guardarLocalStorage(token: string, user: any) {
@@ -188,6 +188,7 @@ export class UsuarioService {
               user.ciudad,
               user.telefono,
               user.numdoc,
+              user.local,
               user.email,
               '',
               user.img,

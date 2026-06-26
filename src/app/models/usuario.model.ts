@@ -9,6 +9,7 @@ export class Usuario {
     public ciudad: string,
     public telefono: string,
     public numdoc: string,
+    public local: string,
     public email: string,
     public password?: string,
     public img?: string,

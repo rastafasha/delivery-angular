@@ -25,7 +25,6 @@ import { environment } from '../../../environments/environment';
 export class RegisterComponent implements OnInit {
 
   public formSumitted = false;
-  nombreSelected = environment.nombreSelected;
   registerForm: FormGroup;
   tiendas!: Tienda[];
   tienda!: Tienda;
@@ -56,15 +55,9 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getTienda();
   }
 
-  getTienda() {
-    this.tiendaService.getTiendaByName(this.nombreSelected).subscribe((resp: any) => {
-      this.tiendaSelected = resp;
-      // console.log(this.tiendaSelected)
-    })
-  }
+ 
 
   getTiendas() {
     // this.tiendaService.cargarTiendas().subscribe((resp:any)=>{

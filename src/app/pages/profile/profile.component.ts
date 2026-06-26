@@ -56,12 +56,7 @@ user_id:any;
   
   ngOnInit(){
     this.loadIdentity();
-    // 1. Comenzamos a escuchar el observable del servicio
-    this.escucharTiendaActiva();
 
-    // 2. Disparamos la petición inicial (usa el slug automático 'pizzeria')
-    // Esto llenará el BehaviorSubject interno de tu servicio
-    this.tiendaService.getTiendaByNameCached().subscribe();
   }
 
   loadIdentity(){
@@ -100,17 +95,7 @@ user_id:any;
     })
   }
 
-  escucharTiendaActiva() {
-    this.tiendaService.selectedTiendaObservable$.subscribe(tienda => {
-      // Al principio será null, pero en cuanto getTiendaByNameCached responda, 
-      // el tap del servicio emitirá la tienda real aquí.
-      if (tienda) {
-        this.tiendaSelected = tienda;
-        
-      }
-    });
-}
-
+  
 
 
   async togglePush() {
