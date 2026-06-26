@@ -96,7 +96,7 @@ export class UsuarioService {
 
    guardarLocalStorage(token: string, userData: any){
     localStorage.setItem('token', token);
-    localStorage.setItem('user', JSON.stringify(userData));
+    localStorage.setItem('usuario', JSON.stringify(userData));
     this.getLocalStorage();  // Populate service state and emit
   }
 
