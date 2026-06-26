@@ -10,6 +10,7 @@ import { LoadingComponent } from "../../shared/loading/loading.component";
 import { NgIf } from '@angular/common';
 import { Driver } from '../../models/driverp.model';
 import { DriverpService } from '../../services/driverp.service';
+import { PwaNotifInstallerComponent } from "../../shared/pwa-notif-installer/pwa-notif-installer.component";
 
 @Component({
   selector: 'app-driver-home',
@@ -20,7 +21,8 @@ import { DriverpService } from '../../services/driverp.service';
     OrderListComponent,
     AvisoComponent,
     LoadingComponent,
-    NgIf
+    NgIf,
+    PwaNotifInstallerComponent
 ],
   templateUrl: './driver-home.component.html',
   styleUrl: './driver-home.component.css'
