@@ -195,7 +195,7 @@ export class UsuarioService {
   }
 
   login(formData: any) {
-    return this.http.post(`${base_url}/auth/login`, formData)
+    return this.http.post(`${base_url}/login`, formData)
       .pipe(
         tap((resp: any) => {
           localStorage.setItem('estaAutenticado', 'true');
