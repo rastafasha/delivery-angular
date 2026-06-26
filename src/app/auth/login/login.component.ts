@@ -72,7 +72,7 @@ export class LoginComponent implements OnInit {
 
         if (localStorage.getItem('user') !== 'undefined') {
           setTimeout(() => {
-            this.router.navigateByUrl('/my-account');
+            this.router.navigateByUrl('/myprofile');
           }, 500);
         } else {
           this.router.navigateByUrl('/login');
