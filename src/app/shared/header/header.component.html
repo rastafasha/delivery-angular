@@ -1,18 +1,35 @@
-<header>
+<!-- Header -->
+<header class="header" >
+    <div class="header-container" (pulldown)="onPullRefresh()">
         <div class="logo">
             <a routerLink="/">
-                <img src="./assets/svg/logo_Mallconnect_tipo2.svg" alt="">
-
-                <!-- <h2>Delivery App</h2> -->
+                <span class="logo-text"><img src="assets/svg/logo-zlipmenu_logotipo.svg" > </span>
             </a>
-        </div>
-        <div class="opciones">
-            <!-- <i class="fa fa-comments"></i> -->
-            <a (click)="logout()">
-                <i class="fa fa-power-off"></i>
-                <!-- <i class="fa fa-bars"></i> -->
-            </a> 
-        </div>
+            <!-- CAMPANA CON BADGE -->
+           <div class="position-relative me-3" routerLink="/notificaciones" style="cursor: pointer;">
+                    <i class="fa fa-regular fa fa-bell fs-4 text-dark animated tada"></i>
 
-    </header>
-    
+                    <!-- Evaluamos el Observable. Si el valor emitido es mayor a 0, pinta el badge -->
+                    @if ((unreadCount$ | async); as pendientes) {
+                        @if (pendientes > 0) {
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                            style="font-size: 0.6rem;">
+                            {{ pendientes }}
+                        </span>
+                        }
+                    }
+                </div>
+
+
+            <span class="logo-text" [ngStyle]="{'color': tiendaSelected?.color_primario }">| {{titleapp}}</span>
+            <app-loading *ngIf="isLoading"></app-loading>
+            <a routerLink="/" *ngIf="tiendaSelected && !isLoading">
+                <img style="border-radius: 100px;" [src]="tiendaSelected.img | imagenPipe: 'tiendas'" [alt]="tiendaSelected.nombre">
+                
+            </a>
+
+        </div>
+    </div>
+</header>
+
+<app-aviso class="aviso-pull" [aviso]="aviso" *ngIf="isAviso"></app-aviso>

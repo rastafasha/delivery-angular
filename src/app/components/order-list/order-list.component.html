@@ -1,8 +1,26 @@
 
 <app-loading *ngIf="isLoading"></app-loading>
 <div *ngIf="!isLoading">
+<div *ngIf="!asignacions || asignacions.length === 0" class="mb-3">
+    <app-aviso [aviso]="aviso"></app-aviso>
+</div>
+<div *ngIf="asignacions || asignacions > 0">
     <div class="list_products" *ngFor=" let asignacion of asignacions">
-        <app-order-item [asignacion]="asignacion" [statustText]="'Empacado'"></app-order-item>
+        <app-order-item 
+        [asignacion]="asignacion" 
+        [status]="status"
+        data-bs-toggle="offcanvas" 
+        data-bs-target="#modalAsignacionDetalleUnico"
+        (click)="openModal(asignacion)">
+    </app-order-item>
     </div>
+</div>
+
+    
     
 </div>
+
+<app-order-detail 
+    [selectedAsignacion]="selectedAsignacion" 
+    (modalClosed)="selectedAsignacion = null">
+</app-order-detail>

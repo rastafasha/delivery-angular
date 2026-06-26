@@ -12,8 +12,6 @@ export class VentaService {
   public url;
   rapidapiK = environment.rapidapiKey;
   rapidapiH = environment.rapidapiHost;
-  clientIdPaypal = environment.clientIdPaypal;
-  sandboxPaypal = environment.sandboxPaypal;
 
   user!:Usuario;
   producto!:Producto;
@@ -106,15 +104,7 @@ export class VentaService {
     return this._http.get(this.url+'/ventas/get_one_cancelacion_admin/one/'+id,{headers:headers});
   }
 
-  get_token():Observable<any>{
-    let headers = new HttpHeaders({
-      'Accept': 'application/json',
-      'Content-Type':'application/x-www-form-urlencoded',
-      'Authorization': 'Basic ' + btoa(`${this.clientIdPaypal}:${this.sandboxPaypal}`),
-      // 'Authorization': 'Basic ' + btoa('AVTHn-IitbqsInQ7Y_Ald2kPSvEjTd3RRm_OevRxyzv_tXo7XskvFK6w2IxFuZLeKSXWUqoDg_JdWu5V:AXlazeNsZ0CmjfJIronSzcqzw4hLHkcoVEM5fO5BY7AbD-_GhKoKezRcavq6-T4kQuRqaTXFB_VXmheG'),
-    });
-    return this._http.post('https://api.sandbox.paypal.com/v1/oauth2/token','grant_type=client_credentials',{headers:headers});
-  }
+ 
 
   set_reembolso(token:string,id:string):Observable<any>{
     let headers = new HttpHeaders({

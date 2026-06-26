@@ -7,21 +7,22 @@ export const environment = {
   // baseUrl: 'http://localhost:3000/api',
   // mediaUrl: 'http://localhost:3000/api/uploads',
   // soketServer : 'http://localhost:3000',
-  //remoto 
-  baseUrl: 'https://back-ecomm-mall.onrender.com/api',
-  mediaUrl: 'https://back-ecomm-mall.onrender.com/api/uploads/',
-  soketServer : 'https://back-ecomm-mall.onrender.com/',
-  nombreSelected: 'Panaderia',
+  // nombreSelected: 'pizzeria',
+
+  //remoto vercel
+  baseUrl: 'https://back-zlipmenu.onrender.com/api',
+  mediaUrl: 'https://back-zlipmenu.onrender.com/api/uploads',
+  soketServer: 'https://back-zlipmenu.onrender.com',
+  nombreSelected: 'zlipmenu-generic',
   
-  mediaUrlRemoto: 'https://res.cloudinary.com/dmv6aukai/image/upload/v1741218430/mallConnect',
+  mediaUrlRemoto: 'https://res.cloudinary.com/dmv6aukai/image/upload/v1741218430/zlipmenu',
+  urlBackedNotification:'https://back-zlipmenu.onrender.com/api/notipush/save-subscription',
+  VAPI_KEY_PUBLIC: 'BGlxB4IqUGZq7BoOU1KLM0Yb4Olh7_zI0xfpvOIOYvQMZhjsrFgs5_ofdZpvMa7ohTQUCk0qLrOcW06U4XCajcw',
   
+  client_idGoogle: '****',
   //pluggins
   rapidapiKey: '****',
-  clientIdPaypal: '****',
-  sandboxPaypal: '****',
-  rapidapiHost: 'apidojo-17track-v1.p.rapidapi.com',
-  
-  client_idGoogle: '291137676127-svvuuca518djs47q2v78se9q6iggi4nq.apps.googleusercontent.com'
+  rapidapiHost: '****',
 };
 
 /*

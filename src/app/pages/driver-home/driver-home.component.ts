@@ -58,22 +58,10 @@ export class DriverHomeComponent {
           this.router.navigateByUrl('/home-customer');
         }
         this.isLoading= false;
-        // console.log(this.identity)
-        this.loadIdentityD();
       })
     }
   }
 
 
-   loadIdentityD() {
-    this.isLoading = true;
-   this.driverService.getByUserId(this.identityId).subscribe((resp: any) => {
-        this.driver = resp
-        this.driverId = resp._id;
-        // console.log(this.identity)
-        this.isLoading = false;
-
-        
-      })
-  }
+   
 }

@@ -1,8 +1,10 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { Detalle } from '../../models/ventas.model';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ImagenPipe } from '../../pipes/imagen-pipe.pipe';
+import { TranslateService } from '@ngx-translate/core';
+import { Producto } from '../../models/producto.model';
 
 @Component({
   selector: 'app-item-list',
@@ -16,6 +18,10 @@ import { ImagenPipe } from '../../pipes/imagen-pipe.pipe';
 })
 export class ItemListComponent {
 
-  @Input() detalle!:Detalle;
+  @Input() producto!:Producto;
+  public translate = inject(TranslateService);
+
+  
+  
 
 }

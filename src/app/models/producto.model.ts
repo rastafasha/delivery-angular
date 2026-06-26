@@ -1,37 +1,49 @@
 import { environment } from '../../environments/environment';
 import { Categoria } from './categoria.model';
+import { Color } from './color.model';
 import { Marca } from './marca.model';
+import { Selector } from './selector.model';
 
 const base_url = environment.mediaUrlRemoto;
 export class Producto {
-  titulo: string;
+
+  // 🌐 CAMPOS INTERNACIONALIZADOS (Ahora son objetos { es, en })
+  titulo!: { es: string; en: string };
+  info_short!: { es: string; en: string };
+  detalle!: { es: string; en: string };
+
   precio_ahora: number;
   precio_antes!: string;
   video_review!: string;
-  info_short!: string;
-  detalle!: string;
+  comentarios!: string;
   slug!: string;
   stock!: number;
   cantidad!:number;
   categoria!: Categoria;
-  subcategoria!: string;
-  nombre_selector!: string;
-  isFeatured!: boolean;
-  status!: boolean;
+  // subcategoria!: string;
+  subcategorias?: { es: string; en: string };
   marca!: Marca;
+  color!: Color;
+  nombre_selector!: string;
+  selector_elegido!:string;
+  isFeatured!: boolean;
+  selector?: Selector;
+  status!: boolean;
   createdAt!: Date;
   updatedAt!: Date;
   img!: string;
   _id?: string;
-
-  constructor(id: string | undefined, name: string, description: string, category: any, price: number ){
+  
+constructor(id: string | undefined, name: string, description: string, category: any, price: number ){
     this._id = id;
-    this.titulo = name;
-    this.detalle = description;
+    
+    // Asignamos el string plano dentro del objeto bilingüe
+    this.titulo = { es: name, en: '' };
+    this.detalle = { es: description, en: '' };
+    
     this.categoria = category;
     this.precio_ahora = price;
-    // this.img = imageUrl;
-  }
+}
 
 
   get imagenUrl(){

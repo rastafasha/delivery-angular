@@ -3,14 +3,41 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideServiceWorker } from '@angular/service-worker';
-import { HttpRequest, HttpHandlerFn, HttpEvent, provideHttpClient, withInterceptors } from '@angular/common/http';
+import { HttpRequest, HttpHandlerFn, HttpEvent, provideHttpClient, withInterceptors, HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+
+// Configuración moderna de internacionalización
+import { provideTranslateService, TranslateLoader } from '@ngx-translate/core';
+import { provideTranslateHttpLoader, TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideToastr } from 'ngx-toastr';
+
+export function HttpLoaderFactory(http: HttpClient) {
+  // Nota: Busca los JSON por defecto en 'public/assets/i18n/es.json'
+  return new TranslateHttpLoader();
+  
+}
 
 export const appConfig: ApplicationConfig = {
   providers: [provideZoneChangeDetection({ eventCoalescing: true }), 
     provideHttpClient(
       withInterceptors([imageInterceptor])
     ),
+    provideTranslateService({
+      lang: 'es',
+      fallbackLang: 'es',
+      // ✅ SINTAXIS MODERNA DIRECTA: Sin useFactory ni dependencias manuales
+      loader: provideTranslateHttpLoader({
+        prefix: './assets/i18n/',
+        suffix: '.json'
+      })
+    }),
+    provideAnimations(),
+    provideToastr({
+      timeOut: 3000,
+      positionClass: 'toast-top-center',
+      preventDuplicates: true,
+    }),
     provideRouter(routes), 
     provideServiceWorker('ngsw-worker.js', {
             enabled: !isDevMode(),

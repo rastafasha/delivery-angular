@@ -9,13 +9,17 @@ import { UsuarioService } from '../../services/usuario.service';
 import { Usuario } from '../../models/usuario.model';
 import { Driver } from '../../models/driverp.model';
 import { AsignardeliveryService } from '../../services/asignardelivery.service';
+import { DireccionService } from '../../services/direccion.service';
+import { Direccion } from '../../models/direccion.model';
+import { BackComponent } from "../../shared/back/back.component";
 
 @Component({
   selector: 'app-mapa',
   imports: [
     MenufooterComponent,
-    RouterModule, NgIf
-  ],
+    RouterModule, NgIf,
+    BackComponent
+],
   providers: [WaGeolocationService],
   templateUrl: './mapa.component.html',
   styleUrls: ['mapa.component.css']
@@ -43,11 +47,14 @@ export class MapaComponent implements OnInit, AfterViewInit, OnDestroy {
   asignacionId!: any;
   user!: any;
   driver!: any;
+  direccion!: string;
+  direccionAddres!: any;
 
   private usuarioService = inject(UsuarioService);
   private asignacionService = inject(AsignardeliveryService);
   private activatedRoute = inject(ActivatedRoute);
   private cdr = inject(ChangeDetectorRef);
+  private direccionService = inject(DireccionService);
 
   // Configuración de iconos personalizados
   private driverIcon = L.icon({
@@ -89,20 +96,20 @@ export class MapaComponent implements OnInit, AfterViewInit, OnDestroy {
         // Use setTimeout to defer the update and avoid expression changed error
         setTimeout(() => {
           // CHOFER: Only update own position (driverPosition) with GPS
-          // deliveryPosition should come from asignacion (the destination)
+          // deliveryPosition should come from direccionAddres 
           if (this.user.role == 'CHOFER') {
             this.driverPosition = { lat, lng };
             this.updateDriverPosition(lat, lng);
             console.log('Posición driverPosition (CHOFER):', this.driverPosition);
-            
+
             // Also update the asignacion with new driver position
             this.updateAsignacionWithPosition();
           }
-          
+
           // USER: Don't update any position from GPS
           // All positions (driverPosition and deliveryPosition) should come from asignacion
           // deliveryPosition is the DESTINATION (from asignacion), not USER's GPS
-          
+
           this.loading = false;
           this.errorMessage = '';
 
@@ -110,13 +117,13 @@ export class MapaComponent implements OnInit, AfterViewInit, OnDestroy {
           if (this.map) {
             this.updateMap();
           }
-          
+
           this.cdr.markForCheck();
         });
       },
       error: (error) => {
         console.error('Error de geolocalización:', error);
-        
+
         setTimeout(() => {
           this.loading = false;
           switch (error.code) {
@@ -142,7 +149,6 @@ export class MapaComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     });
 
-    this.loadIdentity();
   }
 
   ngAfterViewInit() {
@@ -170,7 +176,7 @@ export class MapaComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   private parsePosition(positionStr: string | null | undefined): { lat: number; lng: number } | null {
     if (!positionStr) return null;
-    
+
     const parts = positionStr.split(',');
     if (parts.length === 2) {
       const lat = parseFloat(parts[0].trim());
@@ -191,47 +197,37 @@ export class MapaComponent implements OnInit, AfterViewInit, OnDestroy {
     this.asignacionSubscription = this.asignacionService.getById(this.asignacionId).subscribe({
       next: (resp: any) => {
         if (resp.ok && resp.asignacion) {
-          // Use setTimeout to defer the update and avoid expression changed error
+          // Mantenemos el setTimeout general para diferir la asignación inicial
           setTimeout(() => {
             this.asignacion = resp.asignacion;
-            console.log(this.asignacion);
+            this.direccion = resp.pedido.direccion;
 
-            const parsedDriverPos = this.parsePosition(this.asignacion.driverPosition);
-            const parsedDeliveryPos = this.parsePosition(this.asignacion.deliveryPosition);
+            this.direccionService.get_direccion(this.direccion).subscribe((dirResp: any) => {
+              this.direccionAddres = dirResp;
 
-            if (this.user.role == 'CHOFER') {
-              // CHOFER: deliveryPosition from asignacion, driverPosition from GPS
-              if (parsedDriverPos) {
-                this.driverPosition = parsedDriverPos;
-                console.log('Posición repartidor (from asignacion):', this.driverPosition);
-              }
-              if (parsedDeliveryPos) {
-                this.deliveryPosition = parsedDeliveryPos;
-                console.log('Posición entrega (from asignacion):', this.deliveryPosition);
-              }
-              // driverPosition will be set by geolocation subscription
-            }
-            
-            if (this.user.role == 'USER') {
-              // USER: Both positions from asignacion
-              if (parsedDriverPos) {
-                this.driverPosition = parsedDriverPos;
-                console.log('Posición repartidor (from asignacion):', this.driverPosition);
-              }
-              if (parsedDeliveryPos) {
-                this.deliveryPosition = parsedDeliveryPos;
-                console.log('Posición entrega (from asignacion):', this.deliveryPosition);
-              }
-              
-              // Refresh asignacion periodically to get updated driver position
-              this.startRefreshAsignacion();
-            }
+              const parsedDriverPos = this.parsePosition(this.asignacion.driverPosition);
+              const parsedDeliveryPos = this.parsePosition(this.direccionAddres.deliveryPosition);
 
-            this.loading = false;
-            if (this.map) {
-              this.updateMap();
-            }
-            this.cdr.markForCheck();
+              if (this.user.role == 'CHOFER') {
+                if (parsedDriverPos) this.driverPosition = parsedDriverPos;
+                if (parsedDeliveryPos) this.deliveryPosition = parsedDeliveryPos;
+              }
+
+              if (this.user.role == 'USER') {
+                if (parsedDriverPos) this.driverPosition = parsedDriverPos;
+                if (parsedDeliveryPos) this.deliveryPosition = parsedDeliveryPos;
+                this.startRefreshAsignacion();
+              }
+
+              this.loading = false;
+              if (this.map) {
+                this.updateMap();
+              }
+
+              // 3. CLAVE: Reemplaza markForCheck() por detectChanges() aquí adentro
+              // Esto obliga a Angular a procesar las coordenadas del mapa en este preciso instante
+              this.cdr.detectChanges();
+            });
           });
         }
       },
@@ -239,53 +235,69 @@ export class MapaComponent implements OnInit, AfterViewInit, OnDestroy {
         console.error('Error al cargar asignacion:', error);
         setTimeout(() => {
           this.loading = false;
-          this.cdr.markForCheck();
+          this.cdr.detectChanges();
         });
       }
     });
   }
+
+
+
 
   /**
    * Start periodic refresh of asignacion for USER role
    * to see driver's updated location
    */
   private startRefreshAsignacion(): void {
-    // Refresh every 10 seconds
+    // Limpiar cualquier intervalo previo por seguridad si se vuelve a llamar esta función
+    if (this.refreshInterval) {
+      clearInterval(this.refreshInterval);
+    }
+
+    // Refrescar cada 10 segundos
     this.refreshInterval = setInterval(() => {
       if (this.user.role == 'USER' && this.asignacionId) {
         this.asignacionService.getById(this.asignacionId).subscribe({
           next: (resp: any) => {
             if (resp.ok && resp.asignacion) {
               const parsedDriverPos = this.parsePosition(resp.asignacion.driverPosition);
+
               if (parsedDriverPos) {
-                // Only update if position changed
-                if (!this.driverPosition || 
-                    parsedDriverPos.lat !== this.driverPosition.lat || 
-                    parsedDriverPos.lng !== this.driverPosition.lng) {
-                  setTimeout(() => {
-                    this.driverPosition = parsedDriverPos;
-                    console.log('Posición repartidor actualizada:', this.driverPosition);
-                    if (this.map) {
-                      this.updateMap();
-                    }
-                    this.cdr.markForCheck();
-                  });
+                // Validar si la posición del repartidor realmente cambió
+                if (!this.driverPosition ||
+                  parsedDriverPos.lat !== this.driverPosition.lat ||
+                  parsedDriverPos.lng !== this.driverPosition.lng) {
+
+                  // 1. ELIMINAMOS EL SETTIMEOUT INTERNO: Asignamos el valor directamente
+                  this.driverPosition = parsedDriverPos;
+                  console.log('Posición repartidor actualizada de forma síncrona:', this.driverPosition);
+
+                  if (this.map) {
+                    this.updateMap();
+                  }
+
+                  // 2. FORZAMOS EL CHEQUEO DE CAMBIOS INMEDIATO para actualizar el marcador en el mapa
+                  this.cdr.detectChanges();
                 }
               }
             }
+          },
+          error: (error) => {
+            console.error('Error al actualizar posición del chofer:', error);
           }
         });
       }
     }, 10000);
   }
 
+
   /**
    * Update asignacion with current driver position
    */
   private updateAsignacionWithPosition(): void {
-    if (!this.asignacionId || !this.driverPosition ) return;
+    if (!this.asignacionId || !this.driverPosition) return;
 
-    
+
     // Update silently without showing alert
     this.updateAsignacion();
   }
@@ -318,70 +330,76 @@ export class MapaComponent implements OnInit, AfterViewInit, OnDestroy {
     // Actualizar marcadores y ruta
     this.updateMap();
   }
-
   private updateMap(): void {
     if (!this.map) return;
 
-    // Need at least driverPosition to show map
+    // COORDENADAS DE PRUEBA (Inserta esto temporalmente antes de llamar a updateMap)
+    // this.driverPosition = { lat: 10.5015, lng: -66.8850 }; // Unas cuadras hacia Plaza Venezuela
+    // this.deliveryPosition = { lat: 10.5046, lng: -66.8940 }; // Tu dirección real en la Av. Andrés Bello
+
+
+    // Necesitamos la posición del repartidor para operar el mapa
     if (!this.driverPosition) return;
 
-    // Actualizar o crear marcador del repartidor
+    // 1. Actualizar o crear marcador del repartidor
     if (this.driverMarker) {
       this.driverMarker.setLatLng([this.driverPosition.lat, this.driverPosition.lng]);
     } else {
+      // Corregimos la etiqueta dinámica según el rol para evitar confusiones
+      const driverLabel = this.user.role === 'CHOFER' ? '<b>Tu ubicación (Repartidor)</b>' : '<b>Ubicación del Repartidor</b>';
+
       this.driverMarker = L.marker([this.driverPosition.lat, this.driverPosition.lng], { icon: this.driverIcon })
         .addTo(this.map)
-        .bindPopup('<b>Tu ubicación</b><br>Repartidor');
+        .bindPopup(driverLabel);
     }
 
-    // Actualizar o crear marcador de entrega
+    // 2. Actualizar o crear marcador de entrega
     if (this.deliveryPosition) {
       if (this.deliveryMarker) {
         this.deliveryMarker.setLatLng([this.deliveryPosition.lat, this.deliveryPosition.lng]);
       } else {
+        const deliveryLabel = this.user.role === 'USER' ? '<b>Tu dirección de entrega</b>' : '<b>Punto de Destino</b>';
+
         this.deliveryMarker = L.marker([this.deliveryPosition.lat, this.deliveryPosition.lng], { icon: this.deliveryIcon })
           .addTo(this.map)
-          .bindPopup('<b>Entrega</b><br>Destino');
+          .bindPopup(deliveryLabel);
       }
 
-      // Dibujar línea de ruta
+      // 3. Dibujar o actualizar línea de ruta
+      const routeCoords: L.LatLngExpression[] = [
+        [this.driverPosition.lat, this.driverPosition.lng],
+        [this.deliveryPosition.lat, this.deliveryPosition.lng]
+      ];
+
       if (this.routeLine) {
-        this.routeLine.setLatLngs([
-          [this.driverPosition.lat, this.driverPosition.lng],
-          [this.deliveryPosition.lat, this.deliveryPosition.lng]
-        ]);
+        this.routeLine.setLatLngs(routeCoords);
       } else {
-        this.routeLine = L.polyline([
-          [this.driverPosition.lat, this.driverPosition.lng],
-          [this.deliveryPosition.lat, this.deliveryPosition.lng]
-        ], {
-          color: 'blue',
+        this.routeLine = L.polyline(routeCoords, {
+          color: '#007bff', // Un azul más moderno y estético
           weight: 4,
           opacity: 0.7,
           dashArray: '10, 10'
         }).addTo(this.map);
       }
 
-      // Ajustar vista para mostrar ambos puntos
-      const bounds = L.latLngBounds([
-        [this.driverPosition.lat, this.driverPosition.lng],
-        [this.deliveryPosition.lat, this.deliveryPosition.lng]
-      ]);
-      this.map.fitBounds(bounds, { padding: [50, 50] });
-    }
+      // 4. Ajustar vista de manera inteligente (¡EVITA EL TIRÓN DEL ZOOM CADA 10 SEGUNDOS!)
+      // Solo hacemos fitBounds la primera vez que se dibuja el mapa para no interrumpir al usuario
+      if (!this.map.hasLayer(this.routeLine)) {
+        const bounds = L.latLngBounds(routeCoords);
+        this.map.fitBounds(bounds, { padding: [50, 50], maxZoom: 16 });
+      }
+    } else {
+      // Si por alguna razón no hay posición de entrega, limpiamos los gráficos viejos
+      if (this.deliveryMarker) { this.map.removeLayer(this.deliveryMarker); this.deliveryMarker = null; }
+      if (this.routeLine) { this.map.removeLayer(this.routeLine); this.routeLine = null; }
 
-  }
-
-
-  loadIdentity() {
-    let USER = localStorage.getItem("user");
-    if (USER) {
-      let user = JSON.parse(USER);
-      this.usuarioService.get_user(user.uid).subscribe((resp: any) => {
-        this.identity = resp.usuario;
-      })
+      // Si solo hay chofer, centramos la cámara exclusivamente en él
+      this.map.setView([this.driverPosition.lat, this.driverPosition.lng], 15);
     }
   }
+
+
+
 
   /**
    * Comparte las coordenadas usando la API nativa de Web Share
@@ -420,7 +438,7 @@ export class MapaComponent implements OnInit, AfterViewInit, OnDestroy {
    * Construye el objeto de datos para compartir
    */
   private buildShareData(): ShareData {
-    let title = '📍 Coordenadas de Entrega - MallConnect';
+    let title = '📍 Coordenadas de Entrega - Zlipmenu';
     let text = this.buildCoordinateText();
 
     // Crear URL con coordenadas para abrir en Google Maps
@@ -481,7 +499,7 @@ export class MapaComponent implements OnInit, AfterViewInit, OnDestroy {
 
   updateAsignacion(): void {
     // CHOFER: Only update driverPosition (own GPS location)
-    if(this.user.role == 'CHOFER' && this.driverPosition){
+    if (this.user.role == 'CHOFER' && this.driverPosition) {
       const data = {
         _id: this.asignacionId,
         driverPosition: `${this.driverPosition.lat},${this.driverPosition.lng}`,
@@ -491,7 +509,7 @@ export class MapaComponent implements OnInit, AfterViewInit, OnDestroy {
         this.asignacion = resp.asignacionActualizada;
       });
     }
-    
+
     // USER: Don't update deliveryPosition from GPS
     // deliveryPosition should be set by the CLIENT when creating the order
     // and should NOT be changed by the USER's GPS

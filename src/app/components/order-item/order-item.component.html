@@ -5,14 +5,18 @@
     <div class="div2">
         <h3>Order # {{asignacion._id | slice:0:8}}</h3>
         <p>Standard Delivery</p>
-        <h4>{{asignacion.status}}</h4>
+        <!-- <h4>{{asignacion.status}}</h4> -->
+        <h4>{{asignacion.pedido.status}}</h4>
     </div>
     <div class="div3">
         <p> 1 item</p>
-        <a [routerLink]="['/order-detail', asignacion._id]">
+        <!-- <a [routerLink]="['/order-detail', asignacion._id]">
             <button class="boton_azul_borde">
                 <i class="fa fa-eye"></i>
             </button>
-        </a>
+        </a> -->
+        <button class="boton_azul_borde" (click)="verDetalles()">
+            <i class="fa fa-eye"></i>
+        </button>
     </div>
 </div>

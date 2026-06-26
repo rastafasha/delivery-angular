@@ -1,106 +1,136 @@
-import { Component, inject, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, Input } from '@angular/core';
 import { OrderItemComponent } from "../order-item/order-item.component";
 import { AsignardeliveryService } from '../../services/asignardelivery.service';
 import { Asignacion } from '../../models/asignaciondelivery.model';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { LoadingComponent } from "../../shared/loading/loading.component";
-import { VentaService } from '../../services/venta.service';
-import { UsuarioService } from '../../services/usuario.service';
 import { Usuario } from '../../models/usuario.model';
 import { DriverpService } from '../../services/driverp.service';
 import { Driver } from '../../models/driverp.model';
-
+import { OrderDetailComponent } from '../../pages/order-detail/order-detail.component';
+import { AvisoComponent } from '../../shared/aviso/aviso.component';
+declare var bootstrap: any;
 @Component({
   selector: 'app-order-list',
   imports: [
     OrderItemComponent, CommonModule, NgFor, LoadingComponent,
-    NgIf
+    NgIf, OrderDetailComponent, AvisoComponent
   ],
   templateUrl: './order-list.component.html',
   styleUrl: './order-list.component.css'
 })
 export class OrderListComponent {
 
-  @Input() identity!:string;
-  @Input() identityD!:string;
-  @Input() identityId!:string;
-  @Input() driverId!:string;
+  @Input() identity!: string;
+  @Input() identityD!: string;
+  @Input() identityId!: string;
+  @Input() driverId!: any;
   @Input() asignacion!: any;
-  @Input() statusC!: any;
-  @Input() statusD!: any;
-  asignacions!: Asignacion [];
+  @Input() status!: any;
+  asignacions!: Asignacion[];
+  selectedAsignacion: any | null
+
+  aviso = 'No tienes entregas disponibles';
 
   isLoading: boolean = false;
-  user!:Usuario
-  userId!:any;
-  statusreqest!:string;
-  iduserstatus!:string;
-  driver!:Driver;
+  user!: Usuario
+  userId!: any;
+  statusreqest!: string;
+  iduserstatus!: string;
+  driver!: Driver;
 
   private asignacionDService = inject(AsignardeliveryService);
   private driverService = inject(DriverpService);
+  private cdr = inject(ChangeDetectorRef);
 
-  ngOnInit(){
+
+
+
+
+
+  ngOnInit() {
     this.identityId;
     let USER = localStorage.getItem("user");
     this.user = JSON.parse(USER || '{}');
-
     this.userId = this.user.uid;
-    
-    if(this.user.role == 'CHOFER'){
-      this.loadDriverId();
-       
-      } else {
-        this.loadAsignacionesByUser();
-      }
-      
-      if(this.statusD ){
-        this.statusreqest = this.statusD;
-        this.iduserstatus = this.identityId
-        this.loadAsignacionesByStatus();
-      }
-      if(this.statusC){
-        this.statusreqest = this.statusC;
-        this.iduserstatus = this.userId 
-        this.loadAsignacionesByStatus();
-      }
-    
-    // setTimeout(() => {
-    // }, 500);
+    this.loadDriverId();
+
   }
 
-  loadDriverId(){
-    this.driverService.getByUserId(this.userId).subscribe((resp:any)=>{
+  loadDriverId() {
+    this.driverService.getByUserId(this.userId).subscribe((resp: any) => {
       this.driver = resp;
-      this.loadAsignaciones();
+      this.driverId = this.driver._id
+      this.statusreqest = this.status;
+      this.driverId
+      this.loadAsignacionesByStatus();
     })
   }
 
-  loadAsignaciones(){
+  loadAsignaciones() {
     this.isLoading = true;
-    this.asignacionDService.getByDriverId(this.driver._id).subscribe((resp:any)=>{  
+    this.asignacionDService.getByDriverId(this.driverId).subscribe((resp: any) => {
       this.asignacions = resp;
-       this.isLoading = false;
+      this.isLoading = false;
     });
 
   }
 
-  loadAsignacionesByUser(){
+
+  loadAsignacionesByUser() {
     this.isLoading = true;
-    this.asignacionDService.getByUserId(this.user.uid).subscribe((resp:any)=>{
+    this.asignacionDService.getByUserId(this.user.uid).subscribe((resp: any) => {
       this.asignacions = resp;
-       this.isLoading = false;
+      this.isLoading = false;
     });
   }
-  
-  loadAsignacionesByStatus(){
+
+  loadAsignacionesByStatus() {
     this.isLoading = true;
-    this.asignacionDService.getByStatus(this.iduserstatus, this.statusreqest).subscribe((resp:any)=>{
+    this.asignacionDService.getByStatus(this.driverId, this.statusreqest).subscribe((resp: any) => {
       this.asignacions = resp;
-       this.isLoading = false;
+      this.isLoading = false;
     });
   }
-  
+
+
+  openModal(asignacion: any) {
+    this.selectedAsignacion = asignacion;
+    console.log('Asignación cargada en el modal:', asignacion._id);
+
+    // Forzamos a Angular a pasarle el objeto de la Andrés Bello al hijo
+    this.cdr.detectChanges();
+
+    setTimeout(() => {
+      const element = document.getElementById('modalAsignacionDetalleUnico');
+      const bootstrap = (window as any).bootstrap;
+
+      if (element && bootstrap) {
+        const myOffcanvas = bootstrap.Offcanvas.getOrCreateInstance(element, {
+          backdrop: true,
+          keyboard: true,
+          scroll: true
+        });
+
+        // 👇 AGREGA ESTAS DOS LÍNEAS PARA ROMPER EL CONGELAMIENTO VISUAL 👇
+        element.style.display = 'block';
+        element.style.visibility = 'visible';
+        element.classList.add('show'); // Forzamos la clase de animación nativa de Bootstrap
+        // 👆 ----------------------------------------------------------- 👆
+
+        myOffcanvas.show();
+        this.cdr.detectChanges();
+      } else {
+        console.error('Error crítico: No se encontró el elemento HTML.');
+      }
+    }, 50);
+
+  }
+
+
+
+
+
 
 
 }

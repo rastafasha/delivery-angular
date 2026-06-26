@@ -4,15 +4,15 @@ import { OrderItemComponent } from "../../components/order-item/order-item.compo
 import { CommonModule, NgIf } from '@angular/common';
 import { OrderListComponent } from "../../components/order-list/order-list.component";
 import { Router } from '@angular/router';
-import { Usuario } from '../../models/usuario.model';
-import { UsuarioService } from '../../services/usuario.service';
 import { DriverpService } from '../../services/driverp.service';
+import { HeaderComponent } from '../../shared/header/header.component';
 
 @Component({
   selector: 'app-mis-entregas',
   imports: [
     MenufooterComponent, CommonModule,
-    OrderListComponent
+    OrderListComponent,
+    HeaderComponent
   ],
   templateUrl: './mis-entregas.component.html',
   styleUrl: './mis-entregas.component.scss'
@@ -26,8 +26,7 @@ export class MisEntregasComponent {
   solicitud_selectedd: any = 1;
 
   isLoading = false;
-  statusD = 'Confirmado';
-  statusC = 'Confirmado';
+  status = 'Confirmado';
 
   private driverService = inject(DriverpService);
   private router = inject(Router);

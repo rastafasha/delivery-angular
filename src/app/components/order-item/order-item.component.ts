@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { Asignacion } from '../../models/asignaciondelivery.model';
 
@@ -13,7 +13,16 @@ import { Asignacion } from '../../models/asignaciondelivery.model';
   styleUrl: './order-item.component.css'
 })
 export class OrderItemComponent {
+  @Input() status!:string;
   @Input() statustText!:string;
   @Input() asignacion!:Asignacion;
+
+  @Output() selectedAsignacion: EventEmitter<any> = new EventEmitter<any>();
+  @Output() onVerDetalles = new EventEmitter<any>();
+
+   verDetalles() {
+    // Le enviamos este producto al componente padre
+    this.onVerDetalles.emit(this.asignacion);
+  }
   
 }

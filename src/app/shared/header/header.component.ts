@@ -1,28 +1,187 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, EventEmitter, HostListener, inject, Input, Output } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { UsuarioService } from '../../services/usuario.service';
 import { AvisoComponent } from "../aviso/aviso.component";
-import { NgIf } from '@angular/common';
+import { CommonModule, NgIf } from '@angular/common';
+import { Observable, Subscription } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
+import { NotificacionService } from '../../models/notificacion.service';
+import { Tienda } from '../../models/tienda.model';
+import { Usuario } from '../../models/usuario.model';
+import { TiendaService } from '../../services/tienda.service';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { ImagenPipe } from '../../pipes/imagen-pipe.pipe';
+import { LoadingComponent } from '../loading/loading.component';
 
 @Component({
   selector: 'app-header',
   imports: [
-    RouterModule,
+     RouterModule,
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    ImagenPipe,
+    AvisoComponent,
+    LoadingComponent,
 ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
 export class HeaderComponent {
 
-   private usuarioService = inject(UsuarioService);
-  
-  ngOnInit(){
+  tiendaSelected: Tienda | undefined | null = null;
+  @Output() refreshApp: EventEmitter<void> = new EventEmitter<void>();
+  totalList: number = 0;
+  tiendas: Tienda[] = [];
+  tienda!: Tienda;
+  public user!: Usuario;
+  img: string | null = '../assets/images/no-image.jpg';
+  isLoading = false;
 
-    
+  year: number = new Date().getFullYear();
+
+  // 🌟 SaaS DIGITAL: Eliminamos el uso de variables estáticas del environment
+  titleapp: string = 'Zlipmenu';
+
+  // Pull-to-refresh tracking
+  private touchStartY: number = 0;
+  private touchStartX: number = 0;
+  private readonly PULL_THRESHOLD = 100; // pixels needed to trigger refresh
+
+  isReloadig = false;
+  isAviso: boolean = false;
+  aviso: string = 'Jala desde el header, para refrescar la página';
+  public activeLang = 'es';
+  flag = false;
+
+  
+  public unreadCount$!: Observable<number>;
+  private tiendaSubscription!: Subscription;
+
+  public tiendaService = inject(TiendaService);
+  private notifService = inject(NotificacionService);
+  private translate = inject(TranslateService);
+  
+ 
+  @HostListener('touchstart', ['$event'])
+  onTouchStart(event: TouchEvent) {
+    this.touchStartY = event.touches[0].clientY;
+    this.touchStartX = event.touches[0].clientX;
   }
 
-  logout(){
-    this.usuarioService.logout();
+  @HostListener('touchend', ['$event'])
+  onTouchEnd(event: TouchEvent) {
+    const touchEndY = event.changedTouches[0].clientY;
+    const touchEndX = event.changedTouches[0].clientX;
+
+    const deltaY = touchEndY - this.touchStartY;
+    const deltaX = Math.abs(touchEndX - this.touchStartX);
+
+    if (deltaY > this.PULL_THRESHOLD && deltaX < 50) {
+      this.onPullRefresh();
+    }
+  }
+
+  ngOnInit(): void {
+    this.unreadCount$ = this.notifService.unreadCount$;
+    this.notifService.cargarContador();
+    this.getLangActive()
+
+    // Show aviso only once on initial app start
+    const avisoShown = localStorage.getItem('avisoShown');
+    if (!avisoShown) {
+      this.isAviso = true;
+      setTimeout(() => {
+        this.isAviso = false;
+        localStorage.setItem('avisoShown', 'true');
+      }, 3000);
+    } else {
+      this.isAviso = false;
+    }
+
+    let USER = localStorage.getItem("user");
+    this.user = USER ? JSON.parse(USER) : null;
+
+   
+
+    // 1. Comenzamos a escuchar el observable del servicio
+    this.escucharTiendaActiva();
+
+    // 2. Disparamos la petición inicial (usa el slug automático 'pizzeria')
+    // Esto llenará el BehaviorSubject interno de tu servicio
+    this.tiendaService.getTiendaByNameCached().subscribe();
+  }
+
+   escucharTiendaActiva() {
+    this.tiendaService.selectedTiendaObservable$.subscribe(tienda => {
+      // Al principio será null, pero en cuanto getTiendaByNameCached responda, 
+      // el tap del servicio emitirá la tienda real aquí.
+      if (tienda) {
+        this.tiendaSelected = tienda;
+        
+      }
+    });
+}
+
+
+  getLangActive(){
+    const browserLang = this.translate.getBrowserLang(); // Detecta 'en', 'es', etc.
+    const savedLang = localStorage.getItem('lang') || browserLang || 'es';
+    
+    // Validamos que sea un idioma soportado (es o en)
+    this.activeLang = savedLang.match(/es|en/) ? savedLang : 'es';
+
+    // Forzamos a la librería a activar el idioma correcto en el arranque global
+    this.translate.use(this.activeLang);
+    
+    // Sincronizamos la variable flag para que el switch visual se pinte en la posición correcta
+    this.flag = (this.activeLang === 'en');
+  }
+
+  ngOnDestroy(): void {
+    if (this.tiendaSubscription) {
+      this.tiendaSubscription.unsubscribe();
+    }
+  }
+
+  getTiendas() {
+    this.tiendaService.cargarTiendas().subscribe((resp: Tienda[]) => {
+      // Mapeo genérico por si necesitas lógicas internas
+      this.tiendas = resp.filter((tienda: Tienda) => tienda.status === 'Activo');
+      this.setTiendaDefault();
+    });
+  }
+
+  setTiendaDefault() {
+    const serviceTienda = this.tiendaService.getSelectedTiendaSync();
+    if (serviceTienda) {
+      this.tiendaSelected = serviceTienda;
+      localStorage.setItem('tiendaSelected', JSON.stringify(this.tiendaSelected.nombre));
+      return;
+    }
+  }
+
+  get iconBagColorClass(): string {
+    const colors = ['icon-bag-red', 'icon-bag-black', 'icon-bag-yellow'];
+    if (this.totalList > 0) {
+      return colors[this.totalList % colors.length];
+    }
+    return '';
+  }
+  onPullRefresh() {
+    const headerReload = document.querySelector('.header-container');
+    const logotext = document.querySelector('.logo-text');
+    headerReload?.animate([{ background: '#ccc', color: '#f2f2f2' }], { duration: 300 });
+
+    this.titleapp = 'Cargando';
+    if (logotext instanceof HTMLElement) {
+      logotext.animate([{ opacity: '0.5' }, { opacity: '1' }], { duration: 300 });
+      logotext.textContent = this.titleapp;
+    }
+
+    this.isReloadig = true;
+    this.refreshApp.emit();
+    location.reload();
+    this.isReloadig = false;
   }
 }
 

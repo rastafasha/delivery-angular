@@ -11,6 +11,8 @@ import { LoginComponent } from './auth/login/login.component';
 import { RecoveryComponent } from './auth/recovery/recovery.component';
 import { PerfilComponent } from './pages/profile/perfil/perfil.component';
 import { DireccionEditComponent } from './pages/profile/direcciones/direccion-edit/direccion-edit.component';
+import { ChatComponent } from './pages/chat/chat.component';
+import { MisNotificacionesComponent } from './pages/mis-notificaciones/mis-notificaciones.component';
 
 
 
@@ -19,13 +21,7 @@ export const routes: Routes = [
     
     {path: '', component: DriverHomeComponent},// home del driver
     {path: 'home', component: DriverHomeComponent},// home del driver
-    {path: 'home-customer', component: HomeComponent}, // home usuarios
-    {path: 'delivery-home', component: DriverHomeComponent},
-    {path: 'delivery-status', component: DeliveryStatusComponent},
-    {path: 'mapa-page', component: MapaComponent},
-    {path: 'mapa-page/:id', component: MapaComponent},
-    {path: 'order-detail/:id', component: OrderDetailComponent},
-    {path: 'mis-entregas', component: MisEntregasComponent},
+    
     
    
      {
@@ -37,6 +33,14 @@ export const routes: Routes = [
         component: RegisterComponent
     },
     {path: 'recovery-password', component: RecoveryComponent },
+    {path: 'delivery-home', component: DriverHomeComponent},
+    {path: 'delivery-status', component: DeliveryStatusComponent},
+    {path: 'mapa-page', component: MapaComponent},
+    {path: 'mapa-page/:id', component: MapaComponent},
+    {path: 'order-detail/:id', component: OrderDetailComponent},
+    {path: 'mis-entregas', component: MisEntregasComponent},
+    {path: 'chat/:id', component: ChatComponent},
+    {path: 'notificaciones', component: MisNotificacionesComponent},
 
     {path: 'myprofile', component: ProfileComponent},
     {path: 'myprofile/:id', component: PerfilComponent },
