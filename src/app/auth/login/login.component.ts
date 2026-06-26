@@ -9,6 +9,7 @@ import { Tienda } from '../../models/tienda.model';
 import { ImagenPipe } from '../../pipes/imagen-pipe.pipe';
 import { environment } from '../../../environments/environment';
 import { PwaNotifInstallerComponent } from '../../shared/pwa-notif-installer/pwa-notif-installer.component';
+import { ToastrService } from 'ngx-toastr';
 
 // declare const gapi: any;
 
@@ -40,7 +41,8 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private usuarioService: UsuarioService,
     private tiendaService: TiendaService,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private toastr: ToastrService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -56,16 +58,18 @@ export class LoginComponent implements OnInit {
 
 
   login() {
+    this.formSumitted = true;
+    if (this.loginForm.invalid) { return; }
 
-    this.usuarioService.login(this.loginForm.value).subscribe(
-      resp => {
-        // console.log('Login response:', resp);
+    this.usuarioService.login(this.loginForm.value).subscribe({
+      next: (resp) => {
         if (this.loginForm.get('remember')?.value) {
           localStorage.setItem('email', this.loginForm.get('email')?.value);
         } else {
           localStorage.removeItem('email');
         }
         this.usuarioService.getLocalStorage();
+
         if (localStorage.getItem('user') !== 'undefined') {
           setTimeout(() => {
             this.router.navigateByUrl('/my-account');
@@ -73,14 +77,12 @@ export class LoginComponent implements OnInit {
         } else {
           this.router.navigateByUrl('/login');
         }
-
-
-        // this.router.navigateByUrl('/my-account');
-      }, (err) => {
-        Swal.fire('Error', err.error.msg, 'error');
+      },
+      error: (err) => {
+        this.toastr.error('Error al iniciar sesión.  Verifica tus credenciales.');
+        // Swal.fire('Error', err.error.msg, 'error');
       }
-    )
-
+    });
   }
 
 

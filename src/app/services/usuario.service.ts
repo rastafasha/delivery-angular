@@ -5,7 +5,7 @@ import { LoginForm } from '../auth/interfaces/login-form.interface';
 import { CargarUsuario } from '../auth/interfaces/cargar-usuarios.interface';
 
 import { tap, map, catchError } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { Router } from '@angular/router';
 import { Usuario } from '../models/usuario.model';
 import { environment } from '../../environments/environment';
@@ -17,7 +17,10 @@ const base_url = environment.baseUrl;
 })
 export class UsuarioService {
   public auth2: any;
-  public usuario!: Usuario;
+  public usuario: Usuario | null = null;;
+  public estaAutenticado = false;
+  private currentUserSubject = new BehaviorSubject<Usuario | null>(null);
+  public currentUser$ = this.currentUserSubject.asObservable();
 
   constructor(
     private http: HttpClient,
@@ -49,20 +52,52 @@ export class UsuarioService {
   }
   
   getLocalStorage() {
-    if (localStorage.getItem('token') && localStorage.getItem('user')) {
-      let USER = localStorage.getItem('user');
-      if (USER && USER !== 'undefined') {
-        this.usuario = JSON.parse(USER);
-      } else {
-        this.usuario = new Usuario('', '', '', '', '', '', '', '','','', false, 'USER', '');
+    const authStr = localStorage.getItem('estaAutenticado');
+    this.estaAutenticado = authStr === 'true';
+
+
+    const token = localStorage.getItem('token');
+    const userStr = localStorage.getItem('user');
+
+    if (token && userStr) {
+      try {
+        const userData = JSON.parse(userStr);
+        // Create User instance from parsed data (match JSON shape)
+        this.usuario = new Usuario(
+          userData.first_name || '',
+          userData.last_name || '',
+          userData.pais || '',
+          userData.telefono || '',
+          userData.numdoc || '',
+          userData.local || '',
+          userData.email || '',
+          userData.img || '',
+          undefined,  // password not stored
+          userData.google || false,
+          userData.role,
+          userData.uid,
+        );
+        this.currentUserSubject.next(this.usuario);
+      } catch (e) {
+        console.error('Error parsing user from localStorage:', e);
+        this.usuario = null;
+        this.currentUserSubject.next(null);
       }
     } else {
-      this.usuario = new Usuario('', '', '', '', '', '', '', '', '','',false, 'USER', '');
+      this.usuario = null;
+      this.currentUserSubject.next(null);
     }
+    return this.usuario;
   }
-  guardarLocalStorage(token: string, user: any) {
+
+  getEstaAutenticado(): boolean {
+    return this.estaAutenticado;
+  }
+
+   guardarLocalStorage(token: string, userData: any){
     localStorage.setItem('token', token);
-    localStorage.setItem('user', JSON.stringify(user));
+    localStorage.setItem('user', JSON.stringify(userData));
+    this.getLocalStorage();  // Populate service state and emit
   }
 
 
@@ -82,7 +117,7 @@ export class UsuarioService {
   logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    // localStorage.removeItem('menu');
+    localStorage.removeItem('estaAutenticado');
     this.router.navigateByUrl('/login');
 
     // this.auth2.signOut().then(() => {
@@ -159,12 +194,14 @@ export class UsuarioService {
     );
   }
 
-  login(formData: LoginForm) {
-    return this.http.post(`${base_url}/login`, formData).pipe(
-      tap((resp: any) => {
-        this.guardarLocalStorage(resp.token, resp.usuario);
-      })
-    );
+  login(formData: any) {
+    return this.http.post(`${base_url}/auth/login`, formData)
+      .pipe(
+        tap((resp: any) => {
+          localStorage.setItem('estaAutenticado', 'true');
+          this.guardarLocalStorage(resp.token, resp.user);
+        })
+      )
   }
 
   loginGoogle(token: any) {
