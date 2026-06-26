@@ -60,7 +60,7 @@ export class MisNotificacionesComponent implements OnInit {
 
   ngOnInit() {
     window.scrollTo(0, 0);
-    let USER = localStorage.getItem("user");
+    let USER = localStorage.getItem("usuario");
     this.user = JSON.parse(USER ? USER : '');
     this.userId = this.user.uid;
     this.getTienda();

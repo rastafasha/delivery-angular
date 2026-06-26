@@ -82,7 +82,7 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // 1. Cargar usuario de sesión
-    const userData = localStorage.getItem("user");
+    const userData = localStorage.getItem("usuario");
     if (!userData) return;
     this.user = JSON.parse(userData);
     this.identityId = this.user.uid;

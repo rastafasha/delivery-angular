@@ -41,7 +41,7 @@ export class MisEntregasComponent {
 
   loadIdentity() {
     this.isLoading = true;
-    let USER = localStorage.getItem("user");
+    let USER = localStorage.getItem("usuario");
     this.user = USER ? JSON.parse(USER) : null;
     
     if (!this.user) {

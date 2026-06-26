@@ -42,7 +42,7 @@ export class HomeComponent {
 
   loadIdentity() {
     this.isLoading = true;
-    let USER = localStorage.getItem("user");
+    let USER = localStorage.getItem("usuario");
     if (!USER) {
       this.router.navigateByUrl('/login')
     }

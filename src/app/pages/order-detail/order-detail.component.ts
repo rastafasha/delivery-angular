@@ -84,7 +84,7 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewInit{
   }
 
   loadIdentity() {
-    let USER = localStorage.getItem("user")
+    let USER = localStorage.getItem("usuario")
     if (USER) {
       let user = JSON.parse(USER);
       this.usuarioService.get_user(user.uid).subscribe((resp: any) => {

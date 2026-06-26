@@ -50,7 +50,7 @@ export class OrderListComponent {
 
   ngOnInit() {
     this.identityId;
-    let USER = localStorage.getItem("user");
+    let USER = localStorage.getItem("usuario");
     this.user = JSON.parse(USER || '{}');
     this.userId = this.user.uid;
     this.loadDriverId();

@@ -98,10 +98,12 @@ export class HeaderComponent {
       this.isAviso = false;
     }
 
-    let USER = localStorage.getItem("user");
+    let USER = localStorage.getItem("usuario");
     this.user = USER ? JSON.parse(USER) : null;
 
-    this.getTiemndabId();
+    setTimeout(() => {
+        this.getTiemndabId();
+      }, 50);
 
   }
   getTiemndabId(){

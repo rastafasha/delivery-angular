@@ -61,7 +61,7 @@ user_id:any;
 
   loadIdentity(){
     this.isLoading = true;
-    let USER = localStorage.getItem("user");
+    let USER = localStorage.getItem("usuario");
     if(USER){
       let user = JSON.parse(USER);
       this.usuarioService.get_user(user.uid).subscribe((resp:any)=>{

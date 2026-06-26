@@ -77,7 +77,7 @@ export class MapaComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit() {
 
-    let USER = localStorage.getItem("user");
+    let USER = localStorage.getItem("usuario");
     this.user = JSON.parse(USER || '{}');
 
     this.activatedRoute.params.subscribe(params => {
