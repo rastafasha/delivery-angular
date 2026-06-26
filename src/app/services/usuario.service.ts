@@ -116,7 +116,7 @@ export class UsuarioService {
 
   logout() {
     localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    localStorage.removeItem('usuario');
     localStorage.removeItem('estaAutenticado');
     this.router.navigateByUrl('/login');
 

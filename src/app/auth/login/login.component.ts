@@ -58,32 +58,47 @@ export class LoginComponent implements OnInit {
 
 
   login() {
-    this.formSumitted = true;
-    if (this.loginForm.invalid) { return; }
+  this.formSumitted = true;
+  if (this.loginForm.invalid) { return; }
 
-    this.usuarioService.login(this.loginForm.value).subscribe({
-      next: (resp) => {
-        if (this.loginForm.get('remember')?.value) {
-          localStorage.setItem('email', this.loginForm.get('email')?.value);
-        } else {
-          localStorage.removeItem('email');
-        }
-        this.usuarioService.getLocalStorage();
+  this.usuarioService.login(this.loginForm.value).subscribe({
+    next: (resp: any) => { // 💡 Le agregamos : any para poder leer las propiedades con comodidad
+      console.log('Respuesta exitosa del backend:', resp);
 
-        if (localStorage.getItem('usuario') !== 'undefined') {
-          setTimeout(() => {
-            this.router.navigateByUrl('/myprofile');
-          }, 500);
-        } else {
-          this.router.navigateByUrl('/login');
-        }
-      },
-      error: (err) => {
-        this.toastr.error('Error al iniciar sesión.  Verifica tus credenciales.');
-        // Swal.fire('Error', err.error.msg, 'error');
+      // 1. CLAVE DEFINITIVA: Extraemos el token y el objeto 'usuario' del payload y los guardamos
+      if (resp.token && resp.usuario) {
+        this.usuarioService.guardarLocalStorage(resp.token, resp.usuario);
+      } else {
+        console.error('Error: El servidor no envió el token o la propiedad de usuario esperada.', resp);
       }
-    });
-  }
+
+      // 2. Manejo de la opción de recordar correo
+      if (this.loginForm.get('remember')?.value) {
+        localStorage.setItem('email', this.loginForm.get('email')?.value);
+      } else {
+        localStorage.removeItem('email');
+      }
+
+      // 3. Forzamos la redirección basándonos de forma segura en los datos que acabamos de validar
+      if (resp.usuario && resp.usuario !== 'undefined') {
+        this.toastr.success(`¡Bienvenido de vuelta, ${resp.usuario.first_name}!`);
+        
+        setTimeout(() => {
+          this.router.navigateByUrl('/myprofile');
+        }, 500);
+      } else {
+        this.toastr.error('Los datos de usuario recibidos están corruptos.');
+        this.router.navigateByUrl('/login');
+      }
+    },
+    error: (err) => {
+      console.error('Error en petición de Login:', err);
+      this.toastr.error(`Error al iniciar sesión.  ${err.error.msg}`);
+    }
+  });
+}
+
+  
 
 
 
