@@ -57,7 +57,7 @@ export class UsuarioService {
 
 
     const token = localStorage.getItem('token');
-    const userStr = localStorage.getItem('user');
+    const userStr = localStorage.getItem('usuario');
 
     if (token && userStr) {
       try {

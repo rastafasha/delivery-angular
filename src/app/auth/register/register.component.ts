@@ -94,7 +94,7 @@ export class RegisterComponent implements OnInit {
     //agregamos el id de la tienda a la respuesta
 
     this.registerForm.value.local = this.tiendaSelected._id;
-    console.log(this.registerForm.value);
+    // console.log(this.registerForm.value);
 
     if (this.registerForm.invalid) {
       return;
@@ -106,8 +106,8 @@ export class RegisterComponent implements OnInit {
         console.log(resp);
         this.usuarioService.getLocalStorage();
         Swal.fire('Gracias por Registrate!, En breve te enviaremos a tu perfil para completar los datos requeridos')
-        if (localStorage.getItem('user')) {
-          this.router.navigateByUrl('/my-account');
+        if (localStorage.getItem('usuario')) {
+          this.router.navigateByUrl('/myprofile');
         }
       }, (err) => {
         Swal.fire('Error', err.error.msg, 'error');
