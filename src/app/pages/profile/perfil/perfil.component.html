@@ -1,11 +1,8 @@
 <app-loading *ngIf="isLoading"></app-loading>
 
 <!-- Page Content-->
-<div class="container " *ngIf="!isLoading">
+<div class="container mt-3" *ngIf="!isLoading">
     <div class="back-title">
-        <div class="saludo">
-            <h2>Hola {{identity.first_name}}!</h2>
-        </div>
         <a routerLink="/myprofile">
             <button class="boton_azul_borde">Volver</button>
         </a>

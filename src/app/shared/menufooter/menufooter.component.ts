@@ -8,7 +8,6 @@ import { NgIf } from '@angular/common';
   selector: 'app-menufooter',
   imports: [
     RouterModule,
-    NgIf
 ],
   templateUrl: './menufooter.component.html',
   styleUrl: './menufooter.component.css'

@@ -109,7 +109,6 @@ export class HeaderComponent {
   getTiemndabId(){
     this.tiendaService.getTiendaById(this.user.local).subscribe((resp:any)=>{
       this.tiendaSelected = resp;
-      console.log(resp);
     })
   }
 
